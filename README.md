@@ -24,6 +24,62 @@ connection or how messages are handled; that is an exercise for the reader.
     * `IPv4Address` (bit width of 32, with custom serialisation)
 
 
+## Usage
+
+The following example creates a gRPC request to add a rule to a table.
+
+This theoretical program forwards ports from one device port to another.
+
+
+```python
+DEVICE_ID = 0
+CLIENT_ID = 0
+
+bfrt_data = json.loads(open("bfrt.json").read())
+bfrt_info = BfRtInfo(bfrt_data)
+bfrt_helper = BfRtHelper(DEVICE_ID, CLIENT_ID, bfrt_info)
+
+write_request = bfrt_helper.create_table_write( 
+    program_name='forwarder', 
+    table_name='pipe.PortForward.destination_port',
+    key={
+        'ig_intr_md.ingress_port': Exact(PortId(0))
+    },
+    action_name='PortForward.forward',
+    action_params={
+        'egress_port': PortId(64),
+    })
+```
+
+> `ig_intr_md` is an argument passed to the ingress controller; it is
+> a shortening of "ingress intrinsic metadata", and funnily enough, 
+> contains metadata specific to the ingress. The name it's given is one
+> that is found throughout Intel's P4 examples. If you were to declare it
+> with a different name, you would have to update it here.
+
+Running through the code, we open our BfRt file, and construct a `BfRtInfo` 
+object with it, using it to construct the helper object along with the 
+device and client ID.
+
+You should be able to see that this is completely independent of any kind
+of gRPC client. This may be useful if you want to verify bf runtime gRPC
+objects without having to connect to a device (and consequently manage
+the stream channel, messages across the device, subscription requests etc).
+
+Other functions available are:
+* `create_subscribe_request`
+* `create_write_request`
+* `create_table_entry`
+* `create_key_field`
+* `create_data_field`
+* `create_key_fields`
+* `create_action`
+* `create_table_write`
+* `create_copy_to_cpu` (I'm pretty sure this is a hack)
+* `create_set_pipeline_request`
+* `create_get_pipeline_request`
+
+
 
 ## Acknowledgements
 
