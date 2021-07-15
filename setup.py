@@ -45,8 +45,8 @@ setuptools.setup(
     packages=setuptools.find_namespace_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
-        'License :: Proprietary',
+        'License :: OSI Approved :: Apache Software License',
     ],
     python_requires='>=3.6',
-	install_requires=install_requirements,
+    install_requires=install_requirements,
 )
