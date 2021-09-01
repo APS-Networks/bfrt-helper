@@ -3,7 +3,6 @@
 > This documentation is for the APS Networks `bfrt-helper` software. The source
 > code for this is available on GitHub.
 >
-> ![GitHubLogo](../../assets/images/GitHub-Mark-32px.png) 
 > [bfrt-helper](https://github.com/APS-Networks/bfrt-helper) on GitHub
 
 `bfrt_helper` is a library for creating gRPC messages and communicating with
