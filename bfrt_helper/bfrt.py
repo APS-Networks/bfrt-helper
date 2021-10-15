@@ -117,6 +117,24 @@ class BfRtHelper:
         return request
 
 
+    def create_read_request(self, program_name):
+        request = bfruntime_pb2.ReadRequest()
+        request.client_id = self.client_id
+        request.p4_name = program_name
+        # request.atomicity = atomicity
+
+        target = bfruntime_pb2.TargetDevice()
+        target.device_id = self.device_id
+        target.pipe_id   = 0xffff
+        target.direction = 0xff
+        target.prsr_id   = 0xff
+
+        request.target.CopyFrom(target)
+
+        return request
+
+
+
     def create_table_entry(self, table_name):
         table_id = self.bfrt_info.get_table_id(table_name)
         if table_id == None:
