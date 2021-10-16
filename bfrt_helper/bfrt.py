@@ -269,8 +269,8 @@ class BfRtHelper:
         bfrt_key_fields = self.create_key_fields(table_name, key)
 
         bfrt_table_entry.key.fields.extend(bfrt_key_fields)
-        update = req.entities.add()
-        update.table_entry.CopyFrom(tbl_entry)
+        update = bfrt_request.entities.add()
+        update.table_entry.CopyFrom(bfrt_table_entry)
 
         return bfrt_request
 
