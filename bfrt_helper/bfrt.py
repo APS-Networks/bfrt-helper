@@ -263,6 +263,18 @@ class BfRtHelper:
         return bfrt_request
 
 
+    def create_table_read(self, program_name, table_name, key):
+        bfrt_request = self.create_read_request(program_name)
+        bfrt_table_entry = self.create_table_entry(table_name)
+        bfrt_key_fields = self.create_key_fields(table_name, key)
+
+        bfrt_table_entry.key.fields.extend(bfrt_key_fields)
+        update = req.entities.add()
+        update.table_entry.CopyFrom(tbl_entry)
+
+        return bfrt_request
+
+
     def create_copy_to_cpu(self, program_name, port):
         bfrt_request = self.create_write_request(program_name)
         bfrt_table_entry = self.create_table_entry('$pre.port')
