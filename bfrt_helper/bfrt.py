@@ -245,6 +245,10 @@ class BfRtHelper:
         return bfrt_table_data
 
 
+    # def create_table_data(self, data):
+
+
+
     def create_table_write(self, program_name, table_name, key, action_name=None,
             action_params=None, update_type=bfruntime_pb2.Update.Type.INSERT):
         bfrt_request = self.create_write_request(program_name)
@@ -255,6 +259,28 @@ class BfRtHelper:
         if action_name != None:
             bfrt_action = self.create_action(table_name, action_name, action_params)
             bfrt_table_entry.data.CopyFrom(bfrt_action)
+
+        bfrt_update = bfrt_request.updates.add()
+        bfrt_update.type = update_type
+        bfrt_update.entity.table_entry.CopyFrom(bfrt_table_entry)
+
+        return bfrt_request
+
+
+    def create_table_data_write(self, program_name, table_name, key, data,
+            update_type=bfruntime_pb2.Update.Type.INSERT):
+        bfrt_request = self.create_write_request(program_name)
+        bfrt_table_entry = self.create_table_entry(table_name)
+        bfrt_key_fields = self.create_key_fields(table_name, key)
+        bfrt_table_entry.key.fields.extend(bfrt_key_fields)
+
+        bfrt_table_data = bfruntime_pb2.TableData()
+        for field_name, value in data.items():
+            field = self.bfrt_info.get_data_field(table_name, field_name)
+            bfrt_data_field = self.create_data_field(field.singleton, value)
+            bfrt_table_data.fields.extend([bfrt_data_field])
+
+        bfrt_table_entry.data.CopyFrom(bfrt_table_data)
 
         bfrt_update = bfrt_request.updates.add()
         bfrt_update.type = update_type
