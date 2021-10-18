@@ -20,6 +20,7 @@ jobs:
           pip install -e .
           site_packages=$(python -m site --user-site)
           echo "### site_packages: ${site_packages}"
+          mkdir -p ${site_packages}
           bfproto_dir=$(realpath ./proto)
           echo "### bfproto_dir: ${bfproto_dir}"
           python -m grpc_tools.protoc \
@@ -27,7 +28,7 @@ jobs:
             --proto_path=${site_packages} \
             --python_out=${site_packages} \
             --grpc_python_out=${site_packages} \
-                proto/bfruntime.proto
+                ${bfproto_dir}/bfruntime.proto
       - name: "Run Tests"
         run:
           python -m pytest
