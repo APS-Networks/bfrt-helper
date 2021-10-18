@@ -22,9 +22,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pytest
+          ls -lrth $GITHUB_WORKSPACE
           pip install -e .
           mkdir -p gen-py
-          ls -lrth $GITHUB_WORKSPACE
           python -m grpc_tools.protoc \
             --proto_path=${bfproto_dir} \
             --proto_path=./api-common-protos \
