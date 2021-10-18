@@ -28,7 +28,7 @@ jobs:
             --proto_path=$GITHUB_WORKSPACE/proto \
             --proto_path=$GITHUB_WORKSPACE/api-common-protos \
             --python_out=$GITHUB_WORKSPACE/gen-py \
-            --grpc_python_out=./gen-py \
+            --grpc_python_out=./gen-pye \
                 $GITHUB_WORKSPACE/proto/bfruntime.proto
       - name: "Run Tests"
         env:
