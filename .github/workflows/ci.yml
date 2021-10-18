@@ -4,3 +4,30 @@ on:
     branches:
       - "merge-updates"
 
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout Code"
+        uses: "actions/checkout@v2"
+      - name: "Install Python 3"
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: 3.6
+      - name: "Install BfRt and Dependencies"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          site_packages=$(python -m site --user-site)
+          bfproto_dir=$(realpath ./proto)
+          python -m grpc_tools.protoc \
+            --proto_path=${bfproto_dir} \
+            --proto_path=${site_packages} \
+            --python_out=${site_packages} \
+            --grpc_python_out=${site_packages} \
+                proto/bfruntime.proto
+      - name: "Run Tests"
+        run:
+          python -m pytest
+          
+      
