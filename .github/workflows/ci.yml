@@ -1,0 +1,6 @@
+name: "Run Unit Tests"
+on:
+  push:
+    branches:
+      - "merge-updates"
+
