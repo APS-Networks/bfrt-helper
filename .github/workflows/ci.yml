@@ -18,6 +18,7 @@ jobs:
         uses: "actions/checkout@v2"
         with:
           repository: "googleapis/api-common-protos"
+          path: "api-common-protos"
       - name: "Setup Virtual Environment"
         run: |
           python -m pip install --upgrade pip
