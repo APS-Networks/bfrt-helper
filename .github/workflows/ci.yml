@@ -27,9 +27,9 @@ jobs:
           pip install -e .
           mkdir -p gen-py
           python -m grpc_tools.protoc \
-            --proto_path=./proto \
-            --proto_path=./api-common-protos \
-            --python_out=./gen-py \
+            --proto_path=$GITHUB_WORKSPACE/proto \
+            --proto_path=$GITHUB_WORKSPACE/api-common-protos \
+            --python_out=$GITHUB_WORKSPACE/gen-py \
             --grpc_python_out=./gen-py \
                 $GITHUB_WORKSPACE/proto/bfruntime.proto
       - name: "Run Tests"
