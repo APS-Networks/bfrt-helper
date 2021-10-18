@@ -27,7 +27,7 @@ jobs:
           pip install -e .
           mkdir -p gen-py
           python -m grpc_tools.protoc \
-            --proto_path=${bfproto_dir} \
+            --proto_path=./proto \
             --proto_path=./api-common-protos \
             --python_out=./gen-py \
             --grpc_python_out=./gen-py \
