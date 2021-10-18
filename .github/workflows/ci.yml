@@ -34,7 +34,7 @@ jobs:
                 $GITHUB_WORKSPACE/proto/bfruntime.proto
       - name: "Run Tests"
         env:
-          PYTHONPATH: $GITHUB_WORKSPACE/gen-py
+          PYTHONPATH: ${{ github.workspace }}/gen-py
         run:
           python -m pytest -v
           
