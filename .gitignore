@@ -144,4 +144,5 @@ cython_debug/
 
 
 
-python-api-common-protos
+api-common-protos
+gen-py
