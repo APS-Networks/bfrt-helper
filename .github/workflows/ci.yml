@@ -24,6 +24,7 @@ jobs:
           pip install pytest
           pip install -e .
           mkdir -p gen-py
+          ls -lrth $GITHUB_WORKSPACE
           python -m grpc_tools.protoc \
             --proto_path=${bfproto_dir} \
             --proto_path=./api-common-protos \
