@@ -20,7 +20,8 @@ jobs:
           repository: "googleapis/api-common-protos"
       - name: "Setup Virtual Environment"
         run: |
-          pip install --upgrade pip pytest
+          pip install --upgrade pip
+          pip install pytest
           pip install -e .
           mkdir -p gen-py
           python -m grpc_tools.protoc \
