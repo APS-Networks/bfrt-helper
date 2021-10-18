@@ -14,23 +14,25 @@ jobs:
         uses: "actions/setup-python@v2"
         with:
           python-version: 3.6
+      - name: "Clone Google Common Protos"
+        uses: "actions/checkout@v2"
+        with:
+          repository: "googleapis/api-common-protos"
       - name: "Setup Virtual Environment"
         run: |
-          python -m venv .venv
-          . ./.venv/bin/activate
-          pip install --upgrade pip
+          pip install --upgrade pip pytest
           pip install -e .
-          site_packages=$(python -m site --user-site)
-          bfproto_dir=$(realpath ./proto)
+          mkdir -p gen-py
           python -m grpc_tools.protoc \
             --proto_path=${bfproto_dir} \
-            --proto_path=${site_packages} \
-            --python_out=${site_packages} \
-            --grpc_python_out=${site_packages} \
-                ${bfproto_dir}/bfruntime.proto
+            --proto_path=./api-common-protos \
+            --python_out=./gen-py \
+            --grpc_python_out=./gen-py \
+                $GITHUB_WORKSPACE/proto/bfruntime.proto
       - name: "Run Tests"
+        env:
+          PYTHONPATH: $GITHUB_WORKSPACE/gen-py
         run:
-          . ./.venv/bin/activate
-          python -m pytest
+          python -m pytest -v
           
       
