@@ -38,10 +38,10 @@ setuptools.setup(
     version="0.0.1",
     author="APS Networks GmbH",
     author_email="support@aps-networks.com",
-    description="Helper library for Barefoot Runtime gRPC",
+    description="Helper library for the Barefoot Runtime gRPC interface.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    # url="https://github.com/pypa/sampleproject",
+    url="https://github.com/APS-Networks/bfrt-helper",
     packages=setuptools.find_namespace_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

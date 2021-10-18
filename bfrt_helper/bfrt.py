@@ -12,7 +12,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 '''
-
 import logging
 import sys
 import threading
@@ -23,7 +22,11 @@ import bfruntime_pb2_grpc
 
 import google.rpc.status_pb2 as status_pb2
 import google.rpc.code_pb2 as code_pb2
-from bfrt_helper.fields import *
+
+from bfrt_helper.match import Exact
+from bfrt_helper.match import LPM
+from bfrt_helper.match import Ternary
+from bfrt_helper.fields import Field
 
 
 
@@ -155,19 +158,19 @@ class BfRtHelper:
         if info_key_field.match_type == 'Exact':
             if not isinstance(data, Exact):
                 raise MismatchedDataType(field_name, data, 'Exact')
-            bfrt_key_field.exact.value = data.get_data_bits()
+            bfrt_key_field.exact.value = data.value_bytes()
 
         if info_key_field.match_type == 'LPM':
-            if not isinstance(data, LongestPrefixMatch):
+            if not isinstance(data, LPM):
                 raise MismatchedDataType(field_name, data, 'LPM')
-            bfrt_key_field.lpm.value = data.get_data_bits()
-            bfrt_key_field.lpm.prefix_len = data.get_prefix()
+            bfrt_key_field.lpm.value = data.value_bytes()
+            bfrt_key_field.lpm.prefix_len = data.prefix
 
         if info_key_field.match_type == 'Ternary':
-            if not isinstance(data, Exact):
+            if not isinstance(data, Ternary):
                 raise MismatchedDataType(field_name, data, 'Ternary')
-            bfrt_key_field.ternary.value = data.get_data_bits()
-            bfrt_key_field.ternary.value = data.get_mask_bits()
+            bfrt_key_field.ternary.value = data.value_bytes()
+            bfrt_key_field.ternary.mask = data.mask_bytes()
 
         return bfrt_key_field
 
@@ -176,8 +179,17 @@ class BfRtHelper:
         data_field = bfruntime_pb2.DataField()
         data_field.field_id = field.id
 
-        if isinstance(value, bytes):
-            data_field.stream = value
+        if isinstance(value, Field) or isinstance(value, bytes):
+            if field.type['type'] == 'bytes':
+                if value.bitwidth != field.type['width']:
+                    raise MismatchedDataSize(field.type['width'], value.bitwidth)
+            elif field.type['type'] == 'uint16':
+                if value.bitwidth != 16:
+                    raise MismatchedDataSize(field.type['width'], value.bitwidth)
+            elif field.type['type'] == 'uint32':
+                if value.bitwidth != 32:
+                    raise MismatchedDataSize(field.type['width'], value.bitwidth)
+            data_field.stream = value.to_bytes()
         elif isinstance(value, float):
             data_field.float_val = value
         elif isinstance(value, str):
@@ -194,18 +206,6 @@ class BfRtHelper:
                 else:
                     data = [ self.create_data_field(x) for x in value]
                     data_field.container_arr_value.val.extend(data)
-        elif isinstance(value, Field):
-            if field.type['type'] == 'bytes':
-                if value.bitwidth != field.type['width']:
-                    raise MismatchedDataSize(field.type['width'], value.bitwidth)
-            elif field.type['type'] == 'uint16':
-                if value.bitwidth != 16:
-                    raise MismatchedDataSize(field.type['width'], value.bitwidth)
-            elif field.type['type'] == 'uint32':
-                if value.bitwidth != 32:
-                    raise MismatchedDataSize(field.type['width'], value.bitwidth)
-            data_field.stream = value.get_data_bits()
-
         else:
             raise Exception("Unknown data type!")
         return data_field

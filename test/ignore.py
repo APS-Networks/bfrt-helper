@@ -39,7 +39,10 @@ request = helper.create_table_data_write(
         '$DEV_PORT': Exact(DevPort(55))
     },
     data={
-        '$SPEED': 'BF_SPEED_10G',
+        '$SPEED':            'BF_SPEED_10G',
+        '$FEC':              'BF_FEC_TYP_NONE',
+        '$AUTO_NEGOTIATION': 'PM_AN_DEFAULT'
+        '$PORT_ENABLE':       True
     })
 
 print(request)
