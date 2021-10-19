@@ -45,14 +45,16 @@ jobs:
     needs: "create-environment"
     runs-on: "ubuntu-latest"
     steps:
-      # - name: "Checkout Code"
-      #   uses: "actions/checkout@v2"
+      - name: "Checkout Code"
+        uses: "actions/checkout@v2"
       - name: "Install Python 3"
         uses: "actions/setup-python@v2"
       - uses: "syphar/restore-virtualenv@v1"
         id: "cache-virtualenv"
       - name: "Install Bfrt Helper"
-        run: "pip install -e ."
+        run: |
+          ls -lrth
+          pip install -e .
       - name: "Run Tests"
         env:
           PYTHONPATH: ${{ github.workspace }}/gen-py
@@ -63,14 +65,17 @@ jobs:
     needs: "create-environment"
     runs-on: "ubuntu-latest"
     steps:
-      # - name: "Checkout Code"
-      #   uses: "actions/checkout@v2"
+      - name: "Checkout Code"
+        uses: "actions/checkout@v2"
+
       - name: "Install Python 3"
         uses: "actions/setup-python@v2"
+
       - uses: "syphar/restore-virtualenv@v1"
         id: "cache-virtualenv"
-      - name: "Install Linters"
-        run: "pip install flake8 black"
+      - name: "ls -lrth"
+        run: |
+          ls -lrth
       - name: "Run linters"
         uses: "wearerequired/lint-action@v1"
         with:
