@@ -80,10 +80,9 @@ jobs:
           path: "dist/bfrt_helper-0.0.1-py3-none-any.whl"
         
       - name: "Temporary: Make Release"
-        uses: "ncipollo/release-action@v1"
+        uses: "softprops/action-gh-release@v1"
         with:
-          artifacts: "dist/*"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          files: "dist/*"
 
   lint:
     runs-on: "ubuntu-latest"
