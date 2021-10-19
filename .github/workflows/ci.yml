@@ -12,7 +12,6 @@ jobs:
         uses: "actions/checkout@v2"
       - uses: "syphar/restore-virtualenv@v1"
         id: "cache-virtualenv"
-
       - name: "Cache BfRuntime Protobuf"
         id: "cache-bfrt-protobuf"
         uses: "actions/cache@v2"
@@ -46,8 +45,8 @@ jobs:
     needs: "create-environment"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Checkout Code"
-        uses: "actions/checkout@v2"
+      # - name: "Checkout Code"
+      #   uses: "actions/checkout@v2"
       - name: "Install Python 3"
         uses: "actions/setup-python@v2"
       - uses: "syphar/restore-virtualenv@v1"
@@ -64,8 +63,8 @@ jobs:
     needs: "create-environment"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Checkout Code"
-        uses: "actions/checkout@v2"
+      # - name: "Checkout Code"
+      #   uses: "actions/checkout@v2"
       - name: "Install Python 3"
         uses: "actions/setup-python@v2"
       - uses: "syphar/restore-virtualenv@v1"
