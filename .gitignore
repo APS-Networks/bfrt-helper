@@ -144,7 +144,7 @@ cython_debug/
 
 
 
-api-common-protos
-gen-py
+bfrt_helper/pb2
+# api-common-protos
 htmlcov
 bfruntime_pb2*

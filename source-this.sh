@@ -2,10 +2,11 @@
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # base_dir=${script_dir}/..
-bfproto_file="${base_dir}/proto/bfruntime.proto"
+bfproto_file="./proto/bfrt_helper/pb2/bfruntime.proto"
+echo "bfproto_file:  ${bfproto_file}"
 
 bfproto_file=$(realpath ${bfproto_file})
-bfproto_dir=$(dirname ${bfproto_file})
+bfproto_dir=$(realpath ./proto)
 
 echo "script_dir:    ${script_dir}"
 echo "base_dir:      ${base_dir}"
@@ -33,6 +34,6 @@ mkdir -p ./bfrt_helper/pb2
 python -m grpc_tools.protoc \
     --proto_path=${bfproto_dir} \
     --proto_path=./api-common-protos \
-    --python_out=./bfrt_helper/pb2 \
-    --grpc_python_out=./bfrt_helper/pb2 \
+    --python_out=.\
+    --grpc_python_out=. \
         ${bfproto_file}
