@@ -20,6 +20,11 @@ jobs:
         with:
            path: "gen-py"
            key: ${{ runner.os }}-bfrt-protobuf
+      - name: "Setup Virtual Environment"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e .
       - name: "Clone Google Common Protos"
         if: steps.cache-protobuf.outputs.cache-hit != 'true'
         uses: "actions/checkout@v2"
@@ -37,11 +42,7 @@ jobs:
             --python_out=${{ github.workspace }}/gen-py \
             --grpc_python_out=./gen-py \
                 ${{ github.workspace }}/proto/bfruntime.proto
-      - name: "Setup Virtual Environment"
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -e .
+
       - name: "Run Tests"
         env:
           PYTHONPATH: ${{ github.workspace }}/gen-py
