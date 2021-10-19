@@ -29,6 +29,7 @@ jobs:
           clean: false
       - name: "Generate BfRuntime Protobuf"
         if: steps.cache-bfrt-protobuf.outputs.cache-hit != 'true'
+        run: |
           mkdir -p gen-py
           python -m grpc_tools.protoc \
             --proto_path=${{ github.workspace }}/proto \
