@@ -36,8 +36,17 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}/gen-py
         run:
           python -m pytest -v --cov=bfrt_helper --cov-report html
-      - name: "Run Linting"
-        run: |
-          pip install flake8
-          flake8 ./bfrt_helper
-      
+
+  lint:
+    runs-on: "ubuntu-latest"
+      - name: "Checkout Code"
+        uses: "actions/checkout@v2"
+      - name: "Install Python 3"
+        uses: "actions/setup-python@v2"
+      - name: "Install Linters"
+        run: "pip install flake8 black"
+      - name: "Run linters"
+        uses: wearerequired/lint-action@v1
+        with:
+          black: true
+          flake8: true
