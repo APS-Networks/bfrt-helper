@@ -42,11 +42,13 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/APS-Networks/bfrt-helper",
-    packages=setuptools.find_namespace_packages(),
+    packages=setuptools.find_namespace_packages(
+        exclude=['test']),
     classifiers=[
         "Programming Language :: Python :: 3",
         'License :: OSI Approved :: Apache Software License',
     ],
     python_requires='>=3.6',
     install_requires=install_requirements,
+    
 )

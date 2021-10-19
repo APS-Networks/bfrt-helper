@@ -17,8 +17,8 @@ import sys
 import threading
 import time
 
-import bfruntime_pb2
-import bfruntime_pb2_grpc
+import bfrt_helper.pb2.bfruntime_pb2 as bfruntime_pb2
+import bfrt_helper.pb2.bfruntime_pb2_grpc as bfruntime_pb2_grpc
 
 import google.rpc.status_pb2 as status_pb2
 import google.rpc.code_pb2 as code_pb2

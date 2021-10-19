@@ -27,10 +27,12 @@ pip install -r requirements.txt
 
 site_packages=$(python -m site | grep .venv | sed -E -e "s/^\s*'//g" -e "s/',$//g")
 
+git clone https://github.com/googleapis/api-common-protos
 
+mkdir -p ./bfrt_helper/pb2
 python -m grpc_tools.protoc \
     --proto_path=${bfproto_dir} \
-    --proto_path=${site_packages} \
-    --python_out=${site_packages} \
-    --grpc_python_out=${site_packages} \
+    --proto_path=./api-common-protos \
+    --python_out=./bfrt_helper/pb2 \
+    --grpc_python_out=./bfrt_helper/pb2 \
         ${bfproto_file}

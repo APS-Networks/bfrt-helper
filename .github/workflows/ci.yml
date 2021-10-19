@@ -31,7 +31,7 @@ jobs:
         id: "cache-bfrt-protobuf"
         uses: "actions/cache@v2"
         with:
-            path: "gen-py"
+            path: "bfrt_helper/pb2"
             key: ${{ runner.os }}-bfrt-protobuf-${{ hashFiles('requirements.txt') }}
 
       - name: "Clone Google Common Protos"
@@ -49,8 +49,8 @@ jobs:
           python -m grpc_tools.protoc \
             --proto_path=${{ github.workspace }}/proto \
             --proto_path=${{ github.workspace }}/api-common-protos \
-            --python_out=${{ github.workspace }}/gen-py \
-            --grpc_python_out=./gen-py \
+            --python_out=${{ github.workspace }}/bfrt_helper/pb2 \
+            --grpc_python_out=./bfrt_helper/pb2 \
                 ${{ github.workspace }}/proto/bfruntime.proto
 
       - name: "Install Bfrt Helper"

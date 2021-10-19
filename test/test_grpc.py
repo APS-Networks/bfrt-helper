@@ -1,7 +1,7 @@
 import json
 import os
 
-from bfruntime_pb2 import Update
+from bfrt_helper.pb2.bfruntime_pb2 import Update
 
 from bfrt_helper.bfrt import UnknownKeyField
 from bfrt_helper.bfrt import UnknownTable

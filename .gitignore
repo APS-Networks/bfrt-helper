@@ -146,3 +146,5 @@ cython_debug/
 
 api-common-protos
 gen-py
+htmlcov
+bfruntime_pb2*
