@@ -141,3 +141,10 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+
+
+bfrt_helper/pb2
+api-common-protos
+htmlcov
+bfruntime_pb2*

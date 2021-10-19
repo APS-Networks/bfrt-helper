@@ -1,5 +1,10 @@
 # Barefoot Runtime Helper
 
+![Unit Tests](https://github.com/APS-Networks/bfrt-helper/actions/workflows/ci.yml/badge.svg?branch=merge-updates)
+
+REQUIRES SANITATION BEFORE RELEASE
+
+
 > This documentation is for the APS Networks `bfrt-helper` software. The source
 > code for this is available on GitHub.
 >

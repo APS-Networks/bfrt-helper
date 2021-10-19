@@ -1,0 +1,102 @@
+name: "Run Unit Tests"
+on:
+  push:
+    branches:
+      - "develop"
+  pull_request:
+    branches: 
+      - "develop"
+
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout Code"
+        uses: "actions/checkout@v2"
+
+      - name: "Install Python 3"
+        uses: "actions/setup-python@v2"
+
+      - uses: "syphar/restore-virtualenv@v1"
+        id: "cache-virtualenv"
+
+      - name: "Setup Virtual Environment"
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: "Cache BfRuntime Protobuf"
+        id: "cache-bfrt-protobuf"
+        uses: "actions/cache@v2"
+        with:
+            path: "bfrt_helper/pb2"
+            key: ${{ runner.os }}-bfrt-protobuf-${{ hashFiles('requirements.txt') }}
+
+      - name: "Clone Google Common Protos"
+        if: steps.cache-bfrt-protobuf.outputs.cache-hit != 'true'
+        uses: "actions/checkout@v2"
+        with:
+          repository: "googleapis/api-common-protos"
+          path: "api-common-protos"
+          clean: false
+
+      - name: "Generate BfRuntime Protobuf"
+        if: steps.cache-bfrt-protobuf.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ${{ github.workspace }}/bfrt_helper/pb2
+          python -m grpc_tools.protoc \
+            --proto_path=$bfrt_proto_dir \
+            --proto_path=$google_proto_dir \
+            --python_out=${{ github.workspace }} \
+            --grpc_python_out=${{ github.workspace }} \
+                $bfrt_proto
+        env:
+          bfrt_proto: ${{ github.workspace }}/proto/bfrt_helper/pb2/bfruntime.proto
+          bfrt_proto_dir: ${{ github.workspace }}/proto
+          google_proto_dir: ${{ github.workspace }}/api-common-protos
+      - name: "Install Bfrt Helper"
+        run: |
+          pip install -e .
+
+      - name: "Run Tests"
+        env:
+          PYTHONPATH: ${{ github.workspace }}/gen-py
+        run:
+          python -m pytest -v --cov=bfrt_helper --cov-report html
+      - name: "Save Coverage Report"
+        uses: actions/upload-artifact@v2
+        with:
+          name: "coverage-report"
+          path: "htmlcov"
+
+
+  lint:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout Code"
+        uses: "actions/checkout@v2"
+        with:
+          fetch-depth: 0
+
+      - name: "Install Python 3"
+        uses: "actions/setup-python@v2"
+
+      - name: "Install Linters"
+        run: "pip install flake8 black"
+      # - uses: "syphar/restore-virtualenv@v1"
+      #   id: "cache-virtualenv"
+
+
+      # - name: "Setup Virtual Environment"
+      #   if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install -r requirements.txt
+
+      - name: "Run linters"
+        uses: "wearerequired/lint-action@v1"
+        with:
+          black: false
+          flake8: true
+          flake8_args: "--max-line-length=100"
