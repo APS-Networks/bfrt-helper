@@ -23,7 +23,7 @@ as follows:
 
 > The protobuf definition, as of writing, is Intel proprietary and confidential,
 > and therefore cannot be shared. Otherwise this would be provided.
- 
+
 ## Overview
 
 The library comes supplied with the following python files:
