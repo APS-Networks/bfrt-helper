@@ -3,7 +3,6 @@ from bfrt_helper.util import InvalidValue
 from bfrt_helper.fields import Field
 
 
-
 class Masked:
     def __init__(self):
         self.value = None
@@ -28,25 +27,23 @@ class Masked:
 
     def overlaps(self, other) -> bool:
         c_mask = self.mask & other.mask
-        return not (
-            c_mask == self.mask or c_mask == other.mask
-        ) and (
+        return not (c_mask == self.mask or c_mask == other.mask) and (
             self.value & c_mask == other.value & c_mask
         )
 
     def __hash__(self):
         return hash((self.value, self.mask))
 
-    def __le__(self,  other) -> bool:
+    def __le__(self, other) -> bool:
         return self.subset_of(other)
 
     def __ge__(self, other) -> bool:
         return self.superset_of(other)
 
-    def __lt__(self,  other):
+    def __lt__(self, other):
         return self.subset_of(other) and not self == other
 
-    def __gt__(self,  other):
+    def __gt__(self, other):
         return self.superset_of(other) and not self == other
 
     def __eq__(self, other) -> bool:
@@ -60,7 +57,7 @@ class Masked:
 
     def __iter__(self):
         def iterator(ternary):
-            global_max_value = (1 << self.value.bitwidth) - 1 
+            global_max_value = (1 << self.value.bitwidth) - 1
             local_max_val = global_max_value - self.mask.value
             local_max_val = self.value.value | local_max_val
             temp = self.value.value
@@ -81,25 +78,23 @@ class Masked:
         return iterator(self)
 
 
-
-
 class Ternary(Masked):
-    def __init__(self, value: Field, mask: Field=None, dont_care=False):
+    def __init__(self, value: Field, mask: Field = None, dont_care=False):
         super().__init__()
 
         self.max_value = (2 ** value.bitwidth) - 1
         self.value = value
         self.mask = mask
 
-        if mask == None:
+        if mask is None:
             required_bytes = (value.bitwidth + 7) // 8
             if dont_care:
                 mask_int = 0
-                mask_bytes = mask_int.to_bytes(required_bytes, 'big')
+                mask_bytes = mask_int.to_bytes(required_bytes, "big")
                 mask = value.__class__.from_bytes(mask_bytes)
             else:
                 mask_int = (1 << value.bitwidth) - 1
-                mask_bytes = mask_int.to_bytes(required_bytes, 'big')
+                mask_bytes = mask_int.to_bytes(required_bytes, "big")
                 mask = value.__class__.from_bytes(mask_bytes)
         elif not isinstance(mask, value.__class__):
             mask = value.__class__(mask)
@@ -120,12 +115,10 @@ class Ternary(Masked):
     def __str__(self):
         if self.mask.value == self.max_value:
             return str(self.value)
-        return f'{str(self.value)} &&& {str(self.mask)}'
+        return f"{str(self.value)} &&& {str(self.mask)}"
 
     def __repr__(self):
-        return f'Ternary({repr(self.value)}, mask={repr(self.mask)})'
-
-
+        return f"Ternary({repr(self.value)}, mask={repr(self.mask)})"
 
 
 class LPM(Masked):
@@ -133,24 +126,21 @@ class LPM(Masked):
         super().__init__()
 
         if prefix > value.bitwidth:
-            msg = f'Prefix {prefix} is greater than the maximum allowed for this '
-            msg += f' field. [bitwidth={value.bitwidth}]'
+            msg = f"Prefix {prefix} is greater than the maximum allowed for this "
+            msg += f" field. [bitwidth={value.bitwidth}]"
             raise InvalidValue(msg)
         self.mask = value.__class__((2 ** prefix - 1) << (value.bitwidth - prefix))
         self.value = value & self.mask
         self.prefix = prefix
 
     def __str__(self):
-        return f'{self.value}/{self.prefix}'
+        return f"{self.value}/{self.prefix}"
 
-    
     def __repr__(self):
-        return f'LPM({repr(self.value)}, prefix={self.prefix})'
+        return f"LPM({repr(self.value)}, prefix={self.prefix})"
 
     def value_bytes(self):
         return self.value.to_bytes()
-
-
 
 
 class Exact:
@@ -165,8 +155,6 @@ class Exact:
 
     def value_bytes(self):
         return self.value.to_bytes()
-
-
 
 
 class Match:
@@ -206,7 +194,7 @@ class Match:
             if isinstance(a, Ternary):
                 value = a.value | b.value
                 mask = a.mask | b.mask
-                match = Ternary(value, mask) 
+                match = Ternary(value, mask)
                 tmp.append(match)
             elif isinstance(a, LPM):
                 value = a.value | b.value
@@ -215,8 +203,10 @@ class Match:
                 tmp.append(match)
             else:
                 if a.value != b.value:
-                    raise InvalidOperation('Trying to calculate the difference ' \
-                        + 'on matches containing non-equal exact values.')
+                    raise InvalidOperation(
+                        "Trying to calculate the difference "
+                        + "on matches containing non-equal exact values."
+                    )
                 tmp.append(a)
         return Match(*tmp)
 
@@ -279,12 +269,12 @@ class Match:
         for a in self.fields:
             if isinstance(a, Ternary):
                 if a.mask.value == 0:
-                    field_strings.append('_')
+                    field_strings.append("_")
                 else:
                     field_strings.append(str(a))
             else:
                 field_strings.append(str(a))
-        return '{{  {}  }}'.format(', '.join(field_strings))
+        return "{{  {}  }}".format(", ".join(field_strings))
 
     def __repr__(self):
-       return 'Match({})'.format(', '.join([repr(x) for x in self.fields]))
+        return "Match({})".format(", ".join([repr(x) for x in self.fields]))
