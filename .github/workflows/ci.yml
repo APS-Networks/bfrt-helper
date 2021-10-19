@@ -51,7 +51,6 @@ jobs:
 
       - name: "Install Bfrt Helper"
         run: |
-          ls -lrtha
           pip install -e .
 
       - name: "Run Tests"
@@ -75,9 +74,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: "ls -lrth"
-        run: |
-          ls -lrtha
       - name: "Run linters"
         uses: "wearerequired/lint-action@v1"
         with:
