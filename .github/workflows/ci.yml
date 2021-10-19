@@ -68,6 +68,10 @@ jobs:
       - name: "Install Python 3"
         uses: "actions/setup-python@v2"
 
+      - uses: "syphar/restore-virtualenv@v1"
+        id: "cache-virtualenv"
+
+
       - name: "Setup Virtual Environment"
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: |
