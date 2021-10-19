@@ -10,7 +10,7 @@ def test_ternary_to_string():
     mask = 240
     value = 42 & mask
     ternary = Ternary(EightBit(value), mask=mask)
-    expected = f'{value} &&& 240'
+    expected = f"{value} &&& 240"
     assert str(ternary) == expected
 
 
@@ -110,29 +110,28 @@ def test_ternary_in_conflict():
 def test_ternary_intersection():
     ternary_a = Ternary(EightBit(0b00101011), EightBit(0b00111111))
     ternary_b = Ternary(EightBit(0b11101000), EightBit(0b11111100))
-    expected  = Ternary(EightBit(0b11101011), EightBit(0b11111111))
+    expected = Ternary(EightBit(0b11101011), EightBit(0b11111111))
     assert expected == ternary_a & ternary_b
 
 
 def test_ternary_intersection_of_subset():
     ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
     ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
-    expected  = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
+    expected = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
     assert expected == ternary_a & ternary_b
-
 
 
 def test_ternary_union_of_different_sets():
     ternary_a = Ternary(EightBit(0b00101011), EightBit(0b00111111))
     ternary_b = Ternary(EightBit(0b11101000), EightBit(0b11111100))
-    expected  = Ternary(EightBit(0b00101000), EightBit(0b00111100))
+    expected = Ternary(EightBit(0b00101000), EightBit(0b00111100))
     assert expected == ternary_a | ternary_b
 
 
 def test_ternary_union_of_subset():
     ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
     ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
-    expected  = Ternary(EightBit(0b10100000), mask=EightBit(0b11110000))
+    expected = Ternary(EightBit(0b10100000), mask=EightBit(0b11110000))
     assert expected == ternary_a | ternary_b
 
 
@@ -142,7 +141,7 @@ def test_ternary_iterator_contiguous():
         Ternary(EightBit(0b01101000), EightBit(0b11111111)),
         Ternary(EightBit(0b01101001), EightBit(0b11111111)),
         Ternary(EightBit(0b01101010), EightBit(0b11111111)),
-        Ternary(EightBit(0b01101011), EightBit(0b11111111))
+        Ternary(EightBit(0b01101011), EightBit(0b11111111)),
     ]
 
     assert expected == [x for x in iter(ternary)]
@@ -154,7 +153,7 @@ def test_ternary_iterator_discontiguous():
         Ternary(EightBit(0b01101010), EightBit(0b11111111)),
         Ternary(EightBit(0b01101011), EightBit(0b11111111)),
         Ternary(EightBit(0b01111010), EightBit(0b11111111)),
-        Ternary(EightBit(0b01111011), EightBit(0b11111111))
+        Ternary(EightBit(0b01111011), EightBit(0b11111111)),
     ]
 
     assert expected == [x for x in iter(ternary)]
