@@ -47,11 +47,11 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/bfrt_helper/pb2
           python -m grpc_tools.protoc \
-            --proto_path=${{ bfrt_proto_dir }} \
-            --proto_path=${{ google_proto_dir }} \
+            --proto_path=$bfrt_proto_dir \
+            --proto_path=$google_proto_dir \
             --python_out=${{ github.workspace }} \
             --grpc_python_out=${{ github.workspace }} \
-                ${{ bfrt_proto }}
+                $bfrt_proto
         env:
           bfrt_proto: ${{ github.workspace }}/proto/bfrt_helper/pb2/bfruntime.proto
           bfrt_proto_dir: ${{ github.workspace }}/proto
