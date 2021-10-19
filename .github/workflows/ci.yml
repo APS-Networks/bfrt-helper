@@ -5,32 +5,22 @@ on:
       - "merge-updates"
 
 jobs:
-  build:
-    runs-on: "ubuntu-latest"
+  create-environment:
     steps:
-      - name: "Checkout Code"
-        uses: "actions/checkout@v2"
-      - name: "Install Python 3"
-        uses: "actions/setup-python@v2"
-        with:
-          python-version: 3.6
+      - uses: "syphar/restore-virtualenv@v1"
+        id: "cache-virtualenv"
+
       - name: "Cache BfRuntime Protobuf"
         id: "cache-bfrt-protobuf"
         uses: "actions/cache@v2"
         with:
-           path: "gen-py"
-           key: ${{ runner.os }}-bfrt-protobuf
-
-      - uses: "syphar/restore-virtualenv@v1"
-        id: "cache-virtualenv"
+            path: "gen-py"
+            key: ${{ runner.os }}-bfrt-protobuf
       - name: "Setup Virtual Environment"
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
-      - name: "Install Bfrt Helper"
-        run: "pip install -e ."
       - name: "Clone Google Common Protos"
         if: steps.cache-bfrt-protobuf.outputs.cache-hit != 'true'
         uses: "actions/checkout@v2"
@@ -49,6 +39,16 @@ jobs:
             --grpc_python_out=./gen-py \
                 ${{ github.workspace }}/proto/bfruntime.proto
 
+  test:
+    needs: "create-environment"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout Code"
+        uses: "actions/checkout@v2"
+      - name: "Install Python 3"
+        uses: "actions/setup-python@v2"
+      - name: "Install Bfrt Helper"
+        run: "pip install -e ."
       - name: "Run Tests"
         env:
           PYTHONPATH: ${{ github.workspace }}/gen-py
@@ -56,6 +56,7 @@ jobs:
           python -m pytest -v --cov=bfrt_helper --cov-report html
 
   lint:
+    needs: "create-environment"
     runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout Code"
