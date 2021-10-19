@@ -45,12 +45,12 @@ jobs:
       - name: "Generate BfRuntime Protobuf"
         if: steps.cache-bfrt-protobuf.outputs.cache-hit != 'true'
         run: |
-          mkdir -p gen-py
+          mkdir -p ${{ github.workspace }}/bfrt_helper/pb2
           python -m grpc_tools.protoc \
             --proto_path=${{ github.workspace }}/proto \
             --proto_path=${{ github.workspace }}/api-common-protos \
             --python_out=${{ github.workspace }}/bfrt_helper/pb2 \
-            --grpc_python_out=./bfrt_helper/pb2 \
+            --grpc_python_out=${{ github.workspace }}/bfrt_helper/pb2 \
                 ${{ github.workspace }}/proto/bfruntime.proto
 
       - name: "Install Bfrt Helper"
