@@ -35,7 +35,7 @@ if sys.version_info < (3, 7):
 
 setuptools.setup(
     name="bfrt_helper",
-    version="0.0.1",
+    version="1.0",
     author="APS Networks GmbH",
     author_email="support@aps-networks.com",
     description="Helper library for the Barefoot Runtime gRPC interface.",
