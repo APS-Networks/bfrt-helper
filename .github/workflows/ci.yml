@@ -14,16 +14,21 @@ jobs:
         uses: "actions/setup-python@v2"
         with:
           python-version: 3.6
+      - name: "Cache BfRuntime Protobuf"
+         id: "cache-bfrt-protobuf"
+         uses: "actions/cache@v2"
+         with:
+           path: "gen-py"
+           key: ${{ runner.os }}-bfrt-protobuf
       - name: "Clone Google Common Protos"
+        if: steps.cache-protobuf.outputs.cache-hit != 'true'
         uses: "actions/checkout@v2"
         with:
           repository: "googleapis/api-common-protos"
           path: "api-common-protos"
-      - name: "Setup Virtual Environment"
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -e .
+          clean: false
+      - name: "Generate BfRuntime Protobuf"
+        if: steps.cache-bfrt-protobuf.outputs.cache-hit != 'true'
           mkdir -p gen-py
           python -m grpc_tools.protoc \
             --proto_path=${{ github.workspace }}/proto \
@@ -31,6 +36,11 @@ jobs:
             --python_out=${{ github.workspace }}/gen-py \
             --grpc_python_out=./gen-py \
                 ${{ github.workspace }}/proto/bfruntime.proto
+      - name: "Setup Virtual Environment"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e .
       - name: "Run Tests"
         env:
           PYTHONPATH: ${{ github.workspace }}/gen-py
