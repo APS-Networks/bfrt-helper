@@ -53,9 +53,9 @@ jobs:
             --grpc_python_out=${{ github.workspace }} \
                 ${{ bfrt_proto }}
         env:
-          bfrt_proto=${{ github.workspace }}/proto/bfrt_helper/pb2/bfruntime.proto
-          bfrt_proto_dir=${{ github.workspace }}/proto
-          google_proto_dir=${{ github.workspace }}/api-common-protos
+          bfrt_proto: ${{ github.workspace }}/proto/bfrt_helper/pb2/bfruntime.proto
+          bfrt_proto_dir: ${{ github.workspace }}/proto
+          google_proto_dir: ${{ github.workspace }}/api-common-protos
       - name: "Install Bfrt Helper"
         run: |
           pip install -e .
