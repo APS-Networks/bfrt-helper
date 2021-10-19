@@ -58,6 +58,11 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}/gen-py
         run:
           python -m pytest -v --cov=bfrt_helper --cov-report html
+      - name: "Save Coverage Report"
+        uses: actions/upload-artifact@v2
+        with:
+          name: "coverage-report"
+          path: "htmlcov"
 
   lint:
     runs-on: "ubuntu-latest"
