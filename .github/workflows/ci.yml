@@ -5,7 +5,6 @@ on:
       - "merge-updates"
   pull_request:
     branches: 
-      - "main"
       - "merge-updates"
 
 jobs:
@@ -70,6 +69,15 @@ jobs:
         with:
           name: "coverage-report"
           path: "htmlcov"
+
+      - name: "Build Wheel"
+        run: "python setup.py bdist_wheel"
+      - name: "Save wheel"
+        uses: "actions/upload-artifact@v2"
+        with:
+          name: "Wheel"
+          path: "dist/bfrt_helper-0.0.1-py3-none-any.whl"
+        
 
   lint:
     runs-on: "ubuntu-latest"
