@@ -50,6 +50,8 @@ jobs:
         uses: "actions/checkout@v2"
       - name: "Install Python 3"
         uses: "actions/setup-python@v2"
+      - uses: "syphar/restore-virtualenv@v1"
+        id: "cache-virtualenv"
       - name: "Install Bfrt Helper"
         run: "pip install -e ."
       - name: "Run Tests"
@@ -66,10 +68,12 @@ jobs:
         uses: "actions/checkout@v2"
       - name: "Install Python 3"
         uses: "actions/setup-python@v2"
+      - uses: "syphar/restore-virtualenv@v1"
+        id: "cache-virtualenv"
       - name: "Install Linters"
         run: "pip install flake8 black"
       - name: "Run linters"
-        uses: wearerequired/lint-action@v1
+        uses: "wearerequired/lint-action@v1"
         with:
           black: true
           flake8: true
