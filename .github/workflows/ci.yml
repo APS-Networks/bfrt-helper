@@ -91,6 +91,8 @@ jobs:
       - name: "Install Python 3"
         uses: "actions/setup-python@v2"
 
+      - name: "Install Linters"
+        run: "pip install flake8 black"
       # - uses: "syphar/restore-virtualenv@v1"
       #   id: "cache-virtualenv"
 
