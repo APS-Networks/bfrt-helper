@@ -18,7 +18,7 @@ jobs:
         uses: "actions/cache@v2"
         with:
             path: "gen-py"
-            key: ${{ runner.os }}-bfrt-protobuf
+            key: ${{ runner.os }}-bfrt-protobuf-${{ hashFiles('requirements.txt') }}
 
       - name: "Setup Virtual Environment"
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
@@ -55,6 +55,10 @@ jobs:
         uses: "actions/setup-python@v2"
       - uses: "syphar/restore-virtualenv@v1"
         id: "cache-virtualenv"
+      - uses: "actions/cache@v2"
+        with:
+          path: "gen-py"
+          key: ${{ runner.os }}-bfrt-protobuf-${{ hashFiles('requirements.txt') }}
       - name: "Install Bfrt Helper"
         run: |
           ls -lrtha
