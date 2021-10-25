@@ -70,4 +70,4 @@ jobs:
         with:
           black: false
           flake8: true
-          flake8_args: "--max-line-length=100"
+          flake8_args: "--max-line-length=100 --exclude bfrt_helper/pb2"
