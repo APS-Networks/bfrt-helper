@@ -7,8 +7,8 @@ with open("README.md", "r") as fh:
 
 
 install_requirements = [
-    "grpcio", 
-    "grpcio-tools", 
+    "grpcio",
+    "grpcio-tools",
     "googleapis-common-protos"
 ]
 
@@ -25,7 +25,6 @@ if get_setuptools_ver() < (40, 1, 0):
     print("\tpip install --upgrade setuptools")
     print("Or use provided setup.sh script.")
     sys.exit(1)
-
 
 
 setuptools.setup(
