@@ -63,9 +63,7 @@ class BfRtTableKey(BfRtObject):
 
 
 class BfRtTableActionSpec(BfRtObject):
-    def __init__(
-        self, id_: int, name: str, action_scope: str, annotations: list, data: list
-    ):
+    def __init__(self, id_: int, name: str, action_scope: str, annotations: list, data: list):
         self.id = id_
         self.name = name
         self.action_scope = action_scope
@@ -95,9 +93,7 @@ class BfRtTableActionData(BfRtObject):
 
 
 class BfRtTableDataFieldSingleton(BfRtObject):
-    def __init__(
-        self, id_: int, name: str, repeated: bool, annotations: list, type_: dict
-    ):
+    def __init__(self, id_: int, name: str, repeated: bool, annotations: list, type_: dict):
         self.id = id_
         self.name = name
         self.repeated = repeated
@@ -106,9 +102,7 @@ class BfRtTableDataFieldSingleton(BfRtObject):
 
 
 class BfRtTableDataField(BfRtObject):
-    def __init__(
-        self, mandatory: bool, read_only: bool, singleton: BfRtTableDataFieldSingleton
-    ):
+    def __init__(self, mandatory: bool, read_only: bool, singleton: BfRtTableDataFieldSingleton):
         self.mandatory = mandatory
         self.read_only = read_only
         self.singleton = singleton
@@ -195,9 +189,7 @@ def parse_table_data_field(field):
     if singleton is not None:
         singleton = parse_table_data_field_singleton(singleton)
 
-    return BfRtTableDataField(
-        mandatory=mandatory, read_only=read_only, singleton=singleton
-    )
+    return BfRtTableDataField(mandatory=mandatory, read_only=read_only, singleton=singleton)
 
 
 def parse_table(table_data):

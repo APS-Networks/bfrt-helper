@@ -28,9 +28,7 @@ class UnknownAction(Exception):
 
 class UnknownActionParameter(Exception):
     def __init__(self, table_name, action_name, param_name):
-        msg = (
-            f"Could not find action parameter {table_name}::{action_name}::{param_name}"
-        )
+        msg = f"Could not find action parameter {table_name}::{action_name}::{param_name}"
         super().__init__(msg)
 
 
@@ -226,14 +224,10 @@ class BfRtHelper:
                     raise UnknownActionParameter(table_name, action_name, param_name)
 
                 try:
-                    bfrt_data_field = self.create_data_field(
-                        info_action_field, param_data
-                    )
+                    bfrt_data_field = self.create_data_field(info_action_field, param_data)
                     bfrt_table_data.fields.extend([bfrt_data_field])
                 except MismatchedDataSize as err:
-                    raise InvalidActionParameter(
-                        table_name, action_name, param_name, str(err)
-                    )
+                    raise InvalidActionParameter(table_name, action_name, param_name, str(err))
 
         return bfrt_table_data
 
@@ -307,21 +301,15 @@ class BfRtHelper:
         bfrt_key_field = self.create_key_field("$pre.port", "$DEV_PORT", Exact(port))
         bfrt_table_entry.extend([bfrt_key_field])
 
-        info_cpu_port_field = self.bfrt_info.get_data_field(
-            "$pre.port", "$COPY_TO_CPU_PORT_ENABLE"
-        )
-        bfrt_cpu_port_field = self.create_data_field(
-            info_cpu_port_field.singleton, True
-        )
+        info_cpu_port_field = self.bfrt_info.get_data_field("$pre.port", "$COPY_TO_CPU_PORT_ENABLE")
+        bfrt_cpu_port_field = self.create_data_field(info_cpu_port_field.singleton, True)
         bfrt_table_entry.data.fields.extend([bfrt_cpu_port_field])
 
         bfrt_update = bfrt_request.updates.add()
         bfrt_update.type = bfruntime_pb2.Update.Type.MODIFY
         bfrt_update.entity.table_entry.CopyFrom(bfrt_table_entry)
 
-    def create_set_pipeline_request(
-        self, program_name, bfrt_path, context_path, binary_path
-    ):
+    def create_set_pipeline_request(self, program_name, bfrt_path, context_path, binary_path):
         # Need to figure out base_path properly later
         request = bfruntime_pb2.SetForwardingPipelineConfigRequest()
         request.client_id = self.client_id
