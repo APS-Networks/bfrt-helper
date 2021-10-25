@@ -26,35 +26,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: "Cache BfRuntime Protobuf"
-        id: "cache-bfrt-protobuf"
-        uses: "actions/cache@v2"
-        with:
-            path: "bfrt_helper/pb2"
-            key: ${{ runner.os }}-bfrt-protobuf-${{ hashFiles('requirements.txt') }}
-
-      - name: "Clone Google Common Protos"
-        if: steps.cache-bfrt-protobuf.outputs.cache-hit != 'true'
-        uses: "actions/checkout@v2"
-        with:
-          repository: "googleapis/api-common-protos"
-          path: "api-common-protos"
-          clean: false
-
-      - name: "Generate BfRuntime Protobuf"
-        if: steps.cache-bfrt-protobuf.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p ${{ github.workspace }}/bfrt_helper/pb2
-          python -m grpc_tools.protoc \
-            --proto_path=$bfrt_proto_dir \
-            --proto_path=$google_proto_dir \
-            --python_out=${{ github.workspace }} \
-            --grpc_python_out=${{ github.workspace }} \
-                $bfrt_proto
-        env:
-          bfrt_proto: ${{ github.workspace }}/proto/bfrt_helper/pb2/bfruntime.proto
-          bfrt_proto_dir: ${{ github.workspace }}/proto
-          google_proto_dir: ${{ github.workspace }}/api-common-protos
       - name: "Install Bfrt Helper"
         run: |
           pip install -e .
