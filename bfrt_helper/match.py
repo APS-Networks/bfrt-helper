@@ -1,6 +1,8 @@
 from bfrt_helper.util import InvalidOperation
 from bfrt_helper.util import InvalidValue
+from bfrt_helper.util import mask_from_prefix
 from bfrt_helper.fields import Field
+from bfrt_helper.fields import IPv4Address
 
 
 class Masked:
@@ -19,7 +21,9 @@ class Masked:
         return (self.value & self.mask) == (other.value & self.mask)
 
     def intersection(self, other):
-        return self.__class__(self.value | other.value, self.mask | other.mask)
+        return self.__class__(
+            value=self.value | other.value,
+            mask=self.mask | other.mask)
 
     def union(self, other):
         new_mask = self.mask & other.mask
@@ -179,6 +183,12 @@ class Match:
     def __hash__(self):
         return hash(self.fields)
 
+    def __and__(self, other):
+        return self.intersection(other)
+
+    def __or__(self, other):
+        return self.union(other)
+
     def conflicts(self, other):
         acc = True
         for a, b in zip(self.fields, other.fields):
@@ -188,27 +198,22 @@ class Match:
                 acc = acc and a == b
         return acc
 
-    def difference_to(self, other):
-        tmp = []
+    def intersection(self, other):
+        print(f'Intersection {self} & {other}')
+        args = []
         for a, b in zip(self.fields, other.fields):
             if isinstance(a, Ternary):
-                value = a.value | b.value
-                mask = a.mask | b.mask
-                match = Ternary(value, mask)
-                tmp.append(match)
+                args.append(a.intersection(b))
             elif isinstance(a, LPM):
-                value = a.value | b.value
-                prefix = max(a.prefix, b.prefix)
-                match = LPM(value, prefix=prefix)
-                tmp.append(match)
+                args.append(LPM(a.value | b.value, max(a.prefix, b.prefix)))
             else:
-                if a.value != b.value:
+                if a != b:
                     raise InvalidOperation(
                         "Trying to calculate the difference "
                         + "on matches containing non-equal exact values."
                     )
-                tmp.append(a)
-        return Match(*tmp)
+                args.append(a)
+        return Match(*args)
 
     def superset_of(self, other):
         acc = True
@@ -253,16 +258,20 @@ class Match:
             acc = acc and a == b
         return acc
 
-    def overlap(self, other):
+    def overlaps(self, other):
         acc = True
-        all_exact = True
+
+        if self < other: return False
+        if self > other: return False
+        if self == other: return False
+
         for a, b in zip(self.fields, other.fields):
             if isinstance(a, Masked):
-                acc = acc and (a >= b or a <= b)
+                acc = acc and (a >= b or a <= b or a.overlaps(b))
                 all_exact = False
             else:
                 acc = acc and a == b
-        return False if all_exact else acc
+        return acc
 
     def __str__(self):
         field_strings = []
@@ -278,3 +287,19 @@ class Match:
 
     def __repr__(self):
         return "Match({})".format(", ".join([repr(x) for x in self.fields]))
+
+
+
+
+
+class IPv4AddressTernary(Ternary):
+    ''' The asterisk captures all positional parameters, forcing everything to
+        be named '''
+    def __init__(self, value, *, prefix=None, mask=None):
+        if not isinstance(value, IPv4Address):
+            value = IPv4Address(value)
+        if prefix:
+            mask = IPv4Address(mask_from_prefix(IPv4Address.bitwidth, prefix))
+        
+        super().__init__(value, mask)
+

@@ -41,3 +41,7 @@ def encode_number(number, bitwidth):
 
 def bit_not(value, n_bits):
     return (1 << n_bits) - 1 - value
+
+
+def mask_from_prefix(bitwidth, prefix):
+    return (2 ** prefix - 1) << (bitwidth - prefix)

@@ -184,3 +184,27 @@ def test_ternary_arbitrary_mask_not_subset():
     assert not ternary2 < ternary1
     assert not ternary1 < ternary2
     assert not ternary2 > ternary1
+
+
+def test_ternary_is_overlap():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b00101000), mask=EightBit(0b00111100))
+    assert ternary_a.overlaps(ternary_b)
+
+
+def test_ternary_superset_is_not_overlap():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b00101000), mask=EightBit(0b11111100))
+    assert not ternary_a.overlaps(ternary_b)
+
+
+def test_ternary_subset_is_not_overlap():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
+    ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    assert not ternary_a.overlaps(ternary_b)
+
+
+def test_ternary_equal_is_not_overlap():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    assert not ternary_a.overlaps(ternary_b)
