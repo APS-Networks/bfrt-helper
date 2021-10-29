@@ -202,10 +202,10 @@ def test_match_is_overlap():
 
 def test_match_with_equal_is_overlap():
     match_a = Match(
-        Exact(  EightBit(0b10101100)),
+        Exact(EightBit(0b10101100)),
         Ternary(EightBit(0b11010000), EightBit(0b11110000)))
     match_b = Match(
-        Exact(  EightBit(0b10101100)),
+        Exact(EightBit(0b10101100)),
         Ternary(EightBit(0b00011100), EightBit(0b00111100)))
     assert match_a.overlaps(match_b)
 
@@ -220,13 +220,15 @@ def test_match_with_not_equal_is_overlap():
     assert not match_a.overlaps(match_b)
 
 
-def test_match_mixed_sets():
+def test_match_mixed_sets_overlap():
     match_a = Match(
         Ternary(EightBit(0b10100000), EightBit(0b11110000)),
-        Ternary(EightBit(0b11001100), EightBit(0b11111100)),)
+        Ternary(EightBit(0b11001100), EightBit(0b11111100)))
     match_b = Match(
         Ternary(EightBit(0b10101000), EightBit(0b11111100)),
-        Ternary(EightBit(0b11000000), EightBit(0b11110000)),)
+        Ternary(EightBit(0b11000000), EightBit(0b11110000)))
+    assert match_a.overlaps(match_b)
+
 
 def test_match_superset_ternary_is_not_overlap():
     match_a = Match(

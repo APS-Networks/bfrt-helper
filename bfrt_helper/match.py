@@ -261,14 +261,16 @@ class Match:
     def overlaps(self, other):
         acc = True
 
-        if self < other: return False
-        if self > other: return False
-        if self == other: return False
+        if self < other:
+            return False
+        if self > other:
+            return False
+        if self == other:
+            return False
 
         for a, b in zip(self.fields, other.fields):
             if isinstance(a, Masked):
                 acc = acc and (a >= b or a <= b or a.overlaps(b))
-                all_exact = False
             else:
                 acc = acc and a == b
         return acc
@@ -289,9 +291,6 @@ class Match:
         return "Match({})".format(", ".join([repr(x) for x in self.fields]))
 
 
-
-
-
 class IPv4AddressTernary(Ternary):
     ''' The asterisk captures all positional parameters, forcing everything to
         be named '''
@@ -300,6 +299,5 @@ class IPv4AddressTernary(Ternary):
             value = IPv4Address(value)
         if prefix:
             mask = IPv4Address(mask_from_prefix(IPv4Address.bitwidth, prefix))
-        
-        super().__init__(value, mask)
 
+        super().__init__(value, mask)
