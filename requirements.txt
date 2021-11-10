@@ -19,7 +19,7 @@ protobuf
 py
 pycodestyle
 pyflakes
-pyparsing
+pyparsing<3,>=2.0.2 # Specific version for packaging
 pytest
 pytest-cov
 pytest-github-actions-annotate-failures
