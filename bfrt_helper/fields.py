@@ -6,12 +6,36 @@
 
 import ipaddress
 
+from enum import Enum
 from bfrt_helper.util import InvalidValue
 from bfrt_helper.util import InvalidOperation
 from bfrt_helper.util import encode_number
 
 
-class Field:
+class JSONSerialisable(object):
+    def json(self):
+        result = {}
+        for key, value in self.__dict__.items():
+            result[key] = serialise(value)
+        return result
+
+def serialise(value):
+    if isinstance(value, list):
+        return [serialise(x) for x in value]
+    elif isinstance(value, dict):
+        return { k: serialise(v) for k, v in value.items() }
+    elif isinstance(value, Field):
+        return value.value
+    elif isinstance(value, JSONSerialisable):
+        return value.json()
+    elif isinstance(value, Enum):
+        return value.name
+    else:
+        return value
+
+
+
+class Field(JSONSerialisable):
 
     # Make immutable
     __slots__ = []
