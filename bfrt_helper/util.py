@@ -45,3 +45,5 @@ def bit_not(value, n_bits):
 
 def mask_from_prefix(bitwidth, prefix):
     return (2 ** prefix - 1) << (bitwidth - prefix)
+
+
