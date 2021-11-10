@@ -13,6 +13,8 @@
    limitations under the License.
 """
 
+from bfrt_helper.fields import JSONSerialisable
+
 
 def quoted(value):
     if isinstance(value, str):  # or isinstance(value, unicode):
@@ -21,7 +23,7 @@ def quoted(value):
         return value
 
 
-class BfRtObject(object):
+class BfRtObject(JSONSerialisable):
     def __repr__(self):
         pairs = []
         for key, value in self.__dict__.items():
