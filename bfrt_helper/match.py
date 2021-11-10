@@ -5,6 +5,16 @@ from bfrt_helper.fields import Field
 from bfrt_helper.fields import IPv4Address
 
 
+class MismatchedKeys(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class MismatchedTypes(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+
 class Masked:
     def __init__(self):
         self.value = None
@@ -162,7 +172,7 @@ class Exact:
 
 
 class Match:
-    def __init__(self, *fields):
+    def __init__(self, **fields):
         self.fields = fields
 
     def __gt__(self, other):
@@ -181,7 +191,7 @@ class Match:
         return self.equal_(other)
 
     def __hash__(self):
-        return hash(self.fields)
+        return hash((*self.fields.keys(), *self.fields.values()))
 
     def __and__(self, other):
         return self.intersection(other)
@@ -189,73 +199,120 @@ class Match:
     def __or__(self, other):
         return self.union(other)
 
+    def __equality_check(self, other):
+        for (k1, v1), (k2, v2) in zip(
+                self.fields.items(), 
+                other.fields.items()):
+
+            if k1 != k2:
+                raise MismatchedKeys(f'Key {k1} is not equal to {k2}')
+            if type(v1) != type(v2):
+                raise MismatchedTypes(f'Type of {v1} ({type(v1)}) is not equal to {v2} ({type(v2)})')
+
     def conflicts(self, other):
         acc = True
-        for a, b in zip(self.fields, other.fields):
-            if isinstance(a, Masked):
-                acc = acc and a.conflicts(b)
+        self.__equality_check(other)
+
+        for (k1, v1), (k2, v2) in zip(
+                self.fields.items(), 
+                other.fields.items()):
+
+            if isinstance(v1, Masked):
+                acc = acc and v1.conflicts(v2)
             else:
-                acc = acc and a == b
+                acc = acc and v1 == v2
         return acc
 
     def intersection(self, other):
-        print(f'Intersection {self} & {other}')
-        args = []
-        for a, b in zip(self.fields, other.fields):
-            if isinstance(a, Ternary):
-                args.append(a.intersection(b))
-            elif isinstance(a, LPM):
-                args.append(LPM(a.value | b.value, max(a.prefix, b.prefix)))
+        args = {}
+
+        self.__equality_check(other)
+
+        for (k1, v1), (k2, v2) in zip(
+                self.fields.items(), 
+                other.fields.items()):
+
+            if isinstance(v1, Ternary):
+                # args.append(v1.intersection(v2))
+                args[k1] = v1.intersection(v2)
+            elif isinstance(v1, LPM):
+                # args.append(LPM(v1.value | v2.value, max(v1.prefix, v2.prefix)))
+                args[k1] = LPM(v1.value | v2.value, max(v1.prefix, v2.prefix))
             else:
-                if a != b:
+                if v1 != v2:
                     raise InvalidOperation(
                         "Trying to calculate the difference "
                         + "on matches containing non-equal exact values."
                     )
-                args.append(a)
-        return Match(*args)
+                args[k1] = v1
+        return Match(**args)
 
     def superset_of(self, other):
         acc = True
-        for a, b in zip(self.fields, other.fields):
-            if isinstance(a, Masked):
-                acc = acc and a >= b
+        self.__equality_check(other)
+
+        for (k1, v1), (k2, v2) in zip(
+                self.fields.items(), 
+                other.fields.items()):
+
+            if isinstance(v1, Masked):
+                acc = acc and v1 >= v2
             else:
-                acc = acc and a == b
+                acc = acc and v1 == v2
         return acc
 
     def subset_of(self, other):
         acc = True
-        for a, b in zip(self.fields, other.fields):
-            if isinstance(a, Masked):
-                acc = acc and a <= b
+        self.__equality_check(other)
+
+        for (k1, v1), (k2, v2) in zip(
+                self.fields.items(), 
+                other.fields.items()):
+
+            if isinstance(v1, Masked):
+                acc = acc and v1 <= v2
             else:
-                acc = acc and a == b
+                acc = acc and v1 == v2
         return acc
 
     def proper_superset_of(self, other):
         acc = True
-        for a, b in zip(self.fields, other.fields):
-            if isinstance(a, Masked):
-                acc = acc and a > b
+        self.__equality_check(other)
+
+        for (k1, v1), (k2, v2) in zip(
+                self.fields.items(), 
+                other.fields.items()):
+
+            if isinstance(v1, Masked):
+                acc = acc and v1 > v2
             else:
-                acc = acc and a == b
+                acc = acc and v1 == v2
         return acc
 
     def proper_subset_of(self, other):
         acc = True
-        for a, b in zip(self.fields, other.fields):
-            if isinstance(a, Masked):
-                acc = acc and a < b
+        self.__equality_check(other)
+
+        for (k1, v1), (k2, v2) in zip(
+                self.fields.items(), 
+                other.fields.items()):
+
+            if isinstance(v1, Masked):
+                acc = acc and v1 < v2
             else:
-                acc = acc and a == b
+                acc = acc and v1 == v2
         return acc
         # return acc
 
     def equal_(self, other):
         acc = True
-        for a, b in zip(self.fields, other.fields):
-            acc = acc and a == b
+        self.__equality_check(other)
+
+        for (k1, v1), (k2, v2) in zip(
+                self.fields.items(), 
+                other.fields.items()):
+
+            acc = acc and v1 == v2
         return acc
 
     def overlaps(self, other):
@@ -268,36 +325,43 @@ class Match:
         if self == other:
             return False
 
-        for a, b in zip(self.fields, other.fields):
-            if isinstance(a, Masked):
-                acc = acc and (a >= b or a <= b or a.overlaps(b))
+        self.__equality_check(other)
+
+        for (k1, v1), (k2, v2) in zip(
+                self.fields.items(), 
+                other.fields.items()):
+
+            if isinstance(v1, Masked):
+                acc = acc and (v1 >= v2 or v1 <= v2 or v1.overlaps(v2))
             else:
-                acc = acc and a == b
+                acc = acc and v1 == v2
         return acc
 
     def __str__(self):
         field_strings = []
-        for a in self.fields:
-            if isinstance(a, Ternary):
-                if a.mask.value == 0:
+        for k, v in self.fields.items():
+            if isinstance(v, Ternary):
+                if v.mask.value == 0:
                     field_strings.append("_")
                 else:
-                    field_strings.append(str(a))
+                    field_strings.append(str(v))
             else:
-                field_strings.append(str(a))
+                field_strings.append(str(v))
         return "{{  {}  }}".format(", ".join(field_strings))
 
     def __repr__(self):
-        return "Match({})".format(", ".join([repr(x) for x in self.fields]))
+        acc = 'Match('
+        acc += ', '.join([f'"{k}={repr(v)}"' for k, v in self.fields.items()])
+        return acc + ')'
 
 
 class IPv4AddressTernary(Ternary):
     ''' The asterisk captures all positional parameters, forcing everything to
         be named '''
-    def __init__(self, value, *, prefix=None, mask=None):
+    def __init__(self, value, *, prefix=None, mask=None, dont_care=False):
         if not isinstance(value, IPv4Address):
             value = IPv4Address(value)
         if prefix:
             mask = IPv4Address(mask_from_prefix(IPv4Address.bitwidth, prefix))
 
-        super().__init__(value, mask)
+        super().__init__(value, mask, dont_care)
