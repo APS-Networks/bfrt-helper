@@ -48,6 +48,5 @@ setuptools.setup(
         'grpcio',
         'grpcio-tools',
         'googleapis-common-protos'
-    ],
-    cmdclass=buildsphinx
+    ]
 )
