@@ -1,7 +1,7 @@
-"""This module contains objects which are created when parsing BfRt Info files and
-makes it much easier to build requests. This module is not intended to be used
-by developers. Other than the creation of the BfRtInfo object for consumption
-by the actual helper class.
+"""This module contains objects which are created when parsing BfRt Info files
+and makes it much easier to build requests. This module is not intended to be
+used by developers. Other than the creation of the BfRtInfo object for
+consumption by the actual helper class.
 """
 
 from bfrt_helper.fields import JSONSerialisable
@@ -56,7 +56,13 @@ class BfRtTableKey(BfRtObject):
 
 
 class BfRtTableActionSpec(BfRtObject):
-    def __init__(self, id_: int, name: str, action_scope: str, annotations: list, data: list):
+    def __init__(
+        self, id_: int,
+        name: str,
+        action_scope: str,
+        annotations: list,
+        data: list
+    ):
         self.id = id_
         self.name = name
         self.action_scope = action_scope
@@ -86,7 +92,13 @@ class BfRtTableActionData(BfRtObject):
 
 
 class BfRtTableDataFieldSingleton(BfRtObject):
-    def __init__(self, id_: int, name: str, repeated: bool, annotations: list, type_: dict):
+    def __init__(
+        self, id_: int,
+        name: str,
+        repeated: bool,
+        annotations: list,
+        type_: dict
+    ):
         self.id = id_
         self.name = name
         self.repeated = repeated
@@ -95,7 +107,12 @@ class BfRtTableDataFieldSingleton(BfRtObject):
 
 
 class BfRtTableDataField(BfRtObject):
-    def __init__(self, mandatory: bool, read_only: bool, singleton: BfRtTableDataFieldSingleton):
+    def __init__(
+        self,
+        mandatory: bool,
+        read_only: bool,
+        singleton: BfRtTableDataFieldSingleton
+    ):
         self.mandatory = mandatory
         self.read_only = read_only
         self.singleton = singleton
@@ -171,7 +188,11 @@ def parse_table_data_field_singleton(singleton):
     type_ = singleton.get("type", None)
 
     return BfRtTableDataFieldSingleton(
-        id_=id_, name=name, repeated=repeated, annotations=annotations, type_=type_
+        id_=id_,
+        name=name,
+        repeated=repeated,
+        annotations=annotations,
+        type_=type_
     )
 
 
@@ -182,7 +203,9 @@ def parse_table_data_field(field):
     if singleton is not None:
         singleton = parse_table_data_field_singleton(singleton)
 
-    return BfRtTableDataField(mandatory=mandatory, read_only=read_only, singleton=singleton)
+    return BfRtTableDataField(
+        mandatory=mandatory, read_only=read_only, singleton=singleton
+    )
 
 
 def parse_table(table_data):
@@ -213,8 +236,8 @@ def parse_learn_filters(table_data):
 
 
 class BfRtInfo(object):
-    '''Class representing the contents of a BfRtInfo file
-    
+    """Class representing the contents of a BfRtInfo file
+
     This class is a utility class used to more easily access the contents of
     a BfRtInfo file, rather than define a bunch of functions for navigating
     it's JSON (or a dictionary containing it's contents).
@@ -228,7 +251,8 @@ class BfRtInfo(object):
 
     Args:
         data (dict): Dictionary containing the contents of the BfRtInfo file.
-    '''
+    """
+
     def __init__(self, data):
         if "tables" in data:
             self.tables = []

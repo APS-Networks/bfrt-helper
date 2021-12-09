@@ -1,28 +1,32 @@
 import bfrt_helper.pb2.bfruntime_pb2 as bfruntime_pb2
 
+from bfrt_helper.pb2.bfruntime_pb2 import (
+    SetForwardingPipelineConfigRequest as SetPipelineReq
+)
+
 from bfrt_helper.match import Exact
 from bfrt_helper.match import LPM
 from bfrt_helper.match import Ternary
 from bfrt_helper.fields import Field
 
 
-
 class UnknownAction(Exception):
-    '''Exception raised when an action for a given table could not be found.
-    
+    """Exception raised when an action for a given table could not be found.
+
     Args:
         table_name (str): String containing the name of the table.
         action_name (str): String containing the name of the action.
-    '''
+    """
+
     def __init__(self, table_name, action_name):
         msg = f"Could not find action {table_name}::{action_name}"
         super().__init__(msg)
 
 
 class UnknownActionParameter(Exception):
-    '''Exception raised when a action parameter for a given table could not be
+    """Exception raised when a action parameter for a given table could not be
     found.
-    
+
     Some tables have associated parameters with them; these are optional.
     These are applied to an action, for example (in P4)::
 
@@ -35,25 +39,30 @@ class UnknownActionParameter(Exception):
         table_name (str): String containing the name of the table.
         action_name (str): String containing the name of the action.
         param_name (str): String containing the name of the parameter.
-    '''
+    """
+
     def __init__(self, table_name, action_name, param_name):
-        msg = f"Could not find action parameter {table_name}::{action_name}::{param_name}"
+        msg = (
+            'Could not find action parameter ',
+            f'{table_name}::{action_name}::{param_name}'
+        )
         super().__init__(msg)
 
 
 class UnknownTable(Exception):
-    '''Exception raised when a given table could not be found.
-    
+    """Exception raised when a given table could not be found.
+
     Args:
         table_name (str): String containing the name of the table.
-    '''
+    """
+
     def __init__(self, table_name):
         super().__init__(f"Could not find table {table_name}")
 
 
 class UnknownKeyField(Exception):
-    '''Exception raised when a key field for a given table could not be found.
-    
+    """Exception raised when a key field for a given table could not be found.
+
     A key field is a part of the match construct, and includes a name and
     data. When a table is executed, the key field names are used to retrieve
     a value with the same name as defined in either metadata or headers. This
@@ -80,13 +89,14 @@ class UnknownKeyField(Exception):
     Args:
         table_name (str): String containing the name of the table.
         action_name (str): String containing the name of the action.
-    '''
+    """
+
     def __init__(self, table_name, field_name):
         super().__init__(f"Could not find key field {table_name}::{field_name}")
 
 
 class MismatchedMatchType(Exception):
-    ''' Exception raised when the match for a key field declared in a request
+    """Exception raised when the match for a key field declared in a request
     does not match that which is defined in the table.
 
     The current accepted match types are:
@@ -94,32 +104,35 @@ class MismatchedMatchType(Exception):
         * LPM
         * Exact
         * Ternary :class:`bfrt_helper.match.Ternary`
-    
+
     Args:
         field_name (str): The name of the field in question.
         field_data (Field): The instance of the incorrect field.
         expected (str): The name of the expected data type.
-     '''
+    """
+
     def __init__(self, field_name, field_data, expected: str):
         clz = field_data.__class__.__name__
-        msg = f"Expected field type for {field_name} is {expected}, but have {clz}"
+        msg = (f'Expected field type for {field_name} is {expected}, but have ',
+               f'{clz}')
         super().__init__(msg)
 
 
 class MismatchedDataSize(Exception):
-    '''Exception raised when the data size of a field in a request does not
+    """Exception raised when the data size of a field in a request does not
     match that which is registered to the table.
 
     Most fields have an associated bitwidth. This is defined in the P4 program,
     and is presented in the BfRt info file if generated. While we can't do
     strict type checking, we can compare the bitwidths of the input and target
-    fields (any field registered in this library, or defined by the user, will be
-    equivalent to any other field with the same bitwidth).
+    fields (any field registered in this library, or defined by the user, will
+    be equivalent to any other field with the same bitwidth).
 
     Args:
         expected (int): Bitwidth of field as defined by P4 program.
         observed (int): Bitwidth of field presented by the user.
-    '''
+    """
+
     def __init__(self, expected, observed):
         msg = f"Expected data size {expected} but have {observed}"
         super().__init__(msg)
@@ -139,30 +152,32 @@ class BfRtHelper:
 
     def create_subscribe_request(
         self,
-        learn=True,         # Receive learn notifications
-        timeout=True,       # Receive timeout notifications
-        port_change=True,   # Receive port state change notifications
-        request_timeout=10, # Subscribe response timeout
-    ):  
-        '''Create a subscribe request for registering with a device.
-        
+        learn=True,  # Receive learn notifications
+        timeout=True,  # Receive timeout notifications
+        port_change=True,  # Receive port state change notifications
+        request_timeout=10,  # Subscribe response timeout
+    ):
+        """Create a subscribe request for registering with a device.
+
         After a gRPC connection has been established between a client and the
         Barefoot Runtime server, a ``subscribe`` request must be issued by the
         client in order for the runtime to act on commands issued by the client
         as well as send and receive any other messages.
 
         Args:
-            learn (bool, optional): Enable learn notifications. Provided through digest 
-                messages from the gRPC stream channel. Default is ``True``.
+            learn (bool, optional): Enable learn notifications. Provided through
+                digest messages from the gRPC stream channel. Default is
+                ``True``.
 
-            timeout (bool, optional): Receive timeout notifications. Default is ``True``.
+            timeout (bool, optional): Receive timeout notifications. Default is
+                ``True``.
 
-            port_change (bool, optional): Receive port state change notifications. Default
-                 is ``True``.
+            port_change (bool, optional): Receive port state change
+                notifications. Default is ``True``.
 
             request_timeout (int, optional): Default is ``10``.
 
-        '''
+        """
 
         subscribe = bfruntime_pb2.Subscribe()
         subscribe.device_id = self.device_id
@@ -258,13 +273,16 @@ class BfRtHelper:
         if isinstance(value, Field) or isinstance(value, bytes):
             if field.type["type"] == "bytes":
                 if value.bitwidth != field.type["width"]:
-                    raise MismatchedDataSize(field.type["width"], value.bitwidth)
+                    raise MismatchedDataSize(field.type["width"],
+                                             value.bitwidth)
             elif field.type["type"] == "uint16":
                 if value.bitwidth != 16:
-                    raise MismatchedDataSize(field.type["width"], value.bitwidth)
+                    raise MismatchedDataSize(field.type["width"],
+                                             value.bitwidth)
             elif field.type["type"] == "uint32":
                 if value.bitwidth != 32:
-                    raise MismatchedDataSize(field.type["width"], value.bitwidth)
+                    raise MismatchedDataSize(field.type["width"],
+                                             value.bitwidth)
             data_field.stream = value.to_bytes()
         elif isinstance(value, float):
             data_field.float_val = value
@@ -309,16 +327,20 @@ class BfRtHelper:
                 )
 
                 if info_action_field is None:
-                    raise UnknownActionParameter(table_name, action_name, param_name)
+                    raise UnknownActionParameter(table_name, action_name,
+                                                 param_name)
 
                 try:
-                    bfrt_data_field = self.create_data_field(info_action_field, param_data)
+                    bfrt_data_field = self.create_data_field(
+                        info_action_field, param_data
+                    )
                     bfrt_table_data.fields.extend([bfrt_data_field])
                 except MismatchedDataSize as err:
-                    raise InvalidActionParameter(table_name, action_name, param_name, str(err))
+                    raise InvalidActionParameter(
+                        table_name, action_name, param_name, str(err)
+                    )
 
         return bfrt_table_data
-
 
     def create_table_write(
         self,
@@ -335,7 +357,8 @@ class BfRtHelper:
         bfrt_table_entry.key.fields.extend(bfrt_key_fields)
 
         if action_name is not None:
-            bfrt_action = self.create_action(table_name, action_name, action_params)
+            bfrt_action = self.create_action(table_name, action_name,
+                                             action_params)
             bfrt_table_entry.data.CopyFrom(bfrt_action)
 
         bfrt_update = bfrt_request.updates.add()
@@ -383,34 +406,40 @@ class BfRtHelper:
         return bfrt_request
 
     def create_copy_to_cpu(self, program_name, port):
-        '''Create a for copying data to the CPU
-        
+        """Create a for copying data to the CPU
+
         Warning:
 
             Experimental.
-        '''
+        """
         bfrt_request = self.create_write_request(program_name)
         bfrt_table_entry = self.create_table_entry("$pre.port")
-        bfrt_key_field = self.create_key_field("$pre.port", "$DEV_PORT", Exact(port))
+        bfrt_key_field = self.create_key_field("$pre.port", "$DEV_PORT",
+                                               Exact(port))
         bfrt_table_entry.extend([bfrt_key_field])
 
-        info_cpu_port_field = self.bfrt_info.get_data_field("$pre.port", "$COPY_TO_CPU_PORT_ENABLE")
-        bfrt_cpu_port_field = self.create_data_field(info_cpu_port_field.singleton, True)
+        info_cpu_port_field = self.bfrt_info.get_data_field(
+            "$pre.port", "$COPY_TO_CPU_PORT_ENABLE"
+        )
+        bfrt_cpu_port_field = self.create_data_field(
+            info_cpu_port_field.singleton, True
+        )
         bfrt_table_entry.data.fields.extend([bfrt_cpu_port_field])
 
         bfrt_update = bfrt_request.updates.add()
         bfrt_update.type = bfruntime_pb2.Update.Type.MODIFY
         bfrt_update.entity.table_entry.CopyFrom(bfrt_table_entry)
 
-    def create_set_pipeline_request(self, program_name, bfrt_path, context_path, binary_path):
+    def create_set_pipeline_request(
+        self, program_name, bfrt_path, context_path, binary_path
+    ):
+
         # Need to figure out base_path properly later
         request = bfruntime_pb2.SetForwardingPipelineConfigRequest()
         request.client_id = self.client_id
         request.device_id = self.device_id
         request.base_path = f"install/share/tofinopd/{program_name}"
-        request.action = (
-            bfruntime_pb2.SetForwardingPipelineConfigRequest.VERIFY_AND_WARM_INIT_BEGIN_AND_END
-        )
+        request.action = (SetPipelineReq.VERIFY_AND_WARM_INIT_BEGIN_AND_END)
 
         config = request.config.add()
         config.p4_name = program_name
@@ -442,11 +471,11 @@ class BfRtHelper:
 
 #     if program_name is None:
 #         program_name = response.config[0].p4_name
-
-#     non_p4_config = json.loads(response.non_p4_config.bfruntime_info.decode("utf-8"))
-
+#     data = response.non_p4_config.bfruntime_info.decode("utf-8")
+#     non_p4_config = json.loads(data)
+#
 #     p4_config = None
-
+#
 #     for config in response.config:
 #         if program_name == config.p4_name:
 #             p4_config = json.loads(config.bfruntime_info)
