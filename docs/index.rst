@@ -9,6 +9,9 @@
    examples
    api
 
+.. include:: README
+
+
 Indices and tables
 ==================
 
