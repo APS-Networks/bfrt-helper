@@ -5,12 +5,15 @@ from bfrt_helper.fields import Field
 class EightBit(Field):
     bitwidth = 8
 
+    def __str__(self):
+        return f'0b{self.value:>08b}'
+
 
 def test_ternary_to_string():
-    mask = 240
-    value = 42 & mask
+    mask = 0xf0 # 240
+    value = 0x2a & mask # 
     ternary = Ternary(EightBit(value), mask=mask)
-    expected = f"{value} &&& 240"
+    expected = '0b00100000 &&& 0b11110000'
     assert str(ternary) == expected
 
 
@@ -194,7 +197,7 @@ def test_ternary_is_overlap():
 
 def test_ternary_superset_is_not_overlap():
     ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
-    ternary_b = Ternary(EightBit(0b00101000), mask=EightBit(0b11111100))
+    ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
     assert not ternary_a.overlaps(ternary_b)
 
 
@@ -208,3 +211,93 @@ def test_ternary_equal_is_not_overlap():
     ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
     ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
     assert not ternary_a.overlaps(ternary_b)
+
+
+
+
+
+
+
+
+
+
+def test_union_exhaustive_equal_union():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+
+    union = ternary_a.union(ternary_b)
+
+    for x in iter(ternary_a):
+        assert x in union
+
+    for x in iter(ternary_b):
+        assert x in union
+
+
+
+def test_union_exhaustive_equal_intersection():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+
+    intersection = ternary_a.intersection(ternary_b)
+
+    A = [x for x in iter(ternary_a)]
+    B = [x for x in iter(ternary_b)]
+
+    for x in iter(intersection):
+        assert x in A
+        assert x in B
+
+
+
+def test_union_exhaustive_subset_union():
+    superset = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    subset   = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
+
+    union = superset.union(subset)
+
+    for x in iter(superset):
+        assert x in union
+
+    for x in iter(subset):
+        assert x in union
+
+
+def test_union_exhaustive_subset_intersection():
+    superset = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    subset   = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
+
+    intersection = superset.intersection(subset)
+
+    A = [x for x in iter(superset)]
+    B = [x for x in iter(subset)]
+
+    for x in iter(intersection):
+        assert x in A
+        assert x in B
+
+
+def test_exhaustive_overlap_union():
+    As = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    Bs = Ternary(EightBit(0b00101000), mask=EightBit(0b00111100))
+
+    union = As.union(Bs)
+
+    for x in iter(As):
+        assert x in union
+
+    for x in iter(Bs):
+        assert x in union
+
+
+def test_exhaustive_overlap_intersection():
+    As = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    Bs = Ternary(EightBit(0b00101000), mask=EightBit(0b00111100))
+
+    intersection = As.intersection(Bs)
+    A = [x for x in iter(As)]
+    B = [x for x in iter(Bs)]
+
+    for x in iter(intersection):
+        assert x in A
+        assert x in B

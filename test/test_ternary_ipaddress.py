@@ -1,5 +1,6 @@
 from bfrt_helper.fields import IPv4Address
 from bfrt_helper.match import Ternary
+from bfrt_helper.match import IPv4AddressTernary
 
 
 def test_ternary_ipaddress_equals_itself():
@@ -26,7 +27,7 @@ def test_ternary_ipaddress_ands_value_with_mask():
 
 
 def test_ternary_ipaddress_to_string():
-    ternary = Ternary(IPv4Address("192.168.0.0"), mask=IPv4Address("255.255.255.0"))
+    ternary = IPv4AddressTernary("192.168.0.0", mask="255.255.255.0")
     assert str(ternary) == "192.168.0.0 &&& 255.255.255.0"
 
 
@@ -59,12 +60,13 @@ def test_ternary_ipaddress_max_value():
 
 
 def test_ternary_ipaddress_iterator():
+    ''' It has the full mask as a ternary expression masks off the value bits'''
     ternary = Ternary(IPv4Address("192.168.42.24"), mask="255.255.255.252")
     expected = [
-        Ternary(IPv4Address("192.168.42.24")),
-        Ternary(IPv4Address("192.168.42.25")),
-        Ternary(IPv4Address("192.168.42.26")),
-        Ternary(IPv4Address("192.168.42.27")),
+        IPv4AddressTernary("192.168.42.24", mask="255.255.255.255"),
+        IPv4AddressTernary("192.168.42.25", mask="255.255.255.255"),
+        IPv4AddressTernary("192.168.42.26", mask="255.255.255.255"),
+        IPv4AddressTernary("192.168.42.27", mask="255.255.255.255"),
     ]
 
     assert [x for x in iter(ternary)] == expected

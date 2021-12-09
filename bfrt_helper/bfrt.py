@@ -1,17 +1,3 @@
-"""    Copyright 2021 APS Networks GmbH
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-"""
 import bfrt_helper.pb2.bfruntime_pb2 as bfruntime_pb2
 
 from bfrt_helper.match import Exact
@@ -20,29 +6,100 @@ from bfrt_helper.match import Ternary
 from bfrt_helper.fields import Field
 
 
+
 class UnknownAction(Exception):
+    '''Exception raised when an action for a given table could not be found.
+    
+    Args:
+        table_name (str): String containing the name of the table.
+        action_name (str): String containing the name of the action.
+    '''
     def __init__(self, table_name, action_name):
         msg = f"Could not find action {table_name}::{action_name}"
         super().__init__(msg)
 
 
 class UnknownActionParameter(Exception):
+    '''Exception raised when a action parameter for a given table could not be
+    found.
+    
+    Some tables have associated parameters with them; these are optional.
+    These are applied to an action, for example (in P4)::
+
+        action send_to_multicast_group(MulticastGroupId_t group) {
+            ingress_metadata.multicast_grp_a = group;
+        }
+
+
+    Args:
+        table_name (str): String containing the name of the table.
+        action_name (str): String containing the name of the action.
+        param_name (str): String containing the name of the parameter.
+    '''
     def __init__(self, table_name, action_name, param_name):
         msg = f"Could not find action parameter {table_name}::{action_name}::{param_name}"
         super().__init__(msg)
 
 
 class UnknownTable(Exception):
+    '''Exception raised when a given table could not be found.
+    
+    Args:
+        table_name (str): String containing the name of the table.
+    '''
     def __init__(self, table_name):
         super().__init__(f"Could not find table {table_name}")
 
 
 class UnknownKeyField(Exception):
+    '''Exception raised when a key field for a given table could not be found.
+    
+    A key field is a part of the match construct, and includes a name and
+    data. When a table is executed, the key field names are used to retrieve
+    a value with the same name as defined in either metadata or headers. This
+    value is compared with the key field's data on the basis of the fields
+    defined match type::
+
+        table multicast {
+            key = {
+                hdr.vlan.id: exact;
+            }
+            actions = {
+                send_to_multicast_group;
+            }
+            const entries = {
+                100: send_to_multicast_group;
+            }
+        }
+
+    In this example, a key is defined to match on a vlan id which has been
+    parsed into the program's headers. The key field's name in this case is
+    ``hdr.vlan.id`` and it's match type is ``exact``. If the name of this field
+    is not defined, in some operations this exception will be raised.
+
+    Args:
+        table_name (str): String containing the name of the table.
+        action_name (str): String containing the name of the action.
+    '''
     def __init__(self, table_name, field_name):
         super().__init__(f"Could not find key field {table_name}::{field_name}")
 
 
-class MismatchedDataType(Exception):
+class MismatchedMatchType(Exception):
+    ''' Exception raised when the match for a key field declared in a request
+    does not match that which is defined in the table.
+
+    The current accepted match types are:
+
+        * LPM
+        * Exact
+        * Ternary :class:`bfrt_helper.match.Ternary`
+    
+    Args:
+        field_name (str): The name of the field in question.
+        field_data (Field): The instance of the incorrect field.
+        expected (str): The name of the expected data type.
+     '''
     def __init__(self, field_name, field_data, expected: str):
         clz = field_data.__class__.__name__
         msg = f"Expected field type for {field_name} is {expected}, but have {clz}"
@@ -50,6 +107,19 @@ class MismatchedDataType(Exception):
 
 
 class MismatchedDataSize(Exception):
+    '''Exception raised when the data size of a field in a request does not
+    match that which is registered to the table.
+
+    Most fields have an associated bitwidth. This is defined in the P4 program,
+    and is presented in the BfRt info file if generated. While we can't do
+    strict type checking, we can compare the bitwidths of the input and target
+    fields (any field registered in this library, or defined by the user, will be
+    equivalent to any other field with the same bitwidth).
+
+    Args:
+        expected (int): Bitwidth of field as defined by P4 program.
+        observed (int): Bitwidth of field presented by the user.
+    '''
     def __init__(self, expected, observed):
         msg = f"Expected data size {expected} but have {observed}"
         super().__init__(msg)
@@ -69,13 +139,31 @@ class BfRtHelper:
 
     def create_subscribe_request(
         self,
-        learn=True,  # Receive learn notifications
-        timeout=True,  # Receive timeout notifications
-        port_change=True,  # Receive port state change notifications
-        request_timeout=10,
-    ):  # Subscribe response timeout
+        learn=True,         # Receive learn notifications
+        timeout=True,       # Receive timeout notifications
+        port_change=True,   # Receive port state change notifications
+        request_timeout=10, # Subscribe response timeout
+    ):  
+        '''Create a subscribe request for registering with a device.
+        
+        After a gRPC connection has been established between a client and the
+        Barefoot Runtime server, a ``subscribe`` request must be issued by the
+        client in order for the runtime to act on commands issued by the client
+        as well as send and receive any other messages.
 
-        # logger.debug('subscribe')
+        Args:
+            learn (bool, optional): Enable learn notifications. Provided through digest 
+                messages from the gRPC stream channel. Default is ``True``.
+
+            timeout (bool, optional): Receive timeout notifications. Default is ``True``.
+
+            port_change (bool, optional): Receive port state change notifications. Default
+                 is ``True``.
+
+            request_timeout (int, optional): Default is ``10``.
+
+        '''
+
         subscribe = bfruntime_pb2.Subscribe()
         subscribe.device_id = self.device_id
 
@@ -146,18 +234,18 @@ class BfRtHelper:
 
         if info_key_field.match_type == "Exact":
             if not isinstance(data, Exact):
-                raise MismatchedDataType(field_name, data, "Exact")
+                raise MismatchedMatchType(field_name, data, "Exact")
             bfrt_key_field.exact.value = data.value_bytes()
 
         if info_key_field.match_type == "LPM":
             if not isinstance(data, LPM):
-                raise MismatchedDataType(field_name, data, "LPM")
+                raise MismatchedMatchType(field_name, data, "LPM")
             bfrt_key_field.lpm.value = data.value_bytes()
             bfrt_key_field.lpm.prefix_len = data.prefix
 
         if info_key_field.match_type == "Ternary":
             if not isinstance(data, Ternary):
-                raise MismatchedDataType(field_name, data, "Ternary")
+                raise MismatchedMatchType(field_name, data, "Ternary")
             bfrt_key_field.ternary.value = data.value_bytes()
             bfrt_key_field.ternary.mask = data.mask_bytes()
 
@@ -231,7 +319,6 @@ class BfRtHelper:
 
         return bfrt_table_data
 
-    # def create_table_data(self, data):
 
     def create_table_write(
         self,
@@ -296,6 +383,12 @@ class BfRtHelper:
         return bfrt_request
 
     def create_copy_to_cpu(self, program_name, port):
+        '''Create a for copying data to the CPU
+        
+        Warning:
+
+            Experimental.
+        '''
         bfrt_request = self.create_write_request(program_name)
         bfrt_table_entry = self.create_table_entry("$pre.port")
         bfrt_key_field = self.create_key_field("$pre.port", "$DEV_PORT", Exact(port))

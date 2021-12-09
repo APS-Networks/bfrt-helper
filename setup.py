@@ -2,15 +2,18 @@
 import sys
 import setuptools
 
+
+# buildsphinx = {'build_sphinx': BuildDoc}
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 
-install_requirements = [
-    "grpcio",
-    "grpcio-tools",
-    "googleapis-common-protos"
-]
+# install_requirements = [
+#     "grpcio",
+#     "grpcio-tools",
+#     "googleapis-common-protos"
+# ]
 
 
 def get_setuptools_ver():
@@ -27,6 +30,7 @@ if get_setuptools_ver() < (40, 1, 0):
     sys.exit(1)
 
 
+
 setuptools.setup(
     name="bfrt_helper",
     version="1.0",
@@ -34,13 +38,16 @@ setuptools.setup(
     author_email="support@aps-networks.com",
     description="Helper library for the Barefoot Runtime gRPC interface.",
     long_description=long_description,
-    long_description_content_type="text/markdown",
     url="https://github.com/APS-Networks/bfrt-helper",
     packages=setuptools.find_namespace_packages(exclude=["test"]),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: Apache Software License",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     ],
-    python_requires=">=3.6",
-    install_requires=install_requirements,
+    install_requires=[
+        'grpcio',
+        'grpcio-tools',
+        'googleapis-common-protos'
+    ],
+    cmdclass=buildsphinx
 )

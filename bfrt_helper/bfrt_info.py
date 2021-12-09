@@ -1,16 +1,7 @@
-"""    Copyright 2021 APS Networks GmbH
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+"""This module contains objects which are created when parsing BfRt Info files and
+makes it much easier to build requests. This module is not intended to be used
+by developers. Other than the creation of the BfRtInfo object for consumption
+by the actual helper class.
 """
 
 from bfrt_helper.fields import JSONSerialisable
@@ -34,7 +25,7 @@ class BfRtObject(JSONSerialisable):
 
 
 class BfRtTable(BfRtObject):
-    def __init__(self, id_, name, table_type, size):
+    def __init__(self, id_, name: str, table_type: str, size):
         self.id = id_
         self.name = name
         self.table_type = table_type
@@ -222,6 +213,22 @@ def parse_learn_filters(table_data):
 
 
 class BfRtInfo(object):
+    '''Class representing the contents of a BfRtInfo file
+    
+    This class is a utility class used to more easily access the contents of
+    a BfRtInfo file, rather than define a bunch of functions for navigating
+    it's JSON (or a dictionary containing it's contents).
+
+    This would then be passed to the BfRt helper.
+
+    The data passed in would ordinarily be created as follows::
+
+        bfrt_data = json.load(open("all_bfrt.json"))
+        bfrt_info = BfRtInfo(all_bfrt_data)
+
+    Args:
+        data (dict): Dictionary containing the contents of the BfRtInfo file.
+    '''
     def __init__(self, data):
         if "tables" in data:
             self.tables = []

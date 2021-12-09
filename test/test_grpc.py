@@ -7,7 +7,7 @@ from bfrt_helper.bfrt import UnknownKeyField
 from bfrt_helper.bfrt import UnknownTable
 from bfrt_helper.bfrt import UnknownAction
 from bfrt_helper.bfrt import UnknownActionParameter
-from bfrt_helper.bfrt import MismatchedDataType
+from bfrt_helper.bfrt import MismatchedMatchType
 from bfrt_helper.bfrt import InvalidActionParameter
 from bfrt_helper.bfrt import BfRtHelper
 from bfrt_helper.bfrt_info import BfRtInfo
@@ -172,7 +172,7 @@ def test_grpc_unknown_action_parameter():
 
 
 def test_grpc_unexpected_match_type_ternary():
-    with pytest.raises(MismatchedDataType):
+    with pytest.raises(MismatchedMatchType):
         bfrt_helper.create_table_write(
             program_name="test",
             table_name="pipe.TestIngressControl.port_forward_ternary",
@@ -185,7 +185,7 @@ def test_grpc_unexpected_match_type_ternary():
 
 
 def test_grpc_unexpected_match_type_lpm():
-    with pytest.raises(MismatchedDataType):
+    with pytest.raises(MismatchedMatchType):
         bfrt_helper.create_table_write(
             program_name="test",
             table_name="pipe.TestIngressControl.port_forward_lpm",
@@ -198,7 +198,7 @@ def test_grpc_unexpected_match_type_lpm():
 
 
 def test_grpc_unexpected_match_type_exact():
-    with pytest.raises(MismatchedDataType):
+    with pytest.raises(MismatchedMatchType):
         bfrt_helper.create_table_write(
             program_name="test",
             table_name="pipe.TestIngressControl.port_forward_exact",

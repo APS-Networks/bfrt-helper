@@ -142,8 +142,8 @@ class PortId(Field):
     bitwidth = 9
 ```
 
-The (de)serialisation functions are the object method `get_data_bits` and the
-class method `from_data_bits`.
+The (de)serialisation functions are the object method `to_bytes` and the
+class method `from_bytes`.
 
 More complicated serialisation routines may require custom code. The
 `IPv4Address` is defined as follows:
@@ -152,13 +152,19 @@ More complicated serialisation routines may require custom code. The
 class IPv4Address(Field):
     bitwidth = 32
 
-    def get_data_bits(self):
-        return encode_number(int(ipaddress.ip_address(self.value)), self.bitwidth)
+    def __init__(self, address: str):
+        super().__init__(int(ipaddress.ip_address(address)))
+
+    def __str__(self):
+        return str(ipaddress.ip_address(self.value))
 
     @classmethod
-    def from_data_bits(cls, data):
+    def from_bytes(cls, data):
         return cls(ipaddress.ip_address(data).__str__())
 ```
+
+No special `to_bytes` function is defined as this is derived from the internal
+value representation (an integer), and it's bitwidth.
 
 ## Match Types
 

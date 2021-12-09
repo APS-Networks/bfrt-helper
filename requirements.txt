@@ -30,4 +30,10 @@ tomli
 typing-extensions
 wheel
 zipp
-
+# Sphinx specific
+sphinx
+sphinx-rtd-theme
+myst-parser
+# recommonmark
+# autodocsumm
+renku-sphinx-theme

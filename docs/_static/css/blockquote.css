@@ -1,0 +1,14 @@
+blockquote {
+    background-color: #fff0e9 !important;
+    margin-left: 0px !important;
+    padding-left: 36px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* padding-bottom: 24px; */
+    border-left: 4px solid #f47b42;
+}
+
+blockquote p {
+    margin-left: 0px;
+    margin-bottom: 0px;
+}

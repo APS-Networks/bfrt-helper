@@ -1,3 +1,4 @@
+from enum import unique
 from bfrt_helper.util import InvalidOperation
 from bfrt_helper.util import InvalidValue
 from bfrt_helper.util import mask_from_prefix
@@ -6,70 +7,330 @@ from bfrt_helper.fields import IPv4Address
 
 
 class MismatchedKeys(Exception):
+    '''Raised when the key's name doesn't match when comparing two match objects
+    '''
     def __init__(self, message):
         super().__init__(message)
 
-
 class MismatchedTypes(Exception):
+    '''Raised when a field's type (e.g., bitwidth or object) do not match when
+    comparing two match objects.
+    '''
     def __init__(self, message):
         super().__init__(message)
 
 
 class Masked:
+    '''Base class for all matches which can be represented in terms of a value
+    and a mask.
+
+    '''
     def __init__(self):
         self.value = None
         self.mask = None
 
-    def subset_of(self, other) -> bool:
+
+    def subset_of(self, other: 'Masked') -> bool:
+        '''Compares with another match, where ``self`` is found to be a subset
+        of the other, that is to say; for all :math:`x` in set :math:`B`,
+        there exists some element :math:`x` in set :math:`A`.
+
+        A set is a subset of itself.
+
+        Args:
+
+            other (Masked): Other masked value to compare against.
+
+        Returns:
+
+            bool: True if ``self`` is subset of ``other``
+        '''
         if not self.mask & other.mask == other.mask:
             return False
         return (self.value & other.mask) == (other.value & other.mask)
 
-    def superset_of(self, other) -> bool:
+
+    def superset_of(self, other: 'Masked') -> bool:
+        '''Compares with another match, where ``self`` is found to be a superset
+        of the other, that is to say; for all :math:`x` in set :math:`B`,
+        there exists some element :math:`x` in set :math:`A`.
+
+        A set is a superset of itself.
+
+        Args:
+
+            other (Masked): Other masked value to compare against.
+
+        Returns:
+
+            bool: True if ``self`` is superset of ``other``
+        '''
         if not self.mask & other.mask == self.mask:
             return False
         return (self.value & self.mask) == (other.value & self.mask)
 
-    def intersection(self, other):
+
+    def proper_subset_of(self, other: 'Masked') -> bool:
+        '''Compares with another match, where ``self`` is found to be a proper
+        subset of the other, that is to say; for all :math:`x` in set :math:`B`,
+        there exists some element :math:`x` in set :math:`A`, but there exists
+        at least one :math:`x` which exists in set :math:`B` that does not exist
+        in set :math:`B`.
+
+        A set is not a proper subset of itself.
+
+        Args:
+
+            Masked:
+        
+        Returns:
+
+            bool: True if ``self`` is proper superset of ``other``
+
+        '''
+        return self.subset_of(other) and not self == other
+
+
+    def proper_superset_of(self, other: 'Masked') -> bool:
+        '''Compares with another match, where ``self`` is found to be a proper
+        superset of the other, that is to say; for all :math:`x` in set :math:`A`,
+        there exists some element :math:`x` in set :math:`B`, but there exists
+        at least one :math:`x` which exists in set :math:`A` that does not exist
+        in set :math:`B`.
+
+        A set is not a proper superset of itself.
+
+        Args:
+
+            Masked:
+        
+        Returns:
+
+            bool: True if ``self`` is proper superset of ``other``
+
+        '''
+        return self.superset_of(other) and not self == other
+
+
+    def intersection(self, other: 'Masked') -> 'Masked':
+        '''Returns the intersection of ``self`` and ``other``.
+        
+        The following relations should hold true, noting the use of proper
+        subset and superset comparisons:
+
+        .. highlight:: python
+        .. code-block:: python
+
+            intersection = a & b
+            assert a > intersection
+            assert b > intersection
+        
+        Since the intersection is the common elements, and if both a and b are
+        proper supersets of the intersection, they must contain 
+        different/unique values.
+
+        Returns:
+
+            Masked: Contains the elements which are common to ``self`` and 
+            ``other``.
+        '''
         return self.__class__(
             value=self.value | other.value,
             mask=self.mask | other.mask)
 
-    def union(self, other):
+    def union(self, other: 'Masked') -> 'Masked':
+        '''
+        Returns:
+
+            Masked: Contains all the elements of ``self`` and ``other``
+        '''
         new_mask = self.mask & other.mask
         return self.__class__(self.value & new_mask, new_mask)
 
-    def overlaps(self, other) -> bool:
+
+    def overlaps(self, other: 'Masked') -> bool:
+        '''Returns whether or not two ``Masked`` matches overlap.
+
+        Masked expressions can be considered in a context of sets. An
+        overlapping set is defined here as where some, but not all, elements in
+        a set :math:`A` exist in a set :math:`B`, and, some, but not all,
+        elements in :math:`B` exist in :math:`A`. That is to say that they are
+        neither proper superset or subset of each other, but they share
+        elements.
+
+        If only one of these conditions held true, they would either be a proper
+        subset or superset of one another. A corollary to this is that longest
+        prefix matches do not overlap, they are strictly a subset or superset of
+        one another.
+
+        This can be formalised by the following:
+
+        .. math::
+
+            I = (A \\cap B) \n
+        
+        .. math::
+
+            (A \supsetneq I) {and} (B \supsetneq I)
+
+        That is to say that :math:`A`, being a proper superset of the
+        intersection :math:`I`, has at least one element not in :math:`I`, and,
+        :math:`B`, being a proper superset of :math:`I`, has at least one
+        element not in intersection :math:`I`, implying that the elements
+        contained in the differences between either :math:`A` or :math:`B`
+        and the intersection are unique to each other.
+
+        '''
         c_mask = self.mask & other.mask
         return not (c_mask == self.mask or c_mask == other.mask) and (
             self.value & c_mask == other.value & c_mask
         )
 
-    def __hash__(self):
+
+        # A = [x for x in iter(self)]
+        # B = [x for x in iter(other)]
+
+        # overlap = False
+
+        # for x in A:
+        #     if x not in B:
+        #         for y in B:
+        #             if y not in A:
+        #                 overlap = True
+        
+        # return overlap
+
+
+        # unique_in_A = False
+        # unique_in_B = False
+
+        # for x in A:
+        #     if x not in B:
+        #         unique_in_A = True
+        #         break
+        # for y in B:
+        #     if y not in A:
+        #         unique_in_B = True
+        #         break
+        
+        # return unique_in_A & unique_in_B
+
+
+        # unique_in_self = False
+        # unique_in_other = False
+
+        # intersection = self.intersection(other)
+
+        # # Must be proper subset/superset comparison
+        # if self > intersection:
+        #     unique_in_self = True
+
+        # if other > intersection:
+        #     unique_in_other = True
+
+        # return unique_in_self & unique_in_other
+
+        # common_mask = self.mask | other.mask
+
+        # 0 is don't care bits
+        #       11110000
+        #       00111111
+        # U     00110000 / less specific
+        # n     11001111 / more specific 
+        
+        # 0 is don't care bits
+        #       11100000
+        #       00000111
+        # U     00000000 / less specific
+        # n     11100111 / more specific 
+
+
+    def __hash__(self) -> int:
+        '''Hashes the value and mask of the match.
+        
+        This is useful if the expression is to be used as a key in a dictionary
+        like object.
+
+        Args:
+
+            Masked:
+        
+        Returns:
+
+            int: Hash of ``self.mask`` and ``self.value``.
+        '''
         return hash((self.value, self.mask))
 
-    def __le__(self, other) -> bool:
+
+    def __le__(self, other: 'Masked') -> bool:
+        '''See :meth:`subset_of`
+        '''
         return self.subset_of(other)
 
-    def __ge__(self, other) -> bool:
+
+    def __ge__(self, other: 'Masked') -> bool:
+        '''See :meth:`superset_of`
+        '''
         return self.superset_of(other)
 
-    def __lt__(self, other):
-        return self.subset_of(other) and not self == other
 
-    def __gt__(self, other):
-        return self.superset_of(other) and not self == other
+    def __lt__(self, other: 'Masked') -> bool:
+        '''See :meth:`proper_subset_of`
+        '''
+        return self.proper_subset_of(other)
 
-    def __eq__(self, other) -> bool:
+
+    def __gt__(self, other: 'Masked') -> bool:
+        '''See :meth:`proper_superset_of`
+        '''
+        return self.proper_superset_of(other)
+
+
+    def __eq__(self, other: 'Masked') -> bool:
         return (self.value == other.value) & (self.mask == other.mask)
 
-    def __and__(self, other):
+
+    def __and__(self, other: 'Masked') -> 'Masked':
+        '''Returns the intersection of ``self`` and ``other``.
+
+        see :meth:`intersection`
+
+        '''
         return self.intersection(other)
 
-    def __or__(self, other):
+
+    def __or__(self, other: 'Masked') -> 'Masked':
         return self.union(other)
 
-    def __iter__(self):
+
+    def __iter__(self) -> 'iterator':
+        '''Creates an `iterator` that returns consecutive elements in the set of
+        ``Masked``, starting from the current value.
+
+        Examples:
+
+            Using a ``PortID``:
+
+                >>> match = Ternary(PortId(0x0), mask=0xc)
+                >>> [str(x) for x in iter(match)]
+                [
+                    '0x0 &&& 0xf3',
+                    '0x4 &&& 0xf3',
+                    '0x8 &&& 0xf3',
+                    '0xc &&& 0xf3'
+                ]
+
+            Or an ``IPv4Address``:
+
+                >>> match = Ternary(IPv4Address("192.168.42.24"), mask="255.255.255.252")
+                >>> [str()]
+                [
+                    '192.168.42.24 &&& 255.255.255.252',
+                    '192.168.42.25 &&& 255.255.255.252',
+                    '192.168.42.26 &&& 255.255.255.252',
+                    '192.168.42.27 &&& 255.255.255.252',
+                ]
+        '''
         def iterator(ternary):
             global_max_value = (1 << self.value.bitwidth) - 1
             local_max_val = global_max_value - self.mask.value
@@ -93,7 +354,73 @@ class Masked:
 
 
 class Ternary(Masked):
-    def __init__(self, value: Field, mask: Field = None, dont_care=False):
+    '''Matches values on specific bits.
+
+    A ``Ternary`` match is a match type which matches on specific bits of the
+    value. This is achieved by the use of a mask; when a match is performed,
+    both the the expected value and the compared value are ANDed with the mask,
+    and an equality operation can be performed without comparing every single
+    bit.
+
+    ``Ternary`` values are associated with TCAM () memory; and are stored in
+    hardware as `trits`. These are like bits but have 3 states, on, off, and
+    "don't care".
+
+    Note:
+        Masks could be represented by either ``0`` or ``1`` for a match. In
+        this case, ``1`` bits represent bit's which are matched against.
+
+    This class represents a ternary expression as a combination of an integer
+    value and a mask. This is because:
+
+    * Python supports arbitrary length integers;
+    * It is easier to perform bitwise operations on integers.
+    
+    Args:
+        value (Field): The instance of a field, e.g. ``VlanID()``,
+                ``MACAddress()``, etc.
+        mask (Field): The mask representing the bits to match against, either as
+                an instance of the value's type, or, a value that can be passed
+                to that type's constructor.
+        dont_care (bool): If ``True``, no bits will be considered.
+
+    The semantics of this match can change depending on whether a mask or
+    ``dont_care`` is specified. By default, creating a ``Ternary`` match 
+    without a ``mask`` will match on every single bit, effectively acting in the
+    same way as :class:`bfrt_helper.match.Exact`.
+
+    The mask value does not have to be specified explictly as the same type as
+    the value, any value will be accepted so long as it would be accepted by
+    the value types constructor.
+
+    If ``dont_care`` is specified, no bits will be compared (i.e, the mask will
+    contain all zeroes). This means that it will match on any value it's
+    compared against. This can be useful if a `table` specifies multiple key
+    fields, and you wanted to match on another field, but not this specific
+    ``Ternary`` element.
+
+    Examples:
+        A match on a ``PortId`` which only considers the 4 least significant
+        bits::
+
+            my_field = Ternary(PortId(42), PortId(0xf))
+    
+        A match on a ``PortId`` which only considers the 4 least significant
+        bits, but not specifying the mask in terms of the original type::
+
+            my_field = Ternary(PortId(42), 0xf)
+
+        A match that will match exactly on a ``PortId`` of 42::
+
+            my_field = Ternary(PortId(42))
+
+        A match that will match on any other ``PortId``::
+
+            my_field = Ternary(PortId(42), dont_care=True)
+
+
+    '''
+    def __init__(self, value: Field, mask: Field=None, dont_care=False):
         super().__init__()
 
         self.max_value = (2 ** value.bitwidth) - 1
@@ -117,16 +444,47 @@ class Ternary(Masked):
         self.mask = mask
 
     def value_bytes(self):
+        '''Returns the match value as bytes.
+
+        Returns:
+            bytes: Internal value converted into bytes.
+        '''
         return self.value.to_bytes()
 
     def mask_bytes(self):
+        '''Returns the mask value as bytes.
+
+        Returns:
+            bytes: Internal mask converted into bytes.
+        '''
         return self.mask.to_bytes()
+
 
     @classmethod
     def dont_care(self):
+        '''Not implemented
+        '''
         pass
 
     def __str__(self):
+        ''' Returns a string representation of the match.
+
+        The string representation is output in terms of how this would be
+        written in a P4 program. A value in P4 which is two numbers separated
+        by a triple ampersand (in the correct context) is a ternary expression.
+
+        Example:
+
+            >>> match = Ternary(PortId(0x42), 0x0f)
+            >>> str(match)
+            0x42 &&& 0xf
+
+        Returns:
+
+            str: String representation of the match in terms of how it would be
+            written in P4.
+
+        '''
         if self.mask.value == self.max_value:
             return str(self.value)
         return f"{str(self.value)} &&& {str(self.mask)}"
@@ -172,19 +530,26 @@ class Exact:
 
 
 class Match:
+    '''A collection of fields representing the key segment of a table defined in
+    a P4 program.
+    '''
     def __init__(self, **fields):
         self.fields = fields
 
     def __gt__(self, other):
-        return self.superset_of(other) and not self == other
+        '''See :meth:`proper_superset_of` '''
+        return self.proper_superset_of(other) and not self == other
 
     def __lt__(self, other):
-        return self.subset_of(other) and not self == other
+        '''See :meth:`proper_subset_of` '''
+        return self.proper_subset_of(other) and not self == other
 
     def __ge__(self, other):
+        '''See :meth:`superset_of` '''
         return self.superset_of(other)
 
     def __le__(self, other):
+        '''See :meth:`subset_of` '''
         return self.subset_of(other)
 
     def __eq__(self, other):
@@ -210,6 +575,7 @@ class Match:
                 raise MismatchedTypes(f'Type of {v1} ({type(v1)}) is not equal to {v2} ({type(v2)})')
 
     def conflicts(self, other):
+
         acc = True
         self.__equality_check(other)
 
@@ -224,6 +590,13 @@ class Match:
         return acc
 
     def intersection(self, other):
+        '''Calculates the intersection of values between two matches.
+        
+        Raises:
+            MismatchedKeys:
+                Raised if a key does not match it's respective compared match.
+                Implies that match fields must be ordered correctly. 
+        '''
         args = {}
 
         self.__equality_check(other)
@@ -248,6 +621,18 @@ class Match:
         return Match(**args)
 
     def superset_of(self, other):
+        '''Calculates whether one match is a superset of another
+        
+        For this to hold true, all fields must be superset of their compared
+        respective fields.
+
+        See :meth:`Masked.superset_of`.
+
+        Raises:
+            MismatchedKeys:
+                Raised if a key does not match it's respective compared match.
+                Implies that match fields must be ordered correctly. 
+        '''
         acc = True
         self.__equality_check(other)
 
@@ -262,6 +647,18 @@ class Match:
         return acc
 
     def subset_of(self, other):
+        '''Calculates whether one match is a superset of another
+        
+        For this to hold _true,_ all fields must be subset of their compared
+        respective fields.
+
+        See :meth:`Masked.subset_of`.
+
+        Raises:
+            MismatchedKeys:
+                Raised if a key does not match it's respective compared match.
+                Implies that match fields must be ordered correctly. 
+        '''
         acc = True
         self.__equality_check(other)
 
@@ -276,6 +673,18 @@ class Match:
         return acc
 
     def proper_superset_of(self, other):
+        '''Calculates whether one match is a proper superset of another
+        
+        For this to hold true, all fields must be proper superset of their
+        compared respective fields.
+
+        See :meth:`Masked.proper_superset_of`.
+
+        Raises:
+            MismatchedKeys:
+                Raised if a key does not match it's respective compared match.
+                Implies that match fields must be ordered correctly. 
+        '''
         acc = True
         self.__equality_check(other)
 
@@ -290,6 +699,18 @@ class Match:
         return acc
 
     def proper_subset_of(self, other):
+        '''Calculates whether one match is a proper superset of another
+        
+        For this to hold true, all fields must be proper superset of their
+        compared respective fields.
+
+        See :meth:`Masked.subset_of`.
+
+        Raises:
+            MismatchedKeys:
+                Raised if a key does not match it's respective compared match.
+                Implies that match fields must be ordered correctly. 
+        '''
         acc = True
         self.__equality_check(other)
 
@@ -305,6 +726,15 @@ class Match:
         # return acc
 
     def equal_(self, other):
+        '''Calculates whether two matches are equal.
+        
+        For this to hold true, every single element must equal it's other.
+
+        Raises:
+            MismatchedKeys:
+                Raised if a key does not match it's respective compared match.
+                Implies that match fields must be ordered correctly. 
+        '''
         acc = True
         self.__equality_check(other)
 
@@ -318,9 +748,9 @@ class Match:
     def overlaps(self, other):
         acc = True
 
-        if self < other:
+        if self <= other:
             return False
-        if self > other:
+        if self >= other:
             return False
         if self == other:
             return False
@@ -356,8 +786,8 @@ class Match:
 
 
 class IPv4AddressTernary(Ternary):
-    ''' The asterisk captures all positional parameters, forcing everything to
-        be named '''
+    '''A helper class for more easily expressing a ternary ``IPv4Address``.
+    '''
     def __init__(self, value, *, prefix=None, mask=None, dont_care=False):
         if not isinstance(value, IPv4Address):
             value = IPv4Address(value)
@@ -365,3 +795,9 @@ class IPv4AddressTernary(Ternary):
             mask = IPv4Address(mask_from_prefix(IPv4Address.bitwidth, prefix))
 
         super().__init__(value, mask, dont_care)
+
+    # def __str__(self):
+    #     print('IPv4AddressTernary.__str__')
+    #     if self.mask.value == self.max_value:
+    #         return str(self.value)
+    #     return f"{str(self.value)} &&& {str(self.mask)}"

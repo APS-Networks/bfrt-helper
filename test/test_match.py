@@ -13,6 +13,9 @@ import pytest
 class EightBit(Field):
     bitwidth = 8
 
+    def __str__(self):
+        return f'0b{self.value:>08b}'
+
 
 def test_equal_match_is_superset():
     match = Match(
@@ -294,22 +297,19 @@ def test_match_mixed_sets_overlap():
 
 
 def test_match_superset_ternary_is_not_overlap():
-    match_a = Match(
-        src=Ternary(EightBit(0b11110000), EightBit(0b10100000)),
-        dst=Ternary(EightBit(0b11110000), EightBit(0b10100000)))
-    match_b = Match(
-        src=Ternary(EightBit(0b11110000), EightBit(0b10100000)),
-        dst=Ternary(EightBit(0b11111100), EightBit(0b10101000)))
+    match_a = Match(src=Ternary(EightBit(0b11110000), mask=0b10100000), dst=Ternary(EightBit(0b11110000), mask=0b10100000))
+    match_b = Match(src=Ternary(EightBit(0b11110000), mask=0b10100000), dst=Ternary(EightBit(0b11111100), mask=0b10101000))
+
     assert not match_a.overlaps(match_b)
 
 
 def test_match_subset_ternary_is_not_overlap():
     match_a = Match(
-        src=Ternary(EightBit(0b11110000), EightBit(0b10100000)),
-        dst=Ternary(EightBit(0b11111100), EightBit(0b10101000)))
+        src=Ternary(EightBit(0b11110000), mask=0b10100000),
+        dst=Ternary(EightBit(0b11111100), mask=0b10101000))
     match_b = Match(
-        src=Ternary(EightBit(0b11110000), EightBit(0b10100000)),
-        dst=Ternary(EightBit(0b11110000), EightBit(0b10100000)))
+        src=Ternary(EightBit(0b11110000), mask=0b10100000),
+        dst=Ternary(EightBit(0b11110000), mask=0b10100000))
     assert not match_a.overlaps(match_b)
 
 
