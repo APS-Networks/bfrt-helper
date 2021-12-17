@@ -1,35 +1,10 @@
-attrs
+
 black
-click
 coverage
 flake8
-googleapis-common-protos
-grpcio
-grpcio-tools
-importlib-metadata
-importlib-resources
-iniconfig
-mccabe
-mypy-extensions
-packaging
-pathspec
-platformdirs
-pluggy
-protobuf
-py
-pycodestyle
-pyflakes
 pyparsing<3,>=2.0.2 # Specific version for packaging
 pytest
 pytest-cov
-pytest-github-actions-annotate-failures
-regex
-six
-toml
-tomli
-typing-extensions
-wheel
-zipp
 # Sphinx specific
 sphinx
 sphinx-rtd-theme
