@@ -1,35 +1,10 @@
-attrs
+
 black
-click
 coverage
 flake8
-googleapis-common-protos==1.54.0
-grpcio==1.17.0 # Required for compatibility with the SDE
-grpcio-tools==1.17.0
-importlib-metadata
-importlib-resources
-iniconfig
-mccabe
-mypy-extensions
-packaging
-pathspec
-platformdirs
-pluggy
-protobuf==3.6.1 # Required for compatibility with the SDE
-py
-pycodestyle
-pyflakes
 pyparsing<3,>=2.0.2 # Specific version for packaging
 pytest
 pytest-cov
-pytest-github-actions-annotate-failures
-regex
-six
-toml
-tomli
-typing-extensions
-wheel
-zipp
 # Sphinx specific
 sphinx
 sphinx-rtd-theme
