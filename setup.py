@@ -23,12 +23,12 @@ def get_setuptools_ver():
 
 if get_setuptools_ver() < (40, 1, 0):
     print(
-        "Setuptools version too old, v40.1.0 and above required. Might be able to upgrade with"
+        "Setuptools version too old, v40.1.0 and above required. ",
+        "Might be able to upgrade with"
     )
     print("\tpip install --upgrade setuptools")
     print("Or use provided setup.sh script.")
     sys.exit(1)
-
 
 
 setuptools.setup(
@@ -45,8 +45,9 @@ setuptools.setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     ],
     install_requires=[
-        'grpcio',
-        'grpcio-tools',
-        'googleapis-common-protos'
+        'grpcio==1.17.0',
+        'protobuf==3.12.0',
+        'grpcio-tools==1.43.0',
+        'googleapis-common-protos==1.54.0'
     ]
 )

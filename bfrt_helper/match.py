@@ -477,7 +477,7 @@ class Ternary(Masked):
         return f"Ternary({repr(self.value)}, mask={repr(self.mask)})"
 
 
-class LPM(Masked):
+class LongestPrefixMatch(Masked):
     def __init__(self, value: Field, prefix: int):
         super().__init__()
 
@@ -494,7 +494,7 @@ class LPM(Masked):
         return f"{self.value}/{self.prefix}"
 
     def __repr__(self):
-        return f"LPM({repr(self.value)}, prefix={self.prefix})"
+        return f"LongestPrefixMatch({repr(self.value)}, prefix={self.prefix})"
 
     def value_bytes(self):
         return self.value.to_bytes()
@@ -594,10 +594,10 @@ class Match:
             if isinstance(v1, Ternary):
                 # args.append(v1.intersection(v2))
                 args[k1] = v1.intersection(v2)
-            elif isinstance(v1, LPM):
-                # args.append(LPM(v1.value | v2.value, max(v1.prefix,
+            elif isinstance(v1, LongestPrefixMatch):
+                # args.append(LongestPrefixMatch(v1.value | v2.value, max(v1.prefix,
                 #   v2.prefix)))
-                args[k1] = LPM(v1.value | v2.value, max(v1.prefix, v2.prefix))
+                args[k1] = LongestPrefixMatch(v1.value | v2.value, max(v1.prefix, v2.prefix))
             else:
                 if v1 != v2:
                     raise InvalidOperation(

@@ -45,10 +45,10 @@ Exact
    :members:
    :inherited-members:
 
-Longest Prefix Match
+LongestPrefixMatch
 ^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: LPM
+.. autoclass:: LongestPrefixMatch
    :members:
    :inherited-members:
 

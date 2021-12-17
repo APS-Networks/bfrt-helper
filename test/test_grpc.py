@@ -16,7 +16,7 @@ from bfrt_helper.fields import MACAddress
 from bfrt_helper.fields import PortId
 from bfrt_helper.match import Exact
 from bfrt_helper.match import Ternary
-from bfrt_helper.match import LPM
+from bfrt_helper.match import LongestPrefixMatch
 
 
 import pytest
@@ -100,7 +100,7 @@ def test_grpc_write_request_lpm():
     write_request = bfrt_helper.create_table_write(
         program_name="test",
         table_name="pipe.TestIngressControl.port_forward_lpm",
-        key={"hdr.ethernet.srcAddr": LPM(MACAddress("aa:bb:cc:dd:ee:ff"), prefix=24)},
+        key={"hdr.ethernet.srcAddr": LongestPrefixMatch(MACAddress("aa:bb:cc:dd:ee:ff"), prefix=24)},
         action_name="TestIngressControl.forward",
         action_params={
             "egress_port": PortId(65),

@@ -60,7 +60,7 @@ def test_ternary_ipaddress_max_value():
 
 
 def test_ternary_ipaddress_iterator():
-    ''' It has the full mask as a ternary expression masks off the value bits'''
+    """It has the full mask as a ternary expression masks off the value bits"""
     ternary = Ternary(IPv4Address("192.168.42.24"), mask="255.255.255.252")
     expected = [
         IPv4AddressTernary("192.168.42.24", mask="255.255.255.255"),

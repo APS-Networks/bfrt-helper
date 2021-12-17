@@ -3,9 +3,9 @@ black
 click
 coverage
 flake8
-googleapis-common-protos
-grpcio
-grpcio-tools
+googleapis-common-protos==1.54.0
+grpcio==1.17.0 # Required for compatibility with the SDE
+grpcio-tools==1.17.0
 importlib-metadata
 importlib-resources
 iniconfig
@@ -15,7 +15,7 @@ packaging
 pathspec
 platformdirs
 pluggy
-protobuf
+protobuf==3.6.1 # Required for compatibility with the SDE
 py
 pycodestyle
 pyflakes

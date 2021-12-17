@@ -5,7 +5,7 @@ from bfrt_helper.pb2.bfruntime_pb2 import (
 )
 
 from bfrt_helper.match import Exact
-from bfrt_helper.match import LPM
+from bfrt_helper.match import LongestPrefixMatch
 from bfrt_helper.match import Ternary
 from bfrt_helper.fields import Field
 
@@ -101,7 +101,7 @@ class MismatchedMatchType(Exception):
 
     The current accepted match types are:
 
-        * LPM
+        * LongestPrefixMatch
         * Exact
         * Ternary :class:`bfrt_helper.match.Ternary`
 
@@ -252,9 +252,9 @@ class BfRtHelper:
                 raise MismatchedMatchType(field_name, data, "Exact")
             bfrt_key_field.exact.value = data.value_bytes()
 
-        if info_key_field.match_type == "LPM":
-            if not isinstance(data, LPM):
-                raise MismatchedMatchType(field_name, data, "LPM")
+        if info_key_field.match_type == "LongestPrefixMatch":
+            if not isinstance(data, LongestPrefixMatch):
+                raise MismatchedMatchType(field_name, data, "LongestPrefixMatch")
             bfrt_key_field.lpm.value = data.value_bytes()
             bfrt_key_field.lpm.prefix_len = data.prefix
 
