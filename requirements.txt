@@ -4,8 +4,8 @@ click
 coverage
 flake8
 googleapis-common-protos==1.54.0
-grpcio==1.17.0 # Required for compatibility with the SDE
-grpcio-tools==1.17.0
+grpcio==1.43.0 # Required for compatibility with the SDE
+grpcio-tools==1.43.0
 importlib-metadata
 importlib-resources
 iniconfig

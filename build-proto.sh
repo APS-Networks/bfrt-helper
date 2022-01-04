@@ -23,7 +23,7 @@ python3 -m venv ./.venv --copies
 
 . .venv/bin/activate
 
-pip install grpcio grpcio-tools
+pip install grpcio==1.43.0 grpcio-tools==1.43.0
 
 git clone https://github.com/googleapis/python-api-common-protos
 mkdir -p ./bfrt_helper/pb2

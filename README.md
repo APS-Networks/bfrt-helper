@@ -22,7 +22,8 @@ as follows:
   way of documentation, and it's not obvious how this is installed.
 
 > The protobuf definition, as of writing, is Intel proprietary and confidential,
-> and therefore cannot be shared. Otherwise this would be provided.
+> and therefore cannot be shared. Otherwise this would be provided. It must be 
+> copied into the `proto` directory.
 
 ## Overview
 

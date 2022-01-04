@@ -45,9 +45,9 @@ setuptools.setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     ],
     install_requires=[
-        'grpcio==1.17.0',
-        'protobuf==3.12.0',
+        'grpcio==1.43.0',
         'grpcio-tools==1.43.0',
-        'googleapis-common-protos==1.54.0'
+        'googleapis-common-protos==1.54.0',
+        'protobuf==3.12.0'
     ]
 )
