@@ -5,8 +5,8 @@ API Reference
    :maxdepth: 3
    :caption: Contents:
 
-   bfrt_info
-   bfrt
-   fields
-   match
-   util
+   api/bfrt_info
+   api/bfrt
+   api/fields
+   api/match
+   api/util

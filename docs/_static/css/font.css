@@ -1,0 +1,8 @@
+@font-face {
+    font-family: exo2;
+    src: url(/_static/exo2/Exo2-VariableFont_wght.ttf);
+  }
+  
+  p, a, h1, h2, h3 {
+    font-family: exo2 !important;
+  }

@@ -1,13 +1,11 @@
 # Barefoot Runtime Helper
 
-![Unit Tests](https://github.com/APS-Networks/bfrt-helper/actions/workflows/ci.yml/badge.svg?branch=merge-updates)
+
 
 REQUIRES SANITATION BEFORE RELEASE
 
-
 > This documentation is for the APS Networks `bfrt-helper` software. The source
-> code for this is available on GitHub.
->
+> code for this can be found at
 > [bfrt-helper](https://github.com/APS-Networks/bfrt-helper) on GitHub
 
 `bfrt_helper` is a library for creating gRPC messages and communicating with
@@ -23,7 +21,7 @@ as follows:
 
 > The protobuf definition, as of writing, is Intel proprietary and confidential,
 > and therefore cannot be shared. Otherwise this would be provided. It must be 
-> copied into the `proto` directory.
+> copied into the `proto/bfrt_helper` directory.
 
 ## Overview
 
@@ -40,6 +38,11 @@ The library comes supplied with the following python files:
 * `fields.py`: These define classes that represent objects sent with a request,
   what kind of match it is for a key field, and handle serialisation and
   deserialisation of such.
+
+
+## Building and Installation
+
+> TODO
 
 ## Usage
 

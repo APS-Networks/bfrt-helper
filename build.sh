@@ -9,5 +9,13 @@
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 cd ${script_dir}
-${script_dir}/build-proto.sh
 
+# rm -rf python-api-common-protos
+
+# python3 -m build
+
+./scripts/build-docs.sh
+
+mkdir -p dist/docs
+cp -R docs/_build/html/* dist/docs/.
+cp docs/_build/latex/bfrthelper.pdf dist/.

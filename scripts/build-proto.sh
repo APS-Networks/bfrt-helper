@@ -1,11 +1,8 @@
 #! /usr/bin/env bash
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-# base_dir=${script_dir}/..
-bfproto_file="./proto/bfrt_helper/pb2/bfruntime.proto"
-echo "bfproto_file:  ${bfproto_file}"
-
-bfproto_file=$(realpath ${bfproto_file})
+base_dir=$(realpath ${script_dir}/..)
+bfproto_file="${base_dir}/proto/bfrt_helper/pb2/bfruntime.proto"
 bfproto_dir=$(realpath ./proto)
 
 echo "script_dir:    ${script_dir}"
@@ -18,15 +15,22 @@ if [ ! -z "${VIRTUAL_ENV}" ] ; then
     deactivate
 fi
 
-echo -e "\nCreating Python virtual environment and installing packages"
+echo -e "\nCreating and activating Python virtual environment"
 python3 -m venv ./.venv --copies
 
 . .venv/bin/activate
 
 pip install grpcio==1.43.0 grpcio-tools==1.43.0
 
-git clone https://github.com/googleapis/python-api-common-protos
+
+echo -e "\nCompiling BfRt protobuf"
+
+if [ ! -d "python-api-common-protos" ] ; then
+    git clone https://github.com/googleapis/python-api-common-protos
+fi
+
 mkdir -p ./bfrt_helper/pb2
+
 python -m grpc_tools.protoc \
     --proto_path=./python-api-common-protos \
     --proto_path=${bfproto_dir} \

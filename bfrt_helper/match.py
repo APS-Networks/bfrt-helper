@@ -3,20 +3,12 @@ from bfrt_helper.util import InvalidValue
 from bfrt_helper.util import mask_from_prefix
 from bfrt_helper.fields import Field
 from bfrt_helper.fields import IPv4Address
+from bfrt_helper.fields import MismatchedTypes
 
 
 class MismatchedKeys(Exception):
     """Raised when the key's name doesn't match when comparing two match
     objects
-    """
-
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class MismatchedTypes(Exception):
-    """Raised when a field's type (e.g., bitwidth or object) do not match when
-    comparing two match objects.
     """
 
     def __init__(self, message):
@@ -171,6 +163,10 @@ class Masked:
 
             (A \\supsetneq I) {and} (B \\supsetneq I)
 
+        .. drawio-image:: ../drawio/test.drawio
+            :align: center
+
+
         That is to say that :math:`A`, being a proper superset of the
         intersection :math:`I`, has at least one element not in :math:`I`, and,
         :math:`B`, being a proper superset of :math:`I`, has at least one
@@ -184,60 +180,6 @@ class Masked:
             self.value & c_mask == other.value & c_mask
         )
 
-        # A = [x for x in iter(self)]
-        # B = [x for x in iter(other)]
-
-        # overlap = False
-
-        # for x in A:
-        #     if x not in B:
-        #         for y in B:
-        #             if y not in A:
-        #                 overlap = True
-
-        # return overlap
-
-        # unique_in_A = False
-        # unique_in_B = False
-
-        # for x in A:
-        #     if x not in B:
-        #         unique_in_A = True
-        #         break
-        # for y in B:
-        #     if y not in A:
-        #         unique_in_B = True
-        #         break
-
-        # return unique_in_A & unique_in_B
-
-        # unique_in_self = False
-        # unique_in_other = False
-
-        # intersection = self.intersection(other)
-
-        # # Must be proper subset/superset comparison
-        # if self > intersection:
-        #     unique_in_self = True
-
-        # if other > intersection:
-        #     unique_in_other = True
-
-        # return unique_in_self & unique_in_other
-
-        # common_mask = self.mask | other.mask
-
-        # 0 is don't care bits
-        #       11110000
-        #       00111111
-        # U     00110000 / less specific
-        # n     11001111 / more specific
-
-        # 0 is don't care bits
-        #       11100000
-        #       00000111
-        # U     00000000 / less specific
-        # n     11100111 / more specific
 
     def __hash__(self) -> int:
         """Hashes the value and mask of the match.

@@ -18,9 +18,9 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 
-project = 'BfRt Helper'
-copyright = '2021, APS-Networks GmbH'
-author = 'APS-Networks GmbH'
+project = 'Barefoot Runtime gRPC Helper'
+copyright = '2021, APS Networks GmbH'
+author = 'APS Networks GmbH'
 
 # The full version, including alpha/beta/rc tags
 release = '1.0.0'
@@ -31,6 +31,8 @@ release = '1.0.0'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
+#
+# Napoleon allows the use of Numpy style docstrings.
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.coverage', 
@@ -38,6 +40,9 @@ extensions = [
     'sphinx_rtd_theme',
     'sphinx.ext.autosummary',
     'sphinx.ext.viewcode',
+    
+    # 'sphinx.ext.graphviz',
+    'sphinxcontrib.drawio',
     # 'recommonmark',
     'sphinx.ext.autosectionlabel',
     # 'autodocsumm',
@@ -64,7 +69,9 @@ autodoc_default_options = {
 
 # autoclass_content = 'class'
 
-# autosummary_generate = True
+autodoc_default_flags = ['members']
+autosummary_generate = True
+
 # autosectionlabel_prefix_document = True
 
 autodoc_inherit_docstrings = True
@@ -87,12 +94,6 @@ napoleon_type_aliases = None
 napoleon_attr_annotations = True
 
 
-html_favicon = '_static/favicon.ico'
-html_logo = '_static/logo.png'
-# html_css_files = [
-#     '_static/blockquote.css',
-# ]
-
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -108,13 +109,29 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # a list of builtin themes.
 #
 html_theme = 'renku'
+# html_theme = 'sphinx_rtd_theme'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-from bfrt_helper.fields import Field
+html_favicon = '_static/favicon.ico'
+html_logo = '_static/logo.png'
+html_theme_options = {
+    # 'navigation_depth': 4,
+    'collapse_navigation': False
+}
+html_css_files = [
+    '_static/blockquote.css',
+]
+
+
+# latex_elements = {
+#   'extraclassoptions': 'openany,oneside'
+# }
+
+from bfrt_helper.fields import Field, StringField
 import inspect
 
 '''A vain attempt to ignore ``__new__`` I don't think it worked, hence the
@@ -150,7 +167,7 @@ import re
 
 '''Pre-processes displayed signatures.
 
-There are two deficencies as I see it wrt Sphinx and document generation.
+There are two deficiencies as I see it wrt Sphinx and document generation.
 
 A minor gripe is that the signatures include the full package and module path
 when referring to another object type, which is annoying since, in most cases,
@@ -175,12 +192,14 @@ def autodoc_process_signature(
         options,
         signature,
         return_annotation):
+
     if what == 'class':
         if getattr(obj, '__init__') is not None:
             if issubclass(obj, Field):
                 signature = str(inspect.signature(obj.__init__))
                 signature = signature.replace('self, ', '')
-        signature = re.sub(r'bfrt_helper\..*?\.', '', signature)
+        # signature = re.sub(r'bfrt_helper\..*?\.', '', signature)
+
         return signature, return_annotation
     if what == 'method':
         if return_annotation is not None:
@@ -190,7 +209,9 @@ def autodoc_process_signature(
     return signature, return_annotation
 
 
+
 def setup(app):
     app.connect('autodoc-process-signature', autodoc_process_signature)
-    app.connect('autodoc-skip-member', skip_new)
+    # app.connect('autodoc-skip-member', skip_new)
     app.add_css_file('css/blockquote.css')
+    app.add_css_file('css/font.css')

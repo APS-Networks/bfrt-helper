@@ -10,6 +10,14 @@ from bfrt_helper.util import InvalidOperation
 from bfrt_helper.util import encode_number
 
 
+class MismatchedTypes(Exception):
+    """Raised when a field's type (e.g., bitwidth or object) do not match when
+    comparing two match objects.
+    """
+
+    def __init__(self, a, b):
+        super().__init__(f'Type {a.__class__.__qualname__} is not {a.__class__.__qualname__}')
+
 class JSONSerialisable:
     """Base class that enables converting a derived's contents to JSON"""
 
@@ -37,6 +45,12 @@ class JSONSerialisable:
             return value
 
 
+
+def type_check(a, b):
+    if type(a) != type(b):
+        raise MismatchedTypes(a, b)
+
+
 class Field(JSONSerialisable):
     """Base class for all BfRt Helper field objects.
 
@@ -52,8 +66,6 @@ class Field(JSONSerialisable):
             Raised if the value assigned to the object is greater than the
             maximum permissable value
     """
-
-    # __slots__ = [] # Make immutable
 
     def __init__(self, value=0):
 
@@ -102,24 +114,53 @@ class Field(JSONSerialisable):
         return f"{self.__class__.__qualname__}({str(self)})"
 
     def __eq__(self, other):
+        type_check(self, other)
         if self.__class__ != other.__class__:
             return False
         return self.value == other.value
 
     def __and__(self, other):
+        type_check(self, other)
         cls = self.__class__
         return cls(self.value & other.value)
 
     def __or__(self, other):
+        type_check(self, other)
         cls = self.__class__
         return cls(self.value | other.value)
 
     def __xor__(self, other):
+        type_check(self, other)
         cls = self.__class__
         return cls(self.value ^ other.value)
 
     def __hash__(self):
         return hash(self.value)
+
+    def __ne__(self, other):
+        type_check(self, other)
+        cls = self.__class__
+        return self.value != other.value
+
+    def __le__(self, other):
+        type_check(self, other)
+        cls = self.__class__
+        return self.value <= other.value
+
+    def __lt__(self, other):
+        type_check(self, other)
+        cls = self.__class__
+        return self.value < other.value
+
+    def __ge__(self, other):
+        type_check(self, other)
+        cls = self.__class__
+        return self.value >= other.value
+
+    def __gt__(self, other):
+        type_check(self, other)
+        cls = self.__class__
+        return self.value > other.value
 
 
 """ For data parameters, this may not even be necessary as the class will accept
@@ -296,4 +337,8 @@ class ReplicationId(Field):
     perform additional operations when moving packets across multicast groups.
     """
 
+    bitwidth = 16
+
+
+class Layer2Port(Field):
     bitwidth = 16

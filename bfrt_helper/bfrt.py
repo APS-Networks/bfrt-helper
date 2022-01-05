@@ -101,9 +101,9 @@ class MismatchedMatchType(Exception):
 
     The current accepted match types are:
 
-        * LongestPrefixMatch
-        * Exact
-        * Ternary :class:`bfrt_helper.match.Ternary`
+        * :ref:`LongestPrefixMatch`
+        * :ref:`Exact`
+        * :ref:`Ternary`
 
     Args:
         field_name (str): The name of the field in question.

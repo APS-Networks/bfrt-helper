@@ -1,5 +1,5 @@
-bfrt_helper.match
-=================
+Match
+-----
 
 .. contents:: :local:
    :depth: 3
@@ -7,7 +7,7 @@ bfrt_helper.match
 .. currentmodule:: bfrt_helper.match
 
 There are two match types that can be considered in terms of a mask and a
-value, :ref:`Longest Prefix Match`, and :ref:`Ternary`.
+value, :ref:`LongestPrefixMatch`, and :ref:`Ternary`.
 
 In turn, each of these can be thought in the context of sets: the set of all
 possible values within either are the bits selected for matching, and every
@@ -24,56 +24,14 @@ being:
 
 
 
-Base Match Type
-***************
-
-Masked
-^^^^^^
-
-.. autoclass:: Masked
-   :members:
-
-
-Supported Types
-***************
-
-
 Exact
-^^^^^^^^^^^^^^^^
+^^^^^
 
-.. autoclass:: Exact
-   :members:
-   :inherited-members:
-
-LongestPrefixMatch
+Longest Prefix Match
 ^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: LongestPrefixMatch
-   :members:
-   :inherited-members:
-
-
 Ternary
-^^^^^^^^^^^^^^^^
+^^^^^^^
 
-.. autoclass:: Ternary
-   :members:
-   :inherited-members:
-
-
-
-Exceptions
-**********
-
-MismatchedKeys
-^^^^^^^^^^^^^^
-.. autoclass:: MismatchedKeys
-
-MismatchedTypes
-^^^^^^^^^^^^^^^
-.. autoclass:: MismatchedTypes
-
-
-
-
-
+Unsupported Matches
+^^^^^^^^^^^^^^^^^^^
