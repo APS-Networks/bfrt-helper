@@ -12,6 +12,9 @@ BfRtHelper
 
 .. autoclass:: BfRtHelper
    :members: create_subscribe_request,
+      create_write_request,
+      create_table_write,
+      create_key_field,
       create_table_data_write,
       create_table_read,
       create_copy_to_cpu,

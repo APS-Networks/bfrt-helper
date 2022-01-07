@@ -71,6 +71,46 @@ objects without having to connect to a device (and consequently manage
 the stream channel, messages across the device, subscription requests etc).
 
 
+Retrieving Non-P4 Configuration
+*******************************
+
+.. code:: 
+
+Manipulating Non-Match/Action Tables
+************************************
+
+It is possible to write to many other tables exposed to the runtime interface
+which can be used to manipulate copy to cpu settings, multicast groups, port
+settings etc.
+
+While these tables can be considered as "ordinary" database tables, they are
+still manipulated by the same mechanisms as a match-action update.
+
+While this is not guaranteed to work (or indeed supported by Intel), what
+follows is an example of creating a request to add a ``copy_to_cpu``
+configuration:
+
+.. note::
+
+  Currently this example is used to update an existing table, field and 
+
+  :TODO:
+
+.. code:: python
+
+  # Assuming bfrt_helper et. al. have been created prior
+
+    port = 64
+
+    bfrt_request = helper.create_write_request(program_name)
+    bfrt_table_entry = helper.create_table_entry("$pre.port")
+
+    # The first argument is the table name, the second the field to write, and
+    # the final is the value to lookup
+    bfrt_key_field = helper.create_key_field("$pre.port", "$DEV_PORT", Exact(port))
+    bfrt_table_entry.extend([bfrt_key_field])
+
+
 Building
 ^^^^^^^^
 

@@ -21,6 +21,8 @@ pip install  \
     sphinx-markdown-builder \
     sphinxcontrib-drawio
 
+pip install grpcio==1.43.0 grpcio-tools==1.43.0 googleapis-common-protos==1.54.0
+
 
 cd ${base_dir}/docs
 

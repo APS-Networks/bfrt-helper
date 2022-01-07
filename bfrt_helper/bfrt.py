@@ -1,4 +1,7 @@
 import bfrt_helper.pb2.bfruntime_pb2 as bfruntime_pb2
+from bfrt_helper.pb2.bfruntime_pb2 import WriteRequest
+from bfrt_helper.pb2.bfruntime_pb2 import Update
+# Atomicity = WriteRequest.Atomicity
 
 from bfrt_helper.pb2.bfruntime_pb2 import (
     SetForwardingPipelineConfigRequest as SetPipelineReq
@@ -8,7 +11,6 @@ from bfrt_helper.match import Exact
 from bfrt_helper.match import LongestPrefixMatch
 from bfrt_helper.match import Ternary
 from bfrt_helper.fields import Field
-
 
 class UnknownAction(Exception):
     """Exception raised when an action for a given table could not be found.
@@ -41,7 +43,7 @@ class UnknownActionParameter(Exception):
         param_name (str): String containing the name of the parameter.
     """
 
-    def __init__(self, table_name, action_name, param_name):
+    def __init__(self, table_name: str, action_name: str, param_name: str):
         msg = (
             'Could not find action parameter ',
             f'{table_name}::{action_name}::{param_name}'
@@ -56,7 +58,7 @@ class UnknownTable(Exception):
         table_name (str): String containing the name of the table.
     """
 
-    def __init__(self, table_name):
+    def __init__(self, table_name: str):
         super().__init__(f"Could not find table {table_name}")
 
 
@@ -91,7 +93,7 @@ class UnknownKeyField(Exception):
         action_name (str): String containing the name of the action.
     """
 
-    def __init__(self, table_name, field_name):
+    def __init__(self, table_name: str, field_name: str):
         super().__init__(f"Could not find key field {table_name}::{field_name}")
 
 
@@ -111,7 +113,7 @@ class MismatchedMatchType(Exception):
         expected (str): The name of the expected data type.
     """
 
-    def __init__(self, field_name, field_data, expected: str):
+    def __init__(self, field_name: str, field_data: Field, expected: str):
         clz = field_data.__class__.__name__
         msg = (f'Expected field type for {field_name} is {expected}, but have ',
                f'{clz}')
@@ -133,18 +135,25 @@ class MismatchedDataSize(Exception):
         observed (int): Bitwidth of field presented by the user.
     """
 
-    def __init__(self, expected, observed):
+    def __init__(self, expected: int, observed: int):
         msg = f"Expected data size {expected} but have {observed}"
         super().__init__(msg)
 
 
 class InvalidActionParameter(Exception):
-    def __init__(self, table_name, action_name, param_name, reason):
+    def __init__(self, table_name: str,
+            action_name: str,
+            param_name: str,
+            reason: str):
         msg = f"{table_name}::{action_name}::{param_name}: {reason}"
         super().__init__(msg)
 
 
 class BfRtHelper:
+    '''Barefoot Runtime gRPC Helper Class
+
+    
+    '''
     def __init__(self, device_id, client_id, bfrt_info):
         self.device_id = device_id
         self.client_id = client_id
@@ -152,10 +161,10 @@ class BfRtHelper:
 
     def create_subscribe_request(
         self,
-        learn=True,  # Receive learn notifications
-        timeout=True,  # Receive timeout notifications
-        port_change=True,  # Receive port state change notifications
-        request_timeout=10,  # Subscribe response timeout
+        learn: bool=True,  # Receive learn notifications
+        timeout: bool=True,  # Receive timeout notifications
+        port_change: bool=True,  # Receive port state change notifications
+        request_timeout: int=10,  # Subscribe response timeout
     ):
         """Create a subscribe request for registering with a device.
 
@@ -197,9 +206,55 @@ class BfRtHelper:
 
     def create_write_request(
         self,
-        program_name,
-        atomicity=bfruntime_pb2.WriteRequest.Atomicity.CONTINUE_ON_ERROR,
+        program_name: str,
+        atomicity=WriteRequest.Atomicity.CONTINUE_ON_ERROR,
+        target:dict={}
     ):
+        '''Creates a basic write request with no updates.
+
+        This creates the base gRPC object for the majority of runtime program
+        manipulation.
+
+        The optional target parameter contains any of the following:
+
+        * ``pipe_id`` : The id of the pipe to apply the write. Tofino devices
+          may contain multiple "pipes", which in turn are comprised of
+          multiple ports. Each pipe is capable of being loaded with it's own
+          P4 program that acts independently from other pipes. An ID is 
+          therefore necessary to identify it.
+        * ``direction``: The Tofino Native Architecture has a concept of ingress
+          and egress pipelines. It is possible (AFAWK) that a single control
+          can be associated with both ingress and egress pipelines, but their
+          "instantiation" will contain tables unique to the direction.
+        * ``prsr_id``: TODO
+
+        The default argument for this is equivalent to:
+
+        .. code:: python
+
+            {
+                'pipe_id': 0xFFFF, # All pipes
+                'direction': 0xFF, # All directions
+                'prsr_id': 0xFF # TODO
+            }
+
+        Args:
+
+            program_name (str): The name of the program to target.
+
+            atomicity (WriteRequest.Atomicity): Controls the behaviour of a
+                write request with respect to batched updates, i.e., whether
+                any errors are ignored, errors cause rollbacks of previously
+                submitted writes in the batch, or whether the write is treated
+                as a single atomic transaction.
+
+            target (dict): An optionally provided dictionary that maps parser
+                identifier information.
+
+        Returns:
+
+            bfruntime_pb2.WriteRequest
+        '''
         request = bfruntime_pb2.WriteRequest()
         request.client_id = self.client_id
         request.p4_name = program_name
@@ -207,15 +262,15 @@ class BfRtHelper:
 
         target = bfruntime_pb2.TargetDevice()
         target.device_id = self.device_id
-        target.pipe_id = 0xFFFF
-        target.direction = 0xFF
-        target.prsr_id = 0xFF
+        target.pipe_id = target.get('pipe_id', 0xFFFF)
+        target.direction = target.get('direction', 0xFF)
+        target.prsr_id = target.get('prsr_id', 0xFF)
 
         request.target.CopyFrom(target)
 
         return request
 
-    def create_read_request(self, program_name):
+    def create_read_request(self, program_name: str):
         request = bfruntime_pb2.ReadRequest()
         request.client_id = self.client_id
         request.p4_name = program_name
@@ -231,7 +286,21 @@ class BfRtHelper:
 
         return request
 
-    def create_table_entry(self, table_name):
+    def create_table_entry(self, table_name: str):
+        '''Generates empty table message
+        
+        This produces the base gRPC object for a table entry for the supplied
+        table name.
+
+        Args:
+
+            table_name (str): Name of table to target
+
+        Returns:
+
+            bfruntime_pb2.TableEntry
+
+        '''
         table_id = self.bfrt_info.get_table_id(table_name)
         if table_id is None:
             raise UnknownTable(table_name)
@@ -240,7 +309,35 @@ class BfRtHelper:
 
         return table_entry
 
-    def create_key_field(self, table_name, field_name, data):
+    def create_key_field(self, table_name: str, field_name: str, data: Field):
+        '''Generates key field component of a gRPC message
+        
+        The performs a lookup of the key id (as messages contain a table ID and
+        not the name) using the :ref:`BfRtInfo` object and also type checks
+        the match type.
+
+        Args:
+
+            table_name (str): Name of table to target
+
+            field_name (str): Name of specific key field
+
+            data (Field): Field data supplied as in instance of a `Field`
+                object.
+        
+        Returns:
+
+            bfruntime_pb2.KeyField
+
+        Raises:
+
+            UnknownKeyField: If the :ref:`BfRtInfo` object did not contain a
+                a valid key field for the given table and field names.
+
+            MismatchedMatchType: If the match types (e.g. :ref:`Exact`) does not
+                match the match type defined for the field actually present in
+                the table.
+        '''
         info_key_field = self.bfrt_info.get_key(table_name, field_name)
         if info_key_field is None:
             raise UnknownKeyField(table_name, field_name)
@@ -305,6 +402,10 @@ class BfRtHelper:
         return data_field
 
     def create_key_fields(self, table_name, key_fields):
+        '''Create the key fields gRPC message component
+        
+        
+        '''
         fields = []
         for field_name, field_data in key_fields.items():
             field = self.create_key_field(table_name, field_name, field_data)
@@ -349,8 +450,38 @@ class BfRtHelper:
         key,
         action_name=None,
         action_params=None,
-        update_type=bfruntime_pb2.Update.Type.INSERT,
+        update_type=Update.Type.INSERT, # Type not documented here because it
+                                        # absolutely destroys generated docs.
     ):
+        '''Create a match-action table write request
+
+        .. note::
+            
+            This does not support batched writes.
+
+        Args:
+            program_name (str): Name of program to target.
+
+            table_name (str): Name of table within the program. Depending on how
+                the program has been compiled, you may need to prefix this name
+                with "pipe", e.g. "pipe.IngressControl.table".
+
+            key (dict): Dictionary of match field names to their match. The keys
+                should be strings, and the value should be an instance of a
+                :ref:`Match` (e.g. :ref:`Exact`) constructed with the correct
+                field type as defined in the program.
+
+            action_name (str): Name of the action to execute on a match.
+
+            action_params (dict): Dictionary of parameter names and their values
+                to pass to the executed action. As before, the key should be a
+                string, but the value should derive from :ref:`Field`.
+
+            update_type (Update.Type): The type of operation to take place,
+                e.g., INSERT, MODIFY, DELETE. The default value of ``1``
+                corresponds to Update.Type.INSERT.
+
+        '''
         bfrt_request = self.create_write_request(program_name)
         bfrt_table_entry = self.create_table_entry(table_name)
         bfrt_key_fields = self.create_key_fields(table_name, key)
@@ -369,12 +500,47 @@ class BfRtHelper:
 
     def create_table_data_write(
         self,
-        program_name,
+        program_name: str,
         table_name,
         key,
         data,
         update_type=bfruntime_pb2.Update.Type.INSERT,
     ):
+        '''Create a table write for arbitrary tables.
+
+        It is possible to write to many other tables exposed to the runtime
+        interface which can be used to manipulate copy to cpu settings, 
+        multicast groups, port settings etc.
+
+        While these tables can be considered as "ordinary" database tables,
+        they are still manipulated by the same mechanisms as a match-action
+        update.
+
+        .. note::
+        
+            This does not support batched writes.
+
+        Args:
+            program_name (str): Name of program to target.
+
+            table_name (str): Name of table within the program. Depending on how
+                the program has been compiled, you may need to prefix this name
+                with "pipe", e.g. "pipe.IngressControl.table".
+
+            key (dict): Dictionary of match field names to their match. The keys
+                should be strings, and the value should be an instance of a
+                :ref:`Match` (e.g. :ref:`Exact`) constructed with the correct
+                field type as defined in the program.
+
+            data (Field): The data to be added to the table. Like match-action
+                updates, this can be expressed handily with a :ref:`Field`.
+                This may could involve a :ref:`StringField`, however a use case
+                for this hasn't been firmly established.
+
+            update_type (Update.Type): The type of operation to take place,
+                e.g., INSERT, MODIFY, DELETE. The default value of ``1``
+                corresponds to Update.Type.INSERT.
+        '''
         bfrt_request = self.create_write_request(program_name)
         bfrt_table_entry = self.create_table_entry(table_name)
         bfrt_key_fields = self.create_key_fields(table_name, key)
