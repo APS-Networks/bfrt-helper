@@ -26,12 +26,27 @@ being:
 
 Exact
 ^^^^^
+An exact match is exactly what it sounds like. In a key field, any comparison
+must on a :ref:`Field` must match **exactly.**
+
+API reference: :ref:`Exact<bfrt_info.match.Exact>`
+
+Masked Matches
+^^^^^^^^^^^^^^
+
+A masked match is one that can be expressed in terms of a value and a mask,
+which applies to :ref:`Ternary` and :ref:`Longest Prefix Match` expressions.
 
 Longest Prefix Match
-^^^^^^^^^^^^^^^^^^^^
+********************
+
+API reference: :ref:`LongestPrefixMatch`
 
 Ternary
-^^^^^^^
+*******
+
+API reference: :ref:`Ternary`
+
 
 Unsupported Matches
 ^^^^^^^^^^^^^^^^^^^

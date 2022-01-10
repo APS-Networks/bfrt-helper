@@ -313,7 +313,7 @@ class BfRtHelper:
         '''Generates key field component of a gRPC message
         
         The performs a lookup of the key id (as messages contain a table ID and
-        not the name) using the :ref:`BfRtInfo` object and also type checks
+        not the name) using the :py:class:`BfRtInfo` object and also type checks
         the match type.
 
         Args:
@@ -331,10 +331,10 @@ class BfRtHelper:
 
         Raises:
 
-            UnknownKeyField: If the :ref:`BfRtInfo` object did not contain a
+            UnknownKeyField: If the :py:class:`BfRtInfo` object did not contain a
                 a valid key field for the given table and field names.
 
-            MismatchedMatchType: If the match types (e.g. :ref:`Exact`) does not
+            MismatchedMatchType: If the match types (e.g. :py:class:`Exact`) does not
                 match the match type defined for the field actually present in
                 the table.
         '''
@@ -468,7 +468,7 @@ class BfRtHelper:
 
             key (dict): Dictionary of match field names to their match. The keys
                 should be strings, and the value should be an instance of a
-                :ref:`Match` (e.g. :ref:`Exact`) constructed with the correct
+                :py:class:`Match` (e.g. :py:class:`Exact`) constructed with the correct
                 field type as defined in the program.
 
             action_name (str): Name of the action to execute on a match.
@@ -529,12 +529,12 @@ class BfRtHelper:
 
             key (dict): Dictionary of match field names to their match. The keys
                 should be strings, and the value should be an instance of a
-                :ref:`Match` (e.g. :ref:`Exact`) constructed with the correct
+                :ref:`Match` (e.g. :py:class:`Exact`) constructed with the correct
                 field type as defined in the program.
 
             data (Field): The data to be added to the table. Like match-action
-                updates, this can be expressed handily with a :ref:`Field`.
-                This may could involve a :ref:`StringField`, however a use case
+                updates, this can be expressed handily with a :py:class:`Field`.
+                This may could involve a :py:class:`StringField`, however a use case
                 for this hasn't been firmly established.
 
             update_type (Update.Type): The type of operation to take place,
@@ -624,28 +624,3 @@ class BfRtHelper:
         request.device_id = self.device_id
         request.client_id = self.client_id
         return request
-
-
-# def get_bfrt_data(self, stub, program_name=None):
-#     request = bfruntime_pb2.GetForwardingPipelineConfigRequest()
-#     request.device_id = self.device_id
-#     request.client_id = self.client_id
-#     response = stub.GetForwardingPipelineConfig(request)
-
-#     if response is None:
-#         raise Exception("Did not receive runtime info from device!")
-
-#     if program_name is None:
-#         program_name = response.config[0].p4_name
-#     data = response.non_p4_config.bfruntime_info.decode("utf-8")
-#     non_p4_config = json.loads(data)
-#
-#     p4_config = None
-#
-#     for config in response.config:
-#         if program_name == config.p4_name:
-#             p4_config = json.loads(config.bfruntime_info)
-#             p4_config.get("tables").extend(non_p4_config.get("tables"))
-#             return p4_config
-
-#     return None

@@ -43,6 +43,7 @@ extensions = [
     
     # 'sphinx.ext.graphviz',
     'sphinxcontrib.drawio',
+    'sphinxcontrib.email',
     # 'recommonmark',
     'sphinx.ext.autosectionlabel',
     # 'autodocsumm',
@@ -50,7 +51,7 @@ extensions = [
 ]
 
 
-
+autosectionlabel_prefix_document = True
 
 source_suffix = ['.rst', '.md']
 # autodoc_member_order = 'bysource'
