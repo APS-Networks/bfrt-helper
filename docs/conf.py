@@ -42,7 +42,6 @@ extensions = [
     'sphinx.ext.viewcode',
     
     # 'sphinx.ext.graphviz',
-    'sphinxcontrib.drawio',
     'sphinxcontrib.email',
     # 'recommonmark',
     'sphinx.ext.autosectionlabel',
@@ -60,7 +59,7 @@ autodoc_default_options = {
     'show-inheritance': True,
     # 'members': True,
     'member-order': 'bysource',
-    # 'special-members': '__init__',
+    # 'special-members': '__le__,__ge__,__lt__,__gt__,__eq__,__and__,__or__,__iter__',
     'undoc-members': False,
     # 'exclude-members': '__weakref__',
     # 'autosummary': True,

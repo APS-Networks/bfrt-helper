@@ -103,9 +103,9 @@ class MismatchedMatchType(Exception):
 
     The current accepted match types are:
 
-        * :ref:`LongestPrefixMatch`
-        * :ref:`Exact`
-        * :ref:`Ternary`
+        * :py:class:`LongestPrefixMatch`
+        * :py:class:`Exact`
+        * :py:class:`Ternary`
 
     Args:
         field_name (str): The name of the field in question.
@@ -260,13 +260,13 @@ class BfRtHelper:
         request.p4_name = program_name
         request.atomicity = atomicity
 
-        target = bfruntime_pb2.TargetDevice()
-        target.device_id = self.device_id
-        target.pipe_id = target.get('pipe_id', 0xFFFF)
-        target.direction = target.get('direction', 0xFF)
-        target.prsr_id = target.get('prsr_id', 0xFF)
+        device = bfruntime_pb2.TargetDevice()
+        device.device_id = self.device_id
+        device.pipe_id = target.get('pipe_id', 0xFFFF)
+        device.direction = target.get('direction', 0xFF)
+        device.prsr_id = target.get('prsr_id', 0xFF)
 
-        request.target.CopyFrom(target)
+        request.target.CopyFrom(device)
 
         return request
 
@@ -475,7 +475,7 @@ class BfRtHelper:
 
             action_params (dict): Dictionary of parameter names and their values
                 to pass to the executed action. As before, the key should be a
-                string, but the value should derive from :ref:`Field`.
+                string, but the value should derive from :py:class:`Field`.
 
             update_type (Update.Type): The type of operation to take place,
                 e.g., INSERT, MODIFY, DELETE. The default value of ``1``
@@ -529,7 +529,7 @@ class BfRtHelper:
 
             key (dict): Dictionary of match field names to their match. The keys
                 should be strings, and the value should be an instance of a
-                :ref:`Match` (e.g. :py:class:`Exact`) constructed with the correct
+                :py:class:`Match` (e.g. :py:class:`Exact`) constructed with the correct
                 field type as defined in the program.
 
             data (Field): The data to be added to the table. Like match-action

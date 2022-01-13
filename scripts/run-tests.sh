@@ -6,6 +6,7 @@ base_dir=$(realpath ${script_dir}/..)
 cd ${base_dir}
 
 ./scripts/build-proto.sh
+rm -rf .venv
 python3 -m venv .venv
 . .venv/bin/activate
 
@@ -14,8 +15,8 @@ pip install grpcio==1.43.0 grpcio-tools==1.43.0 googleapis-common-protos==1.54.0
 
 
 
-python -m build install
-# pip install -e .
+# python -m build
 # pip install -r requirements.txt
+pip install -e .
 
 python -m pytest --capture=tee-sys -v --cov=bfrt_helper --cov-report html ${PYDIR}

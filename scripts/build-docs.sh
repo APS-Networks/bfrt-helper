@@ -19,7 +19,6 @@ pip install  \
     renku-sphinx-theme \
     sphinx-rtd-theme \
     sphinx-markdown-builder \
-    sphinxcontrib-drawio \
     sphinxcontrib-email
 
 pip install grpcio==1.43.0 grpcio-tools==1.43.0 googleapis-common-protos==1.54.0

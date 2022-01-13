@@ -15,7 +15,7 @@ data types constrained by a bit width, checking whether a value used to
 construct an instance is representable by this constraint, and lends itself to
 type checks further down the line.
 
-An example in this library is the :ref:`Layer2Port` field. It represents a 
+An example in this library is the :py:class:`Layer2Port` field. It represents a 
 source or destination port in a layer 3 protocol such is ICMP, TCP or UDP.
 
 .. code:: python
@@ -42,18 +42,18 @@ Existing Fields
 
 The following fields are defined already:
 
-* :ref:`DevPort`
-* :ref:`DigestType`
-* :ref:`EgressSpec`
-* :ref:`IPv4Address`
-* :ref:`Layer2Port`
-* :ref:`MACAddress`
-* :ref:`MulticastGroupId`
-* :ref:`MulticastNodeId`
-* :ref:`PortId`
-* :ref:`ReplicationId`
-* :ref:`StringField`
-* :ref:`VlanID`
+* :py:class:`DevPort`
+* :py:class:`DigestType`
+* :py:class:`EgressSpec`
+* :py:class:`IPv4Address`
+* :py:class:`Layer2Port`
+* :py:class:`MACAddress`
+* :py:class:`MulticastGroupId`
+* :py:class:`MulticastNodeId`
+* :py:class:`PortId`
+* :py:class:`ReplicationId`
+* :py:class:`StringField`
+* :py:class:`VlanID`
 
 
 Defining Custom Fields
@@ -61,11 +61,11 @@ Defining Custom Fields
 
 If fields are represented by a simple integer value, then they can be defined
 as in the previous example. However, some fields have more **interesting**
-expressions, such as an :ref:`IPv4Address` or :ref:`MACAddress`. In this case
+expressions, such as an :py:class:`IPv4Address` or :py:class:`MACAddress`. In this case
 you will need to overload the constructor, the deserialisation method
 ``from_bytes``, and optionally the ``__str__`` method.
 
-An example of this is indeed an :ref:`IPv4Address`:
+An example of this is indeed an :py:class:`IPv4Address`:
 
 .. code:: python
 
@@ -92,7 +92,7 @@ printed you will again have nice readable expression.
 Finally, the ``from_bytes`` function is required to deserialise data from the
 device.
 
-Another example is :ref:`MACAddress`:
+Another example is :py:class:`MACAddress`:
 
 
 .. code:: python
@@ -136,7 +136,7 @@ operators available are:
 Additionally, a hash is available via ``hash(field)`` (``__hash__``).
 
 The use cases for most are straightforward, however an interesting case is
-perform masking operations such as on an :ref:`IPv4Address`:
+perform masking operations such as on an :py:class:`IPv4Address`:
 
 .. code:: python
 

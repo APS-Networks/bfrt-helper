@@ -15,6 +15,8 @@ Masked
 
 .. autoclass:: Masked
    :members:
+   :special-members: __le__,__ge__,__lt__,__gt__,__eq__,__and__,__or__,__iter__
+
 
 
 Supported Types

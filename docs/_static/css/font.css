@@ -1,15 +1,15 @@
 @font-face {
-    font-family: exo2;
-    src: url(/_static/exo2/Exo2-VariableFont_wght.ttf);
+    font-family: "exo2";
+    src: url("../exo2/Exo2-VariableFont_wght.ttf");
   }
   
   p, h1, h2, h3 {
-    font-family: exo2 !important;
+    font-family: "exo2" !important;
   }
 
 
 /*  Exo2 does not have certain symbols, like the double gear used in the 
     header link. */
 a:not(.headerlink) {
-    font-family: exo2 !important;
+    font-family: "exo2" !important;
 }

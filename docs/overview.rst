@@ -47,13 +47,6 @@ Installing
 Usage
 ^^^^^
 
-.. toctree::
-   :maxdepth: 1
-
-   fields
-   match
-
-
 Basic Example
 *************
 
@@ -146,7 +139,7 @@ configuration:
 
 .. code:: python
 
-  # Assuming bfrt_helper et. al. have been created prior
+    # Assuming bfrt_helper et. al. have been created prior
 
     port = 64
 

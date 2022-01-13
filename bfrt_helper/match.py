@@ -26,18 +26,21 @@ class Masked:
         self.mask = None
 
     def subset_of(self, other: "Masked") -> bool:
-        """Compares with another match, where ``self`` is found to be a subset
-        of the other, that is to say; for all :math:`x` in set :math:`B`,
-        there exists some element :math:`x` in set :math:`A`.
+        """Compares whether ``self`` is a subset of ``other``.
 
-        A set is a subset of itself.
+        If all the elements in ``self`` are also in ``other``, then this object
+        is a subset. This is ``True`` even if both objects contain exactly the
+        same elements.
+
+        This is broadly equivalent to a ``<=`` (less than or equal to)
+        operation, and is called by the :py:meth:`Masked.__le__` special method.
+
+        See also: :py:meth:`Masked.proper_subset_of`
 
         Args:
-
             other (Masked): Other masked value to compare against.
 
         Returns:
-
             bool: True if ``self`` is subset of ``other``
         """
         if not self.mask & other.mask == other.mask:
@@ -45,18 +48,21 @@ class Masked:
         return (self.value & other.mask) == (other.value & other.mask)
 
     def superset_of(self, other: "Masked") -> bool:
-        """Compares with another match, where ``self`` is found to be a superset
-        of the other, that is to say; for all :math:`x` in set :math:`B`,
-        there exists some element :math:`x` in set :math:`A`.
+        """Compares whether ``other`` is a subset of ``self``.
 
-        A set is a superset of itself.
+        If all the elements in ``other`` are also in ``self``, then this object
+        is a superset. This is ``True`` even if both objects contain exactly the
+        same elements.
+
+        This is broadly equivalent to a ``>=`` (less than or equal to)
+        operation, and is called by the :py:meth:`Masked.__ge__` special method.
+
+        See also: :py:meth:`Masked.proper_superset_of`
 
         Args:
-
             other (Masked): Other masked value to compare against.
 
         Returns:
-
             bool: True if ``self`` is superset of ``other``
         """
         if not self.mask & other.mask == self.mask:
@@ -65,19 +71,21 @@ class Masked:
 
     def proper_subset_of(self, other: "Masked") -> bool:
         """Compares with another match, where ``self`` is found to be a proper
-        subset of the other, that is to say; for all :math:`x` in set :math:`B`,
-        there exists some element :math:`x` in set :math:`A`, but there exists
-        at least one :math:`x` which exists in set :math:`B` that does not exist
-        in set :math:`B`.
+        subset of the other.
+        
+        If all the elements in ``self`` are present in ``other``, and, ``other``
+        contains at least one element not in ``self``, then this object can be
+        considered a proper subset. 
 
-        A set is not a proper subset of itself.
+        This is broadly equivalent to a ``<`` (less than) operation, and is
+        called by the :py:meth:`Masked.__lt__` special method.
+        
+        See also: :py:meth:`Masked.subset_of`
 
         Args:
-
-            Masked:
+            other (Masked): Other masked value to compare against.
 
         Returns:
-
             bool: True if ``self`` is proper superset of ``other``
 
         """
@@ -85,19 +93,21 @@ class Masked:
 
     def proper_superset_of(self, other: "Masked") -> bool:
         """Compares with another match, where ``self`` is found to be a proper
-        superset of the other, that is to say; for all :math:`x` in set
-        :math:`A`, there exists some element :math:`x` in set :math:`B`, but
-        there exists at least one :math:`x` which exists in set :math:`A` that
-        does not exist in set :math:`B`.
+        superset of the other.
+        
+        If all the elements in ``other`` are present in ``self``, and, ``self``
+        contains at least one element not in ``other``, then this object can be
+        considered a proper superset. 
 
-        A set is not a proper superset of itself.
+        This is broadly equivalent to a ``>`` (less than) operation, and is
+        called by the :py:meth:`Masked.__gt__` special method.
+        
+        See also: :py:meth:`Masked.uperset_of`
 
         Args:
-
-            Masked:
+            other (Masked): Other masked value to compare against.
 
         Returns:
-
             bool: True if ``self`` is proper superset of ``other``
 
         """
@@ -106,15 +116,17 @@ class Masked:
     def intersection(self, other: "Masked") -> "Masked":
         """Returns the intersection of ``self`` and ``other``.
 
+        The intersection of two masked values is the common potential values
+        between ``self`` and ``other``.
+
         The following relations should hold true, noting the use of proper
         subset and superset comparisons:
 
-        .. highlight:: python
         .. code-block:: python
 
             intersection = a & b
-            assert a > intersection
-            assert b > intersection
+            assert a > intersection # Intersection is subset of a
+            assert b > intersection # Intersection also subset of b
 
         Since the intersection is the common elements, and if both a and b are
         proper supersets of the intersection, they must contain
@@ -129,11 +141,24 @@ class Masked:
             value=self.value | other.value, mask=self.mask | other.mask
         )
 
-    def union(self, other: "Masked") -> "Masked":
+    def merged(self, other: "Masked") -> "Masked":
         """
+        Derives a :py:class:`Masked` object whose mask has all "don't care" bits
+        from both ``self`` and ``other``.
+
+        .. note::
+            This is *not* a union. As an example, a ternary expression
+            :math:`A = 0101xxxx` contains all possible values beginning with
+            :math:`0101`. Another value :math:`B = xxxx0101` contains all the
+            possible values ending in :math:`0101`. A merge between the two
+            yields the ternary expression :math:`I = xxxxxxxx`, where another
+            value :math:`C = 11001100` is subset to :math:`I` but is in neither
+            :math:`A` or :math:`B`. If it were a union, any value that is subset
+            must be in either :math:`A` or :math`B`.
+
         Returns:
 
-            Masked: Contains all the elements of ``self`` and ``other``
+            Masked: Contains values derived from
         """
         new_mask = self.mask & other.mask
         return self.__class__(self.value & new_mask, new_mask)
@@ -141,31 +166,16 @@ class Masked:
     def overlaps(self, other: "Masked") -> bool:
         """Returns whether or not two ``Masked`` matches overlap.
 
-        Masked expressions can be considered in a context of sets. An
-        overlapping set is defined here as where some, but not all, elements in
-        a set :math:`A` exist in a set :math:`B`, and, some, but not all,
-        elements in :math:`B` exist in :math:`A`. That is to say that they are
-        neither proper superset or subset of each other, but they share
-        elements.
+        Overlapping ternary expressions are defined where some, but not all,
+        elements in a ternary :math:`A` exist in a ternary :math:`B`, and, some,
+        but not all, elements in :math:`B` exist in :math:`A`. That is to say
+        that they are neither proper superset or subset of each other, but they
+        share elements.
 
         If only one of these conditions held true, they would either be a proper
         subset or superset of one another. A corollary to this is that longest
         prefix matches do not overlap, they are strictly a subset or superset of
         one another.
-
-        This can be formalised by the following:
-
-        .. math::
-
-            I = (A \\cap B) \n
-
-        .. math::
-
-            (A \\supsetneq I) {and} (B \\supsetneq I)
-
-        .. drawio-image:: ../drawio/test.drawio
-            :align: center
-
 
         That is to say that :math:`A`, being a proper superset of the
         intersection :math:`I`, has at least one element not in :math:`I`, and,
@@ -214,6 +224,11 @@ class Masked:
         return self.proper_superset_of(other)
 
     def __eq__(self, other: "Masked") -> bool:
+        """Equality compares two ternary expressions.
+        
+        If both value and mask are the same between the two objects, then
+        ``True`` is returned.
+        """
         return (self.value == other.value) & (self.mask == other.mask)
 
     def __and__(self, other: "Masked") -> "Masked":
@@ -225,11 +240,22 @@ class Masked:
         return self.intersection(other)
 
     def __or__(self, other: "Masked") -> "Masked":
-        return self.union(other)
+        """Returns a ternary with a merged mask of ``self`` and ``other``.
+
+        see :meth:`merged`
+
+        """
+        return self.merged(other)
 
     def __iter__(self) -> "Masked.__iter__.iterator":
         """Creates an `iterator` that returns consecutive elements in the set of
         ``Masked``, starting from the current value.
+
+        The iterator itself is not efficient, it's internal value is incremented
+        until it finds a match on every iteration.
+
+        When the iterator is dereferenced, it returns either an LPM or Ternary
+        expression, depending on what the derived class is.
 
         Examples:
 
@@ -255,6 +281,9 @@ class Masked:
                     '192.168.42.26 &&& 255.255.255.252',
                     '192.168.42.27 &&& 255.255.255.252',
                 ]
+        
+        Returns:
+            An iterator object that 
         """
 
         def iterator(ternary):
@@ -420,6 +449,8 @@ class Ternary(Masked):
 
 
 class LongestPrefixMatch(Masked):
+    """Class that represents only the first *prefix* bits are considered
+    in a match."""
     def __init__(self, value: Field, prefix: int):
         super().__init__()
 
@@ -443,6 +474,10 @@ class LongestPrefixMatch(Masked):
 
 
 class Exact:
+    """An exact match
+    
+    Comparisons between exact matches are on the basis of equality alone.
+    """
     def __init__(self, value):
         self.value = value
 
@@ -456,7 +491,7 @@ class Exact:
         return self.value.to_bytes()
 
 
-class Match:
+class Key:
     """A collection of fields representing the key segment of a table defined in
     a P4 program.
     """
@@ -488,9 +523,6 @@ class Match:
 
     def __and__(self, other):
         return self.intersection(other)
-
-    def __or__(self, other):
-        return self.union(other)
 
     def __equality_check(self, other):
         for (k1, v1), (k2, v2) in zip(self.fields.items(),
@@ -547,7 +579,7 @@ class Match:
                         + "on matches containing non-equal exact values."
                     )
                 args[k1] = v1
-        return Match(**args)
+        return Key(**args)
 
     def superset_of(self, other):
         """Calculates whether one match is a superset of another
