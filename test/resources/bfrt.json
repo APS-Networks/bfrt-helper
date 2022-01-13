@@ -137,7 +137,7 @@
           "repeated" : false,
           "annotations" : [],
           "mandatory" : false,
-          "match_type" : "LPM",
+          "match_type" : "LongestPrefixMatch",
           "type" : {
             "type" : "bytes",
             "width" : 48

@@ -1,13 +1,11 @@
 # Barefoot Runtime Helper
 
-![Unit Tests](https://github.com/APS-Networks/bfrt-helper/actions/workflows/ci.yml/badge.svg?branch=merge-updates)
+
 
 REQUIRES SANITATION BEFORE RELEASE
 
-
 > This documentation is for the APS Networks `bfrt-helper` software. The source
-> code for this is available on GitHub.
->
+> code for this can be found at
 > [bfrt-helper](https://github.com/APS-Networks/bfrt-helper) on GitHub
 
 `bfrt_helper` is a library for creating gRPC messages and communicating with
@@ -22,7 +20,8 @@ as follows:
   way of documentation, and it's not obvious how this is installed.
 
 > The protobuf definition, as of writing, is Intel proprietary and confidential,
-> and therefore cannot be shared. Otherwise this would be provided.
+> and therefore cannot be shared. Otherwise this would be provided. It must be 
+> copied into the `proto/bfrt_helper` directory.
 
 ## Overview
 
@@ -39,6 +38,11 @@ The library comes supplied with the following python files:
 * `fields.py`: These define classes that represent objects sent with a request,
   what kind of match it is for a key field, and handle serialisation and
   deserialisation of such.
+
+
+## Building and Installation
+
+> TODO
 
 ## Usage
 
@@ -142,8 +146,8 @@ class PortId(Field):
     bitwidth = 9
 ```
 
-The (de)serialisation functions are the object method `get_data_bits` and the
-class method `from_data_bits`.
+The (de)serialisation functions are the object method `to_bytes` and the
+class method `from_bytes`.
 
 More complicated serialisation routines may require custom code. The
 `IPv4Address` is defined as follows:
@@ -152,13 +156,19 @@ More complicated serialisation routines may require custom code. The
 class IPv4Address(Field):
     bitwidth = 32
 
-    def get_data_bits(self):
-        return encode_number(int(ipaddress.ip_address(self.value)), self.bitwidth)
+    def __init__(self, address: str):
+        super().__init__(int(ipaddress.ip_address(address)))
+
+    def __str__(self):
+        return str(ipaddress.ip_address(self.value))
 
     @classmethod
-    def from_data_bits(cls, data):
+    def from_bytes(cls, data):
         return cls(ipaddress.ip_address(data).__str__())
 ```
+
+No special `to_bytes` function is defined as this is derived from the internal
+value representation (an integer), and it's bitwidth.
 
 ## Match Types
 

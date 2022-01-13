@@ -1,0 +1,43 @@
+blockquote {
+    background-color: #fff0e9 !important;
+    margin-left: 0px !important;
+    padding-left: 36px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* padding-bottom: 24px; */
+    border-left: 4px solid #f47b42;
+}
+
+blockquote p {
+    margin-left: 0px;
+    margin-bottom: 0px;
+}
+
+blockquote ul {
+    margin-left: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+
+.note {
+    background-color: #fff0e9 !important;
+    margin-left: 0px !important;
+    padding-left: 36px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* padding-bottom: 24px; */
+
+    color: #3d3d3d !important;
+    border-left: 4px solid #f47b42;
+}
+
+/* Yeeesh */
+html.writer-html4 
+.rst-content
+dl:not(.docutils)>dt, html.writer-html5 .rst-content
+dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) > dt
+{
+    border-top: 0px; //3px solid #1ea481;
+    background: #dff0ec;
+    color: #0c8666;
+}

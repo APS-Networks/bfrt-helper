@@ -5,12 +5,15 @@ from bfrt_helper.fields import Field
 class EightBit(Field):
     bitwidth = 8
 
+    def __str__(self):
+        return f"0b{self.value:>08b}"
+
 
 def test_ternary_to_string():
-    mask = 240
-    value = 42 & mask
+    mask = 0xF0  # 240
+    value = 0x2A & mask  #
     ternary = Ternary(EightBit(value), mask=mask)
-    expected = f"{value} &&& 240"
+    expected = "0b00100000 &&& 0b11110000"
     assert str(ternary) == expected
 
 
@@ -121,14 +124,14 @@ def test_ternary_intersection_of_subset():
     assert expected == ternary_a & ternary_b
 
 
-def test_ternary_union_of_different_sets():
+def test_ternary_merged_of_different_sets():
     ternary_a = Ternary(EightBit(0b00101011), EightBit(0b00111111))
     ternary_b = Ternary(EightBit(0b11101000), EightBit(0b11111100))
     expected = Ternary(EightBit(0b00101000), EightBit(0b00111100))
     assert expected == ternary_a | ternary_b
 
 
-def test_ternary_union_of_subset():
+def test_ternary_merged_of_subset():
     ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
     ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
     expected = Ternary(EightBit(0b10100000), mask=EightBit(0b11110000))
@@ -184,3 +187,129 @@ def test_ternary_arbitrary_mask_not_subset():
     assert not ternary2 < ternary1
     assert not ternary1 < ternary2
     assert not ternary2 > ternary1
+
+
+def test_ternary_is_overlap():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b00101000), mask=EightBit(0b00111100))
+    assert ternary_a.overlaps(ternary_b)
+
+
+def test_ternary_superset_is_not_overlap():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
+    assert not ternary_a.overlaps(ternary_b)
+
+
+def test_ternary_subset_is_not_overlap():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
+    ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    assert not ternary_a.overlaps(ternary_b)
+
+
+def test_ternary_equal_is_not_overlap():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    assert not ternary_a.overlaps(ternary_b)
+
+
+def test_merged_exhaustive_equal_merged():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+
+    merged = ternary_a.merged(ternary_b)
+
+    for x in iter(ternary_a):
+        assert x in merged
+
+    for x in iter(ternary_b):
+        assert x in merged
+
+    for x in iter(merged):
+        assert x in ternary_a or x in ternary_b
+
+
+def test_merged_exhaustive_equal_intersection():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+
+    intersection = ternary_a.intersection(ternary_b)
+
+    A = [x for x in iter(ternary_a)]
+    B = [x for x in iter(ternary_b)]
+
+    for x in [ x for x in ternary_a if x not in ternary_b]:
+        assert x not in intersection
+
+    for x in [ x for x in ternary_b if x not in ternary_a]:
+        assert x not in intersection
+
+    for x in iter(intersection):
+        assert x in A
+        assert x in B
+
+
+def test_merged_exhaustive_subset_merged():
+    superset = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    subset = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
+
+    merged = superset.merged(subset)
+
+    for x in iter(superset):
+        assert x in merged
+
+    for x in iter(subset):
+        assert x in merged
+
+
+def test_merged_exhaustive_subset_intersection():
+    superset = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    subset = Ternary(EightBit(0b10101000), mask=EightBit(0b11111100))
+
+    intersection = superset.intersection(subset)
+
+    A = [x for x in iter(superset)]
+    B = [x for x in iter(subset)]
+
+    for x in [ x for x in superset if x not in subset]:
+        assert x not in intersection
+
+    for x in [ x for x in subset if x not in superset]:
+        assert x not in intersection
+
+    for x in iter(intersection):
+        assert x in A
+        assert x in B
+
+
+def test_exhaustive_overlap_merged():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b00101000), mask=EightBit(0b00111100))
+
+    merged = ternary_a.merged(ternary_b)
+
+    for x in iter(ternary_a):
+        assert x in merged
+
+    for x in iter(ternary_b):
+        assert x in merged
+
+
+
+
+def test_exhaustive_overlap_intersection():
+    ternary_a = Ternary(EightBit(0b10101000), mask=EightBit(0b11110000))
+    ternary_b = Ternary(EightBit(0b00101000), mask=EightBit(0b00111100))
+
+    intersection = ternary_a.intersection(ternary_b)
+    for x in [ x for x in ternary_a if x not in ternary_b]:
+        assert x not in intersection
+
+    for x in [ x for x in ternary_b if x not in ternary_a]:
+        assert x not in intersection
+
+    A = [x for x in iter(ternary_a)]
+    B = [x for x in iter(ternary_b)]
+    for x in iter(intersection):
+        assert x in A
+        assert x in B

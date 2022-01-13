@@ -3,9 +3,9 @@ black
 click
 coverage
 flake8
-googleapis-common-protos
-grpcio
-grpcio-tools
+googleapis-common-protos==1.54.0
+grpcio==1.43.0 # Required for compatibility with the SDE
+grpcio-tools==1.43.0
 importlib-metadata
 importlib-resources
 iniconfig
@@ -15,11 +15,11 @@ packaging
 pathspec
 platformdirs
 pluggy
-protobuf
+protobuf==3.6.1 # Required for compatibility with the SDE
 py
 pycodestyle
 pyflakes
-pyparsing
+pyparsing<3,>=2.0.2 # Specific version for packaging
 pytest
 pytest-cov
 pytest-github-actions-annotate-failures
@@ -30,4 +30,10 @@ tomli
 typing-extensions
 wheel
 zipp
-
+# Sphinx specific
+sphinx
+sphinx-rtd-theme
+myst-parser
+# recommonmark
+# autodocsumm
+renku-sphinx-theme

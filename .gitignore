@@ -1,6 +1,3 @@
-third-party
-forwarder.tofino
-*.pcap
 
 
 # Byte-compiled / optimized / DLL files
@@ -144,8 +141,11 @@ cython_debug/
 
 
 
-# bfrt_helper/pb2
+
+# bfrt_helper
+.vscode
 api-common-protos
 python-api-common-protos
 htmlcov
-bfruntime_pb2*
+proto/bfrt_helper/pb2/bfruntime.proto
+bfrt_helper/pb2

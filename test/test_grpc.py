@@ -7,7 +7,7 @@ from bfrt_helper.bfrt import UnknownKeyField
 from bfrt_helper.bfrt import UnknownTable
 from bfrt_helper.bfrt import UnknownAction
 from bfrt_helper.bfrt import UnknownActionParameter
-from bfrt_helper.bfrt import MismatchedDataType
+from bfrt_helper.bfrt import MismatchedMatchType
 from bfrt_helper.bfrt import InvalidActionParameter
 from bfrt_helper.bfrt import BfRtHelper
 from bfrt_helper.bfrt_info import BfRtInfo
@@ -16,7 +16,7 @@ from bfrt_helper.fields import MACAddress
 from bfrt_helper.fields import PortId
 from bfrt_helper.match import Exact
 from bfrt_helper.match import Ternary
-from bfrt_helper.match import LPM
+from bfrt_helper.match import LongestPrefixMatch
 
 
 import pytest
@@ -100,7 +100,7 @@ def test_grpc_write_request_lpm():
     write_request = bfrt_helper.create_table_write(
         program_name="test",
         table_name="pipe.TestIngressControl.port_forward_lpm",
-        key={"hdr.ethernet.srcAddr": LPM(MACAddress("aa:bb:cc:dd:ee:ff"), prefix=24)},
+        key={"hdr.ethernet.srcAddr": LongestPrefixMatch(MACAddress("aa:bb:cc:dd:ee:ff"), prefix=24)},
         action_name="TestIngressControl.forward",
         action_params={
             "egress_port": PortId(65),
@@ -172,7 +172,7 @@ def test_grpc_unknown_action_parameter():
 
 
 def test_grpc_unexpected_match_type_ternary():
-    with pytest.raises(MismatchedDataType):
+    with pytest.raises(MismatchedMatchType):
         bfrt_helper.create_table_write(
             program_name="test",
             table_name="pipe.TestIngressControl.port_forward_ternary",
@@ -185,7 +185,7 @@ def test_grpc_unexpected_match_type_ternary():
 
 
 def test_grpc_unexpected_match_type_lpm():
-    with pytest.raises(MismatchedDataType):
+    with pytest.raises(MismatchedMatchType):
         bfrt_helper.create_table_write(
             program_name="test",
             table_name="pipe.TestIngressControl.port_forward_lpm",
@@ -198,7 +198,7 @@ def test_grpc_unexpected_match_type_lpm():
 
 
 def test_grpc_unexpected_match_type_exact():
-    with pytest.raises(MismatchedDataType):
+    with pytest.raises(MismatchedMatchType):
         bfrt_helper.create_table_write(
             program_name="test",
             table_name="pipe.TestIngressControl.port_forward_exact",
