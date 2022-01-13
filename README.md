@@ -1,9 +1,5 @@
 # Barefoot Runtime Helper
 
-
-
-REQUIRES SANITATION BEFORE RELEASE
-
 > This documentation is for the APS Networks `bfrt-helper` software. The source
 > code for this can be found at
 > [bfrt-helper](https://github.com/APS-Networks/bfrt-helper) on GitHub
