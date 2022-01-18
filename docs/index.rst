@@ -11,9 +11,9 @@ devices exposing a Barefoot Runtime gRPC interface.
        of any discrepancies, you should refer to their documentation.
     2. The building of this library requires a copy of the Intel Barefoot
        Runtime gRPC Protocol Buffers definition, which is included as a part of
-       the Barefoot SDE. This is available under license from Intel and requires
-       the signing of a non-disclosure agreement. We are not able to supply
-       this.
+       the Intel Barefoot SDE. This is available under license from Intel and
+       requires the signing of a non-disclosure agreement. We are not able to
+       supply this.
     3. As a consequence of *2*, we are unable to discuss Tofino specific
        specifications, technical data, workarounds, and other errata.  
 
