@@ -148,6 +148,6 @@ api-common-protos
 python-api-common-protos
 htmlcov
 proto/bfrt_helper/pb2/bfruntime.proto
-bfrt_helper/pb2
+# bfrt_helper/pb2
 poetry.lock
 .docsvenv
