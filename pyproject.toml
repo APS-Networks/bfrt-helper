@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "bfrt-helper"
+version = "1.0.0"
+description = "Helper for building BfRt gRPC requests."
+authors = ["APS Networks GmbH <support@aps-networks.com>"]
+license = "GPL-2.0-only"
+classifiers = [
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+readme = "README.md"
+repository = "https://github.com/APS-Networks/bfrt-helper"
+documentation = "https://aps-networks.github.io/bfrt-helper/"
+homepage = "https://aps-networks.github.io/bfrt-helper/"
+
+
+[tool.poetry.dependencies]
+python = "^3.6"
+grpcio = "^1.43.0"
+grpcio-tools = "^1.43.0"
+googleapis-common-protos = "^1.54.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^4.6"
+pytest-cov = "^3.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88

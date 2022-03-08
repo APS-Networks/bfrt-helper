@@ -1,0 +1,6 @@
+We are not currently accepting pull requests. This software may be used in APS
+Networks proprietary software, and therefore we do not wish to accept any
+contributions under the GPL as this would effectively poison the project from
+a licensing point of view. We may decide to either create a CLA or a PR template
+with a licence exception for APS, but we think it's safer at this stage to not
+to do anything at all.

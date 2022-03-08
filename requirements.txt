@@ -1,0 +1,14 @@
+
+black
+coverage
+flake8
+pyparsing<3,>=2.0.2 # Specific version for packaging
+pytest
+pytest-cov
+# Sphinx specific
+sphinx
+sphinx-rtd-theme
+myst-parser
+# recommonmark
+# autodocsumm
+renku-sphinx-theme
