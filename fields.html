@@ -1,0 +1,482 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Fields &mdash; Barefoot Runtime gRPC Helper 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/fonts.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/blockquote.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/font.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Match" href="match.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Barefoot Runtime gRPC Helper
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#installing">Installing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#self-contained-usage">Self Contained Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#basic-example">Basic Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#retrieving-non-p4-configuration">Retrieving Non-P4 Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#manipulating-non-match-action-tables">Manipulating Non-Match/Action Tables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#building-documentation">Building Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#existing-fields">Existing Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defining-custom-fields">Defining Custom Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations-on-fields">Operations on Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="match.html">Match</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="match.html#exact">Exact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="match.html#masked-matches-lpm-ternary">Masked Matches (LPM &amp; Ternary)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="match.html#construction">Construction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="match.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="match.html#unsupported-matches">Unsupported Matches</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#loading-a-pipeline">Loading a Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/bfrt_info.html">bfrt_helper.bfrt_info</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/bfrt_info.html#bfrtinfo">BfRtInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/bfrt.html">bfrt_helper.bfrt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/bfrt.html#bfrthelper">BfRtHelper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/bfrt.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknownaction">UnknownAction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknownactionparameter">UnknownActionParameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknowntable">UnknownTable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknownkeyfield">UnknownKeyField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#mismatchedmatchtype">MismatchedMatchType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#mismatcheddatasize">MismatchedDataSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#invalidactionparameter">InvalidActionParameter</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/fields.html">bfrt_helper.fields</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/fields.html#base-fields">Base Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#jsonserialisable">JSONSerialisable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#field">Field</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/fields.html#predefined-fields">Predefined Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#devport">DevPort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#digesttype">DigestType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#egressspec">EgressSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#ipv4address">IPv4Address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#layer2port">Layer2Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#macaddress">MACAddress</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#multicastgroupid">MulticastGroupId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#multicastnodeid">MulticastNodeId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#portid">PortId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#replicationid">ReplicationId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#stringfield">StringField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#vlanid">VlanID</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/fields.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/match.html">bfrt_helper.match</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/match.html#base-match-type">Base Match Type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#masked">Masked</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/match.html#supported-types">Supported Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#exact">Exact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#longestprefixmatch">LongestPrefixMatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#ternary">Ternary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/match.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/util.html">bfrt_helper.util</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/util.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#encode-number">encode_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#bit-not">bit_not</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#mask-from-prefix">mask_from_prefix</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/util.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#invalidvalue">InvalidValue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#invalidoperation">InvalidOperation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#valueoutofrange">ValueOutOfRange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#matchhelper">MatchHelper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Barefoot Runtime gRPC Helper</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+<div class="git-ribbon">
+  <a href="http://github.com/APS-Networks" rel="me">Join us on GitHub</a>
+</div>
+
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Fields</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/fields.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="fields">
+<h1>Fields<a class="headerlink" href="#fields" title="Permalink to this headline">¶</a></h1>
+<p>In P4 parlance, a field is typically an integer constrained by a bit width, and
+is either a member of a key field for a “match table”, or a value passed as an
+action parameter when a key field is matched.</p>
+<p>In order to present a field value to any element mentioned previously, you would
+first have to construct a gRPC field object, and then serialise an integer value
+into a byte array. I would argue that this is <em>inconvenient</em> to do, and that
+they can be presented in a far more obvious and human readable way.</p>
+<p>This library provides a <code class="docutils literal notranslate"><span class="pre">Field</span></code> object that can be derived from to define
+data types constrained by a bit width, checking whether a value used to
+construct an instance is representable by this constraint, and lends itself to
+type checks further down the line.</p>
+<p>An example in this library is the <code class="xref py py-class docutils literal notranslate"><span class="pre">Layer2Port</span></code> field. It represents a
+source or destination port in a layer 3 protocol such is ICMP, TCP or UDP.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bfrt_helper.fields</span> <span class="kn">import</span> <span class="n">Layer2Port</span>
+
+<span class="n">port</span> <span class="o">=</span> <span class="n">Layer2Port</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And this is defined simply as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bfrt_helper.fields</span> <span class="kn">import</span> <span class="n">Field</span>
+
+<span class="k">class</span> <span class="nc">Layer2Port</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">16</span>
+</pre></div>
+</div>
+<p>The only thing required is that the bit width is specified. Python magic does
+all the rest.</p>
+<section id="existing-fields">
+<h2>Existing Fields<a class="headerlink" href="#existing-fields" title="Permalink to this headline">¶</a></h2>
+<p>The following fields are defined already:</p>
+<ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DevPort</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DigestType</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">EgressSpec</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer2Port</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">MACAddress</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">MulticastGroupId</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">MulticastNodeId</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PortId</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ReplicationId</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">StringField</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">VlanID</span></code></p></li>
+</ul>
+</section>
+<section id="defining-custom-fields">
+<h2>Defining Custom Fields<a class="headerlink" href="#defining-custom-fields" title="Permalink to this headline">¶</a></h2>
+<p>If fields are represented by a simple integer value, then they can be defined
+as in the previous example. However, some fields have more <strong>interesting</strong>
+expressions, such as an <code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">MACAddress</span></code>. In this case
+you will need to overload the constructor, the deserialisation method
+<code class="docutils literal notranslate"><span class="pre">from_bytes</span></code>, and optionally the <code class="docutils literal notranslate"><span class="pre">__str__</span></code> method.</p>
+<p>An example of this is indeed an <code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">IPv4Address</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">32</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="n">address</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The constructor is overloaded as the underlying value type is required to be an
+integer, so we use the <code class="docutils literal notranslate"><span class="pre">ipaddress</span></code> Python library to convert a human readable
+address into a number.</p>
+<p>The reason for overloading the <code class="docutils literal notranslate"><span class="pre">__str__</span></code> method should be obvious; when it is
+printed you will again have nice readable expression.</p>
+<p>Finally, the <code class="docutils literal notranslate"><span class="pre">from_bytes</span></code> function is required to deserialise data from the
+device.</p>
+<p>Another example is <code class="xref py py-class docutils literal notranslate"><span class="pre">MACAddress</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MACAddress</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">48</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">address</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="mi">16</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">02x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">)])</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">02x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">)]))</span>
+</pre></div>
+</div>
+<p>For some reason I decided to allow the address to be supplied as in integer.
+I can’t for the life of me remember why.</p>
+</section>
+<section id="operations-on-fields">
+<h2>Operations on Fields<a class="headerlink" href="#operations-on-fields" title="Permalink to this headline">¶</a></h2>
+<p>Fields have convenience operators defined for comparisons. The
+operators available are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">==</span></code> (equality)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!=</span></code> (inequality)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&amp;</span></code> (bitwise <em>AND</em>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">|</span></code> (bitwise <em>OR</em>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">^</span></code> (bitwise <em>XOR</em>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;=</span></code> (less than or equal to)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;</span></code> (less than)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&gt;=</span></code> (greater than or equal to)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&gt;</span></code> (greater than)</p></li>
+</ul>
+<p>Additionally, a hash is available via <code class="docutils literal notranslate"><span class="pre">hash(field)</span></code> (<code class="docutils literal notranslate"><span class="pre">__hash__</span></code>).</p>
+<p>The use cases for most are straightforward, however an interesting case is
+perform masking operations such as on an <code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bfrt_helper.fields</span> <span class="kn">import</span> <span class="n">IPv4Address</span>
+
+<span class="n">addr</span> <span class="o">=</span> <span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.168.0.46&#39;</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;255.255.255.0&#39;</span><span class="p">)</span>
+
+<span class="n">masked</span> <span class="o">=</span> <span class="n">addr</span> <span class="o">&amp;</span> <span class="n">mask</span>
+<span class="n">expected</span> <span class="o">=</span> <span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.168.0.0&#39;</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">masked</span> <span class="o">==</span> <span class="n">expected</span>
+<span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">masked</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;192.168.0.0&#39;</span>
+</pre></div>
+</div>
+<p>Yes, this could be done with native libraries such as the
+<a class="reference external" href="https://docs.python.org/3/library/ipaddress.html">ipaddress module</a>, but
+again this is to provide similar operations natively.</p>
+<p>More of these operators can be added, with reference to the
+<a class="reference external" href="https://docs.python.org/3/reference/datamodel.html">Python data model</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, any comparison operator performs a strict test against their
+types. However, such operators could reasonably expected to work against
+fields with the same bit width. The view is that the current position is
+sensible, but we are open to changing this. It is almost certainly better to
+start more strict, as any code which would rely on the alternative semantics
+would surely fail on a change.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="match.html" class="btn btn-neutral float-right" title="Match" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021 - present, APS Networks GmbH.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

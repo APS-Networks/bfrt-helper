@@ -1,0 +1,947 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bfrt_helper.bfrt &mdash; Barefoot Runtime gRPC Helper 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/fonts.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/blockquote.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/font.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Barefoot Runtime gRPC Helper
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#installing">Installing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#self-contained-usage">Self Contained Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#basic-example">Basic Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#retrieving-non-p4-configuration">Retrieving Non-P4 Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#manipulating-non-match-action-tables">Manipulating Non-Match/Action Tables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#building-documentation">Building Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../fields.html">Fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#existing-fields">Existing Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#defining-custom-fields">Defining Custom Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#operations-on-fields">Operations on Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../match.html">Match</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#exact">Exact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#masked-matches-lpm-ternary">Masked Matches (LPM &amp; Ternary)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../match.html#construction">Construction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../match.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#unsupported-matches">Unsupported Matches</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#loading-a-pipeline">Loading a Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/bfrt_info.html">bfrt_helper.bfrt_info</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt_info.html#bfrtinfo">BfRtInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/bfrt.html">bfrt_helper.bfrt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt.html#bfrthelper">BfRtHelper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownaction">UnknownAction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownactionparameter">UnknownActionParameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknowntable">UnknownTable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownkeyfield">UnknownKeyField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#mismatchedmatchtype">MismatchedMatchType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#mismatcheddatasize">MismatchedDataSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#invalidactionparameter">InvalidActionParameter</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/fields.html">bfrt_helper.fields</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#base-fields">Base Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#jsonserialisable">JSONSerialisable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#field">Field</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#predefined-fields">Predefined Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#devport">DevPort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#digesttype">DigestType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#egressspec">EgressSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#ipv4address">IPv4Address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#layer2port">Layer2Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#macaddress">MACAddress</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#multicastgroupid">MulticastGroupId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#multicastnodeid">MulticastNodeId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#portid">PortId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#replicationid">ReplicationId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#stringfield">StringField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#vlanid">VlanID</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/match.html">bfrt_helper.match</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#base-match-type">Base Match Type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#masked">Masked</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#supported-types">Supported Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#exact">Exact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#longestprefixmatch">LongestPrefixMatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#ternary">Ternary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/util.html">bfrt_helper.util</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/util.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#encode-number">encode_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#bit-not">bit_not</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#mask-from-prefix">mask_from_prefix</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/util.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#invalidvalue">InvalidValue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#invalidoperation">InvalidOperation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#valueoutofrange">ValueOutOfRange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#matchhelper">MatchHelper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Barefoot Runtime gRPC Helper</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+<div class="git-ribbon">
+  <a href="http://github.com/APS-Networks" rel="me">Join us on GitHub</a>
+</div>
+
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>bfrt_helper.bfrt</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bfrt_helper.bfrt</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">bfrt_helper.pb2.bfruntime_pb2</span> <span class="k">as</span> <span class="nn">bfruntime_pb2</span>
+<span class="kn">from</span> <span class="nn">bfrt_helper.pb2.bfruntime_pb2</span> <span class="kn">import</span> <span class="n">WriteRequest</span>
+<span class="kn">from</span> <span class="nn">bfrt_helper.pb2.bfruntime_pb2</span> <span class="kn">import</span> <span class="n">Update</span>
+
+<span class="c1"># Atomicity = WriteRequest.Atomicity</span>
+
+<span class="kn">from</span> <span class="nn">bfrt_helper.pb2.bfruntime_pb2</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SetForwardingPipelineConfigRequest</span> <span class="k">as</span> <span class="n">SetPipelineReq</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">bfrt_helper.match</span> <span class="kn">import</span> <span class="n">Exact</span>
+<span class="kn">from</span> <span class="nn">bfrt_helper.match</span> <span class="kn">import</span> <span class="n">LongestPrefixMatch</span>
+<span class="kn">from</span> <span class="nn">bfrt_helper.match</span> <span class="kn">import</span> <span class="n">Ternary</span>
+<span class="kn">from</span> <span class="nn">bfrt_helper.fields</span> <span class="kn">import</span> <span class="n">Field</span>
+
+
+<div class="viewcode-block" id="UnknownAction"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.UnknownAction">[docs]</a><span class="k">class</span> <span class="nc">UnknownAction</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised when an action for a given table could not be found.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        table_name (str): String containing the name of the table.</span>
+<span class="sd">        action_name (str): String containing the name of the action.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Could not find action </span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">action_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UnknownActionParameter"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.UnknownActionParameter">[docs]</a><span class="k">class</span> <span class="nc">UnknownActionParameter</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised when a action parameter for a given table could not be</span>
+<span class="sd">    found.</span>
+
+<span class="sd">    Some tables have associated parameters with them; these are optional.</span>
+<span class="sd">    These are applied to an action, for example (in P4)::</span>
+
+<span class="sd">        action send_to_multicast_group(MulticastGroupId_t group) {</span>
+<span class="sd">            ingress_metadata.multicast_grp_a = group;</span>
+<span class="sd">        }</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        table_name (str): String containing the name of the table.</span>
+<span class="sd">        action_name (str): String containing the name of the action.</span>
+<span class="sd">        param_name (str): String containing the name of the parameter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">action_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">param_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Could not find action parameter &quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">action_name</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">param_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UnknownTable"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.UnknownTable">[docs]</a><span class="k">class</span> <span class="nc">UnknownTable</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised when a given table could not be found.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        table_name (str): String containing the name of the table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find table </span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UnknownKeyField"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.UnknownKeyField">[docs]</a><span class="k">class</span> <span class="nc">UnknownKeyField</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised when a key field for a given table could not be found.</span>
+
+<span class="sd">    A key field is a part of the match construct, and includes a name and</span>
+<span class="sd">    data. When a table is executed, the key field names are used to retrieve</span>
+<span class="sd">    a value with the same name as defined in either metadata or headers. This</span>
+<span class="sd">    value is compared with the key field&#39;s data on the basis of the fields</span>
+<span class="sd">    defined match type::</span>
+
+<span class="sd">        table multicast {</span>
+<span class="sd">            key = {</span>
+<span class="sd">                hdr.vlan.id: exact;</span>
+<span class="sd">            }</span>
+<span class="sd">            actions = {</span>
+<span class="sd">                send_to_multicast_group;</span>
+<span class="sd">            }</span>
+<span class="sd">            const entries = {</span>
+<span class="sd">                100: send_to_multicast_group;</span>
+<span class="sd">            }</span>
+<span class="sd">        }</span>
+
+<span class="sd">    In this example, a key is defined to match on a vlan id which has been</span>
+<span class="sd">    parsed into the program&#39;s headers. The key field&#39;s name in this case is</span>
+<span class="sd">    ``hdr.vlan.id`` and it&#39;s match type is ``exact``. If the name of this field</span>
+<span class="sd">    is not defined, in some operations this exception will be raised.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        table_name (str): String containing the name of the table.</span>
+<span class="sd">        action_name (str): String containing the name of the action.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find key field </span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MismatchedMatchType"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.MismatchedMatchType">[docs]</a><span class="k">class</span> <span class="nc">MismatchedMatchType</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised when the match for a key field declared in a request</span>
+<span class="sd">    does not match that which is defined in the table.</span>
+
+<span class="sd">    The current accepted match types are:</span>
+
+<span class="sd">        * :py:class:`LongestPrefixMatch`</span>
+<span class="sd">        * :py:class:`Exact`</span>
+<span class="sd">        * :py:class:`Ternary`</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        field_name (str): The name of the field in question.</span>
+<span class="sd">        field_data (Field): The instance of the incorrect field.</span>
+<span class="sd">        expected (str): The name of the expected data type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">field_data</span><span class="p">:</span> <span class="n">Field</span><span class="p">,</span> <span class="n">expected</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">clz</span> <span class="o">=</span> <span class="n">field_data</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expected field type for </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">, but have &quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">clz</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MismatchedDataSize"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.MismatchedDataSize">[docs]</a><span class="k">class</span> <span class="nc">MismatchedDataSize</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised when the data size of a field in a request does not</span>
+<span class="sd">    match that which is registered to the table.</span>
+
+<span class="sd">    Most fields have an associated bitwidth. This is defined in the P4 program,</span>
+<span class="sd">    and is presented in the BfRt info file if generated. While we can&#39;t do</span>
+<span class="sd">    strict type checking, we can compare the bitwidths of the input and target</span>
+<span class="sd">    fields (any field registered in this library, or defined by the user, will</span>
+<span class="sd">    be equivalent to any other field with the same bitwidth).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        expected (int): Bitwidth of field as defined by P4 program.</span>
+<span class="sd">        observed (int): Bitwidth of field presented by the user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expected</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">observed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Expected data size </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2"> but have </span><span class="si">{</span><span class="n">observed</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="InvalidActionParameter"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.InvalidActionParameter">[docs]</a><span class="k">class</span> <span class="nc">InvalidActionParameter</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">action_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">param_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">action_name</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">param_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BfRtHelper"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.BfRtHelper">[docs]</a><span class="k">class</span> <span class="nc">BfRtHelper</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Barefoot Runtime gRPC Helper Class&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">bfrt_info</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="n">device_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_id</span> <span class="o">=</span> <span class="n">client_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bfrt_info</span> <span class="o">=</span> <span class="n">bfrt_info</span>
+
+<div class="viewcode-block" id="BfRtHelper.create_subscribe_request"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_subscribe_request">[docs]</a>    <span class="k">def</span> <span class="nf">create_subscribe_request</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">learn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Receive learn notifications</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Receive timeout notifications</span>
+        <span class="n">port_change</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Receive port state change notifications</span>
+        <span class="n">request_timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1"># Subscribe response timeout</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a subscribe request for registering with a device.</span>
+
+<span class="sd">        After a gRPC connection has been established between a client and the</span>
+<span class="sd">        Barefoot Runtime server, a ``subscribe`` request must be issued by the</span>
+<span class="sd">        client in order for the runtime to act on commands issued by the client</span>
+<span class="sd">        as well as send and receive any other messages.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            learn (bool, optional): Enable learn notifications. Provided through</span>
+<span class="sd">                digest messages from the gRPC stream channel. Default is</span>
+<span class="sd">                ``True``.</span>
+
+<span class="sd">            timeout (bool, optional): Receive timeout notifications. Default is</span>
+<span class="sd">                ``True``.</span>
+
+<span class="sd">            port_change (bool, optional): Receive port state change</span>
+<span class="sd">                notifications. Default is ``True``.</span>
+
+<span class="sd">            request_timeout (int, optional): Default is ``10``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">subscribe</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">Subscribe</span><span class="p">()</span>
+        <span class="n">subscribe</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
+
+        <span class="n">notifications</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">Subscribe</span><span class="o">.</span><span class="n">Notifications</span><span class="p">()</span>
+        <span class="n">notifications</span><span class="o">.</span><span class="n">enable_learn_notifications</span> <span class="o">=</span> <span class="n">learn</span>
+        <span class="n">notifications</span><span class="o">.</span><span class="n">enable_idletimeout_notifications</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="n">notifications</span><span class="o">.</span><span class="n">enable_port_status_change_notifications</span> <span class="o">=</span> <span class="n">port_change</span>
+
+        <span class="n">subscribe</span><span class="o">.</span><span class="n">notifications</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">notifications</span><span class="p">)</span>
+
+        <span class="n">request</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">StreamMessageRequest</span><span class="p">()</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">client_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_id</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">subscribe</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">subscribe</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">request</span></div>
+
+<div class="viewcode-block" id="BfRtHelper.create_write_request"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_write_request">[docs]</a>    <span class="k">def</span> <span class="nf">create_write_request</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">program_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">atomicity</span><span class="o">=</span><span class="n">WriteRequest</span><span class="o">.</span><span class="n">Atomicity</span><span class="o">.</span><span class="n">CONTINUE_ON_ERROR</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a basic write request with no updates.</span>
+
+<span class="sd">        This creates the base gRPC object for the majority of runtime program</span>
+<span class="sd">        manipulation.</span>
+
+<span class="sd">        The optional target parameter contains any of the following:</span>
+
+<span class="sd">        * ``pipe_id`` : The id of the pipe to apply the write. Tofino devices</span>
+<span class="sd">          may contain multiple &quot;pipes&quot;, which in turn are comprised of</span>
+<span class="sd">          multiple ports. Each pipe is capable of being loaded with it&#39;s own</span>
+<span class="sd">          P4 program that acts independently from other pipes. An ID is</span>
+<span class="sd">          therefore necessary to identify it.</span>
+<span class="sd">        * ``direction``: The Tofino Native Architecture has a concept of ingress</span>
+<span class="sd">          and egress pipelines. It is possible (AFAWK) that a single control</span>
+<span class="sd">          can be associated with both ingress and egress pipelines, but their</span>
+<span class="sd">          &quot;instantiation&quot; will contain tables unique to the direction.</span>
+<span class="sd">        * ``prsr_id``: TODO</span>
+
+<span class="sd">        The default argument for this is equivalent to:</span>
+
+<span class="sd">        .. code:: python</span>
+
+<span class="sd">            {</span>
+<span class="sd">                &#39;pipe_id&#39;: 0xFFFF, # All pipes</span>
+<span class="sd">                &#39;direction&#39;: 0xFF, # All directions</span>
+<span class="sd">                &#39;prsr_id&#39;: 0xFF # TODO</span>
+<span class="sd">            }</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            program_name (str): The name of the program to target.</span>
+
+<span class="sd">            atomicity (WriteRequest.Atomicity): Controls the behaviour of a</span>
+<span class="sd">                write request with respect to batched updates, i.e., whether</span>
+<span class="sd">                any errors are ignored, errors cause rollbacks of previously</span>
+<span class="sd">                submitted writes in the batch, or whether the write is treated</span>
+<span class="sd">                as a single atomic transaction.</span>
+
+<span class="sd">            target (dict): An optionally provided dictionary that maps parser</span>
+<span class="sd">                identifier information.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">            bfruntime_pb2.WriteRequest</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">WriteRequest</span><span class="p">()</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">client_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_id</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">p4_name</span> <span class="o">=</span> <span class="n">program_name</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">atomicity</span> <span class="o">=</span> <span class="n">atomicity</span>
+
+        <span class="n">device</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">TargetDevice</span><span class="p">()</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">pipe_id</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pipe_id&quot;</span><span class="p">,</span> <span class="mh">0xFFFF</span><span class="p">)</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;direction&quot;</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">)</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">prsr_id</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;prsr_id&quot;</span><span class="p">,</span> <span class="mh">0xFF</span><span class="p">)</span>
+
+        <span class="n">request</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">request</span></div>
+
+    <span class="k">def</span> <span class="nf">create_read_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">ReadRequest</span><span class="p">()</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">client_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_id</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">p4_name</span> <span class="o">=</span> <span class="n">program_name</span>
+        <span class="c1"># request.atomicity = atomicity</span>
+
+        <span class="n">target</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">TargetDevice</span><span class="p">()</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">pipe_id</span> <span class="o">=</span> <span class="mh">0xFFFF</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="mh">0xFF</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">prsr_id</span> <span class="o">=</span> <span class="mh">0xFF</span>
+
+        <span class="n">request</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">request</span>
+
+    <span class="k">def</span> <span class="nf">create_table_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generates empty table message</span>
+
+<span class="sd">        This produces the base gRPC object for a table entry for the supplied</span>
+<span class="sd">        table name.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            table_name (str): Name of table to target</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">            bfruntime_pb2.TableEntry</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">table_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bfrt_info</span><span class="o">.</span><span class="n">get_table_id</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">table_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">UnknownTable</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="n">table_entry</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">TableEntry</span><span class="p">()</span>
+        <span class="n">table_entry</span><span class="o">.</span><span class="n">table_id</span> <span class="o">=</span> <span class="n">table_id</span>
+
+        <span class="k">return</span> <span class="n">table_entry</span>
+
+<div class="viewcode-block" id="BfRtHelper.create_key_field"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_key_field">[docs]</a>    <span class="k">def</span> <span class="nf">create_key_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generates key field component of a gRPC message</span>
+
+<span class="sd">        The performs a lookup of the key id (as messages contain a table ID and</span>
+<span class="sd">        not the name) using the :py:class:`BfRtInfo` object and also type checks</span>
+<span class="sd">        the match type.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            table_name (str): Name of table to target</span>
+
+<span class="sd">            field_name (str): Name of specific key field</span>
+
+<span class="sd">            data (Field): Field data supplied as in instance of a `Field`</span>
+<span class="sd">                object.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">            bfruntime_pb2.KeyField</span>
+
+<span class="sd">        Raises:</span>
+
+<span class="sd">            UnknownKeyField: If the :py:class:`BfRtInfo` object did not contain a</span>
+<span class="sd">                a valid key field for the given table and field names.</span>
+
+<span class="sd">            MismatchedMatchType: If the match types (e.g. :py:class:`Exact`) does not</span>
+<span class="sd">                match the match type defined for the field actually present in</span>
+<span class="sd">                the table.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info_key_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bfrt_info</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">info_key_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">UnknownKeyField</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+        <span class="n">bfrt_key_field</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">KeyField</span><span class="p">()</span>
+        <span class="n">bfrt_key_field</span><span class="o">.</span><span class="n">field_id</span> <span class="o">=</span> <span class="n">info_key_field</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="k">if</span> <span class="n">info_key_field</span><span class="o">.</span><span class="n">match_type</span> <span class="o">==</span> <span class="s2">&quot;Exact&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Exact</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">MismatchedMatchType</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s2">&quot;Exact&quot;</span><span class="p">)</span>
+            <span class="n">bfrt_key_field</span><span class="o">.</span><span class="n">exact</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">value_bytes</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">info_key_field</span><span class="o">.</span><span class="n">match_type</span> <span class="o">==</span> <span class="s2">&quot;LongestPrefixMatch&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">LongestPrefixMatch</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">MismatchedMatchType</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s2">&quot;LongestPrefixMatch&quot;</span><span class="p">)</span>
+            <span class="n">bfrt_key_field</span><span class="o">.</span><span class="n">lpm</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">value_bytes</span><span class="p">()</span>
+            <span class="n">bfrt_key_field</span><span class="o">.</span><span class="n">lpm</span><span class="o">.</span><span class="n">prefix_len</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">prefix</span>
+
+        <span class="k">if</span> <span class="n">info_key_field</span><span class="o">.</span><span class="n">match_type</span> <span class="o">==</span> <span class="s2">&quot;Ternary&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Ternary</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">MismatchedMatchType</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s2">&quot;Ternary&quot;</span><span class="p">)</span>
+            <span class="n">bfrt_key_field</span><span class="o">.</span><span class="n">ternary</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">value_bytes</span><span class="p">()</span>
+            <span class="n">bfrt_key_field</span><span class="o">.</span><span class="n">ternary</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mask_bytes</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">bfrt_key_field</span></div>
+
+    <span class="k">def</span> <span class="nf">create_data_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">data_field</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">DataField</span><span class="p">()</span>
+        <span class="n">data_field</span><span class="o">.</span><span class="n">field_id</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Field</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;bytes&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">bitwidth</span> <span class="o">!=</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="n">MismatchedDataSize</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">],</span> <span class="n">value</span><span class="o">.</span><span class="n">bitwidth</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;uint16&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">bitwidth</span> <span class="o">!=</span> <span class="mi">16</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">MismatchedDataSize</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">],</span> <span class="n">value</span><span class="o">.</span><span class="n">bitwidth</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;uint32&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">bitwidth</span> <span class="o">!=</span> <span class="mi">32</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">MismatchedDataSize</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">],</span> <span class="n">value</span><span class="o">.</span><span class="n">bitwidth</span><span class="p">)</span>
+            <span class="n">data_field</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">data_field</span><span class="o">.</span><span class="n">float_val</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">data_field</span><span class="o">.</span><span class="n">str_val</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">data_field</span><span class="o">.</span><span class="n">bool_val</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">inner_value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inner_value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                    <span class="n">data_field</span><span class="o">.</span><span class="n">int_arr_val</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inner_value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                    <span class="n">data_field</span><span class="o">.</span><span class="n">bool_arr_value</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">create_data_field</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+                    <span class="n">data_field</span><span class="o">.</span><span class="n">container_arr_value</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown data type!&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data_field</span>
+
+    <span class="k">def</span> <span class="nf">create_key_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">key_fields</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create the key fields gRPC message component&quot;&quot;&quot;</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_data</span> <span class="ow">in</span> <span class="n">key_fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_key_field</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_data</span><span class="p">)</span>
+            <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fields</span>
+
+    <span class="k">def</span> <span class="nf">create_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="p">):</span>
+        <span class="n">info_action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bfrt_info</span><span class="o">.</span><span class="n">get_action_spec</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">info_action</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">UnknownAction</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">)</span>
+
+        <span class="n">bfrt_table_data</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">TableData</span><span class="p">()</span>
+        <span class="n">bfrt_table_data</span><span class="o">.</span><span class="n">action_id</span> <span class="o">=</span> <span class="n">info_action</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="k">if</span> <span class="n">action_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_data</span> <span class="ow">in</span> <span class="n">action_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">info_action_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bfrt_info</span><span class="o">.</span><span class="n">get_action_field</span><span class="p">(</span>
+                    <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">param_name</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">info_action_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">UnknownActionParameter</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">param_name</span><span class="p">)</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">bfrt_data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_data_field</span><span class="p">(</span>
+                        <span class="n">info_action_field</span><span class="p">,</span> <span class="n">param_data</span>
+                    <span class="p">)</span>
+                    <span class="n">bfrt_table_data</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">bfrt_data_field</span><span class="p">])</span>
+                <span class="k">except</span> <span class="n">MismatchedDataSize</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">InvalidActionParameter</span><span class="p">(</span>
+                        <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">bfrt_table_data</span>
+
+<div class="viewcode-block" id="BfRtHelper.create_table_write"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_table_write">[docs]</a>    <span class="k">def</span> <span class="nf">create_table_write</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">program_name</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">,</span>
+        <span class="n">key</span><span class="p">,</span>
+        <span class="n">action_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">action_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">update_type</span><span class="o">=</span><span class="n">Update</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">INSERT</span><span class="p">,</span>  <span class="c1"># Type not documented here because it</span>
+        <span class="c1"># absolutely destroys generated docs.</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a match-action table write request</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This does not support batched writes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            program_name (str): Name of program to target.</span>
+
+<span class="sd">            table_name (str): Name of table within the program. Depending on how</span>
+<span class="sd">                the program has been compiled, you may need to prefix this name</span>
+<span class="sd">                with &quot;pipe&quot;, e.g. &quot;pipe.IngressControl.table&quot;.</span>
+
+<span class="sd">            key (dict): Dictionary of match field names to their match. The keys</span>
+<span class="sd">                should be strings, and the value should be an instance of a</span>
+<span class="sd">                :py:class:`Match` (e.g. :py:class:`Exact`) constructed with the correct</span>
+<span class="sd">                field type as defined in the program.</span>
+
+<span class="sd">            action_name (str): Name of the action to execute on a match.</span>
+
+<span class="sd">            action_params (dict): Dictionary of parameter names and their values</span>
+<span class="sd">                to pass to the executed action. As before, the key should be a</span>
+<span class="sd">                string, but the value should derive from :py:class:`Field`.</span>
+
+<span class="sd">            update_type (Update.Type): The type of operation to take place,</span>
+<span class="sd">                e.g., INSERT, MODIFY, DELETE. The default value of ``1``</span>
+<span class="sd">                corresponds to Update.Type.INSERT.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bfrt_request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_write_request</span><span class="p">(</span><span class="n">program_name</span><span class="p">)</span>
+        <span class="n">bfrt_table_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_table_entry</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="n">bfrt_key_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_key_fields</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="n">bfrt_table_entry</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">bfrt_key_fields</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">action_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bfrt_action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_action</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="p">)</span>
+            <span class="n">bfrt_table_entry</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">bfrt_action</span><span class="p">)</span>
+
+        <span class="n">bfrt_update</span> <span class="o">=</span> <span class="n">bfrt_request</span><span class="o">.</span><span class="n">updates</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+        <span class="n">bfrt_update</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">update_type</span>
+        <span class="n">bfrt_update</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">bfrt_table_entry</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">bfrt_request</span></div>
+
+<div class="viewcode-block" id="BfRtHelper.create_table_data_write"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_table_data_write">[docs]</a>    <span class="k">def</span> <span class="nf">create_table_data_write</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">program_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">,</span>
+        <span class="n">key</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="n">update_type</span><span class="o">=</span><span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">Update</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">INSERT</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a table write for arbitrary tables.</span>
+
+<span class="sd">        It is possible to write to many other tables exposed to the runtime</span>
+<span class="sd">        interface which can be used to manipulate copy to cpu settings,</span>
+<span class="sd">        multicast groups, port settings etc.</span>
+
+<span class="sd">        While these tables can be considered as &quot;ordinary&quot; database tables,</span>
+<span class="sd">        they are still manipulated by the same mechanisms as a match-action</span>
+<span class="sd">        update.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This does not support batched writes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            program_name (str): Name of program to target.</span>
+
+<span class="sd">            table_name (str): Name of table within the program. Depending on how</span>
+<span class="sd">                the program has been compiled, you may need to prefix this name</span>
+<span class="sd">                with &quot;pipe&quot;, e.g. &quot;pipe.IngressControl.table&quot;.</span>
+
+<span class="sd">            key (dict): Dictionary of match field names to their match. The keys</span>
+<span class="sd">                should be strings, and the value should be an instance of a</span>
+<span class="sd">                :py:class:`Match` (e.g. :py:class:`Exact`) constructed with the correct</span>
+<span class="sd">                field type as defined in the program.</span>
+
+<span class="sd">            data (Field): The data to be added to the table. Like match-action</span>
+<span class="sd">                updates, this can be expressed handily with a :py:class:`Field`.</span>
+<span class="sd">                This may could involve a :py:class:`StringField`, however a use case</span>
+<span class="sd">                for this hasn&#39;t been firmly established.</span>
+
+<span class="sd">            update_type (Update.Type): The type of operation to take place,</span>
+<span class="sd">                e.g., INSERT, MODIFY, DELETE. The default value of ``1``</span>
+<span class="sd">                corresponds to Update.Type.INSERT.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bfrt_request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_write_request</span><span class="p">(</span><span class="n">program_name</span><span class="p">)</span>
+        <span class="n">bfrt_table_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_table_entry</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="n">bfrt_key_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_key_fields</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="n">bfrt_table_entry</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">bfrt_key_fields</span><span class="p">)</span>
+
+        <span class="n">bfrt_table_data</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">TableData</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bfrt_info</span><span class="o">.</span><span class="n">get_data_field</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+            <span class="n">bfrt_data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_data_field</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">singleton</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">bfrt_table_data</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">bfrt_data_field</span><span class="p">])</span>
+
+        <span class="n">bfrt_table_entry</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">bfrt_table_data</span><span class="p">)</span>
+
+        <span class="n">bfrt_update</span> <span class="o">=</span> <span class="n">bfrt_request</span><span class="o">.</span><span class="n">updates</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+        <span class="n">bfrt_update</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">update_type</span>
+        <span class="n">bfrt_update</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">bfrt_table_entry</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">bfrt_request</span></div>
+
+<div class="viewcode-block" id="BfRtHelper.create_table_read"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_table_read">[docs]</a>    <span class="k">def</span> <span class="nf">create_table_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program_name</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="n">bfrt_request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_read_request</span><span class="p">(</span><span class="n">program_name</span><span class="p">)</span>
+        <span class="n">bfrt_table_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_table_entry</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="n">bfrt_key_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_key_fields</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+        <span class="n">bfrt_table_entry</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">bfrt_key_fields</span><span class="p">)</span>
+        <span class="n">update</span> <span class="o">=</span> <span class="n">bfrt_request</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+        <span class="n">update</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">bfrt_table_entry</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">bfrt_request</span></div>
+
+<div class="viewcode-block" id="BfRtHelper.create_copy_to_cpu"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_copy_to_cpu">[docs]</a>    <span class="k">def</span> <span class="nf">create_copy_to_cpu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program_name</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a for copying data to the CPU</span>
+
+<span class="sd">        Warning:</span>
+
+<span class="sd">            Experimental.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bfrt_request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_write_request</span><span class="p">(</span><span class="n">program_name</span><span class="p">)</span>
+        <span class="n">bfrt_table_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_table_entry</span><span class="p">(</span><span class="s2">&quot;$pre.port&quot;</span><span class="p">)</span>
+        <span class="n">bfrt_key_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_key_field</span><span class="p">(</span><span class="s2">&quot;$pre.port&quot;</span><span class="p">,</span> <span class="s2">&quot;$DEV_PORT&quot;</span><span class="p">,</span> <span class="n">Exact</span><span class="p">(</span><span class="n">port</span><span class="p">))</span>
+        <span class="n">bfrt_table_entry</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">bfrt_key_field</span><span class="p">])</span>
+
+        <span class="n">info_cpu_port_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bfrt_info</span><span class="o">.</span><span class="n">get_data_field</span><span class="p">(</span>
+            <span class="s2">&quot;$pre.port&quot;</span><span class="p">,</span> <span class="s2">&quot;$COPY_TO_CPU_PORT_ENABLE&quot;</span>
+        <span class="p">)</span>
+        <span class="n">bfrt_cpu_port_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_data_field</span><span class="p">(</span>
+            <span class="n">info_cpu_port_field</span><span class="o">.</span><span class="n">singleton</span><span class="p">,</span> <span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">bfrt_table_entry</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">bfrt_cpu_port_field</span><span class="p">])</span>
+
+        <span class="n">bfrt_update</span> <span class="o">=</span> <span class="n">bfrt_request</span><span class="o">.</span><span class="n">updates</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+        <span class="n">bfrt_update</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">Update</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">MODIFY</span>
+        <span class="n">bfrt_update</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">bfrt_table_entry</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BfRtHelper.create_set_pipeline_request"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_set_pipeline_request">[docs]</a>    <span class="k">def</span> <span class="nf">create_set_pipeline_request</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">program_name</span><span class="p">,</span> <span class="n">bfrt_path</span><span class="p">,</span> <span class="n">context_path</span><span class="p">,</span> <span class="n">binary_path</span>
+    <span class="p">):</span>
+
+        <span class="c1"># Need to figure out base_path properly later</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">SetForwardingPipelineConfigRequest</span><span class="p">()</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">client_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_id</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;install/share/tofinopd/</span><span class="si">{</span><span class="n">program_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">SetPipelineReq</span><span class="o">.</span><span class="n">VERIFY_AND_WARM_INIT_BEGIN_AND_END</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">p4_name</span> <span class="o">=</span> <span class="n">program_name</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">bfruntime_info</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">bfrt_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="n">profile</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">profiles</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+        <span class="n">profile</span><span class="o">.</span><span class="n">profile_name</span> <span class="o">=</span> <span class="s2">&quot;pipe&quot;</span>
+        <span class="n">profile</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">context_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">profile</span><span class="o">.</span><span class="n">binary</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">binary_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">profile</span><span class="o">.</span><span class="n">pipe_scope</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">request</span></div>
+
+<div class="viewcode-block" id="BfRtHelper.create_get_pipeline_request"><a class="viewcode-back" href="../../api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_get_pipeline_request">[docs]</a>    <span class="k">def</span> <span class="nf">create_get_pipeline_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">GetForwardingPipelineConfigRequest</span><span class="p">()</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">client_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_id</span>
+        <span class="k">return</span> <span class="n">request</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021 - present, APS Networks GmbH.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

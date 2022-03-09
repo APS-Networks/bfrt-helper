@@ -1,0 +1,672 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bfrt_helper.fields &mdash; Barefoot Runtime gRPC Helper 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/fonts.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/blockquote.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/font.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Barefoot Runtime gRPC Helper
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#installing">Installing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#self-contained-usage">Self Contained Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#basic-example">Basic Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#retrieving-non-p4-configuration">Retrieving Non-P4 Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#manipulating-non-match-action-tables">Manipulating Non-Match/Action Tables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#building-documentation">Building Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../fields.html">Fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#existing-fields">Existing Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#defining-custom-fields">Defining Custom Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#operations-on-fields">Operations on Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../match.html">Match</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#exact">Exact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#masked-matches-lpm-ternary">Masked Matches (LPM &amp; Ternary)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../match.html#construction">Construction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../match.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#unsupported-matches">Unsupported Matches</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#loading-a-pipeline">Loading a Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/bfrt_info.html">bfrt_helper.bfrt_info</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt_info.html#bfrtinfo">BfRtInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/bfrt.html">bfrt_helper.bfrt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt.html#bfrthelper">BfRtHelper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownaction">UnknownAction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownactionparameter">UnknownActionParameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknowntable">UnknownTable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownkeyfield">UnknownKeyField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#mismatchedmatchtype">MismatchedMatchType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#mismatcheddatasize">MismatchedDataSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#invalidactionparameter">InvalidActionParameter</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/fields.html">bfrt_helper.fields</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#base-fields">Base Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#jsonserialisable">JSONSerialisable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#field">Field</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#predefined-fields">Predefined Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#devport">DevPort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#digesttype">DigestType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#egressspec">EgressSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#ipv4address">IPv4Address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#layer2port">Layer2Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#macaddress">MACAddress</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#multicastgroupid">MulticastGroupId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#multicastnodeid">MulticastNodeId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#portid">PortId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#replicationid">ReplicationId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#stringfield">StringField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#vlanid">VlanID</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/match.html">bfrt_helper.match</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#base-match-type">Base Match Type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#masked">Masked</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#supported-types">Supported Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#exact">Exact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#longestprefixmatch">LongestPrefixMatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#ternary">Ternary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/util.html">bfrt_helper.util</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/util.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#encode-number">encode_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#bit-not">bit_not</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#mask-from-prefix">mask_from_prefix</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/util.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#invalidvalue">InvalidValue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#invalidoperation">InvalidOperation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#valueoutofrange">ValueOutOfRange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#matchhelper">MatchHelper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Barefoot Runtime gRPC Helper</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+<div class="git-ribbon">
+  <a href="http://github.com/APS-Networks" rel="me">Join us on GitHub</a>
+</div>
+
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>bfrt_helper.fields</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bfrt_helper.fields</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+
+<span class="kn">import</span> <span class="nn">ipaddress</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">bfrt_helper.util</span> <span class="kn">import</span> <span class="n">InvalidValue</span>
+<span class="kn">from</span> <span class="nn">bfrt_helper.util</span> <span class="kn">import</span> <span class="n">InvalidOperation</span>
+<span class="kn">from</span> <span class="nn">bfrt_helper.util</span> <span class="kn">import</span> <span class="n">encode_number</span>
+
+
+<div class="viewcode-block" id="MismatchedTypes"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.MismatchedTypes">[docs]</a><span class="k">class</span> <span class="nc">MismatchedTypes</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when a field&#39;s type (e.g., bitwidth or object) do not match when</span>
+<span class="sd">    comparing two match objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Type </span><span class="si">{</span><span class="n">a</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> is not </span><span class="si">{</span><span class="n">a</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JSONSerialisable"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.JSONSerialisable">[docs]</a><span class="k">class</span> <span class="nc">JSONSerialisable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Base class that enables converting a derived&#39;s contents to JSON&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="JSONSerialisable.json"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.JSONSerialisable.json">[docs]</a>    <span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generates a dictionary representation of a classes contents.&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONSerialisable</span><span class="o">.</span><span class="n">serialise</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="JSONSerialisable.serialise"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.JSONSerialisable.serialise">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">serialise</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Recursively descends, serialising class members&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">JSONSerialisable</span><span class="o">.</span><span class="n">serialise</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">JSONSerialisable</span><span class="o">.</span><span class="n">serialise</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Field</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">JSONSerialisable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">type_check</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">MismatchedTypes</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Field"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.Field">[docs]</a><span class="k">class</span> <span class="nc">Field</span><span class="p">(</span><span class="n">JSONSerialisable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all BfRt Helper field objects.</span>
+
+<span class="sd">    A field is datatype and value defined within a P4 program. Such fields can</span>
+<span class="sd">    be manipulated using gRPC, however requires translation from the client side</span>
+<span class="sd">    as types can have arbitrary bitwidths.</span>
+
+<span class="sd">    Internally, the value is stored as an integer, since bitwise operations are</span>
+<span class="sd">    easier to apply.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        InvalidValue:</span>
+<span class="sd">            Raised if the value assigned to the object is greater than the</span>
+<span class="sd">            maximum permissable value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;bitwidth&quot;</span><span class="p">):</span>
+            <span class="n">max_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">max_value</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">max_value</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Value </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> is greater than the maximum allowed for &quot;</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;this &quot;</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; field. [max=</span><span class="si">{</span><span class="n">max_value</span><span class="si">}</span><span class="s2">, bitwidth=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bitwidth</span><span class="si">}</span><span class="s2">]&quot;</span>
+                <span class="k">raise</span> <span class="n">InvalidValue</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;bitwidth&quot;</span><span class="p">):</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">bitwidth</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">bitwidth</span>
+        <span class="k">return</span> <span class="n">instance</span>
+
+<div class="viewcode-block" id="Field.to_bytes"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.Field.to_bytes">[docs]</a>    <span class="k">def</span> <span class="nf">to_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Converts internal value to a byte array representing the contents</span>
+
+<span class="sd">        When marshalling to gRPC, the byte representation is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">encode_number</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitwidth</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Field.from_bytes"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.Field.from_bytes">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Accepts a string of bytes and converts it to an instance of the</span>
+<span class="sd">        derived class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;big&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Field.max_value"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.Field.max_value">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">max_value</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Using the derived classes bitwidth, retrieve the maximum value. This</span>
+<span class="sd">        is :math:`2^x-1`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">2</span><span class="o">**</span><span class="bp">cls</span><span class="o">.</span><span class="n">bitwidth</span> <span class="o">-</span> <span class="mi">1</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">type_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">type_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">&amp;</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">type_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">|</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">type_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">^</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">type_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">type_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;=</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">type_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">type_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">&gt;=</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">type_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span></div>
+
+
+<span class="sd">&quot;&quot;&quot; For data parameters, this may not even be necessary as the class will accept</span>
+<span class="sd">    a string directly&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="StringField"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.StringField">[docs]</a><span class="k">class</span> <span class="nc">StringField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents a gRPC string field.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This is here for completeness purposes only, and is not used (perhaps</span>
+<span class="sd">        even required), by any available gRPC function (so far).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">InvalidOperation</span><span class="p">(</span><span class="s2">&quot;StringField.__and__ not allowed&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">InvalidOperation</span><span class="p">(</span><span class="s2">&quot;StringField.__or__ not allowed&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">InvalidOperation</span><span class="p">(</span><span class="s2">&quot;StringField.__xor__ not allowed&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">max_value</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">InvalidOperation</span><span class="p">(</span><span class="s2">&quot;StringField.max_value not allowed&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="IPv4Address"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.IPv4Address">[docs]</a><span class="k">class</span> <span class="nc">IPv4Address</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Utility class for better representing IP addresses in a more pleasing</span>
+<span class="sd">    way.</span>
+
+<span class="sd">    Can accept string representations and internally convert them to</span>
+<span class="sd">    the required integer type, and vice versa when printing as a string. When</span>
+<span class="sd">    the value is sent to the gRPC interface, it will be converted to a byte</span>
+<span class="sd">    array as required.</span>
+
+<span class="sd">    Uses the ``ipaddress`` module.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        address (str): Dotted decimal IPv4 address string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">32</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="n">address</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+
+    <span class="sd">&quot;&quot;&quot; Overloaded cause of quotes&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;IPv4Address(&#39;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="MACAddress"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.MACAddress">[docs]</a><span class="k">class</span> <span class="nc">MACAddress</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Utility class for better representing IP addresses in a more pleasing</span>
+<span class="sd">    way.</span>
+
+<span class="sd">    Can accept string representations and internally convert them to</span>
+<span class="sd">    the required integer type, and vice versa when printing as a string. When</span>
+<span class="sd">    the value is sent to the gRPC interface, it will be converted to a byte</span>
+<span class="sd">    array as required.</span>
+
+<span class="sd">    Internally uses string manipulation and integer casting for serialisation</span>
+<span class="sd">    from and to integer value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        address (str): Colon seperated 6 byte hexadecimal address string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">48</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">address</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="mi">16</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">02x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">)])</span>
+
+    <span class="c1"># def __repr__(self):</span>
+    <span class="c1">#     return f&#39;MACAddress(\&#39;{str(self)}\&#39;)&#39;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">02x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">)]))</span></div>
+
+
+<div class="viewcode-block" id="PortId"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.PortId">[docs]</a><span class="k">class</span> <span class="nc">PortId</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typical port id data type.</span>
+
+<span class="sd">    The port id typically represents an egress or ingress port, and is 9 bits</span>
+<span class="sd">    wide.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        value (int): Port id.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">9</span></div>
+
+
+<div class="viewcode-block" id="MulticastGroupId"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.MulticastGroupId">[docs]</a><span class="k">class</span> <span class="nc">MulticastGroupId</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mutlicast group P4 data type, as defined by the Tofino core architecture</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        value (int): Group id.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">16</span></div>
+
+
+<div class="viewcode-block" id="MulticastNodeId"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.MulticastNodeId">[docs]</a><span class="k">class</span> <span class="nc">MulticastNodeId</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">32</span></div>
+
+
+<div class="viewcode-block" id="DevPort"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.DevPort">[docs]</a><span class="k">class</span> <span class="nc">DevPort</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">32</span></div>
+
+
+<div class="viewcode-block" id="VlanID"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.VlanID">[docs]</a><span class="k">class</span> <span class="nc">VlanID</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;User class representing a parsed Vlan ID</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        value (int): VLAN id.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">12</span></div>
+
+
+<div class="viewcode-block" id="EgressSpec"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.EgressSpec">[docs]</a><span class="k">class</span> <span class="nc">EgressSpec</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Legacy port representation&quot;&quot;&quot;</span>
+
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">9</span></div>
+
+
+<div class="viewcode-block" id="DigestType"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.DigestType">[docs]</a><span class="k">class</span> <span class="nc">DigestType</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a digest as defined in the BfRt spec.</span>
+
+<span class="sd">    A digest is used to send messages from the Tofino hardware to the runtime</span>
+<span class="sd">    components. The 3 bit field can be used to inform the controller of any</span>
+<span class="sd">    special semantics for a given message, for instance what type it is, or</span>
+<span class="sd">    what data it includes. For instance, you could send a message containing</span>
+<span class="sd">    an IP address, but change the digest type depending on whether it was</span>
+<span class="sd">    IPv4 or IPv6.</span>
+
+<span class="sd">    Another example would be notifying the controller of any new MAC addresses</span>
+<span class="sd">    seen on the wire.</span>
+
+<span class="sd">    In any case, this would not typically be used to send messages, but instead</span>
+<span class="sd">    is useful for storing when received.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">3</span></div>
+
+
+<div class="viewcode-block" id="ReplicationId"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.ReplicationId">[docs]</a><span class="k">class</span> <span class="nc">ReplicationId</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a replication ID as defined in the BfRt spec</span>
+
+<span class="sd">    A replication id is a tag that is added to metadata that can be used to</span>
+<span class="sd">    perform additional operations when moving packets across multicast groups.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">16</span></div>
+
+
+<div class="viewcode-block" id="Layer2Port"><a class="viewcode-back" href="../../api/fields.html#bfrt_helper.fields.Layer2Port">[docs]</a><span class="k">class</span> <span class="nc">Layer2Port</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="n">bitwidth</span> <span class="o">=</span> <span class="mi">16</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021 - present, APS Networks GmbH.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

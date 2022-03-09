@@ -1,0 +1,652 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bfrt_helper.bfrt_info &mdash; Barefoot Runtime gRPC Helper 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/fonts.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/blockquote.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/font.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Barefoot Runtime gRPC Helper
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#installing">Installing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#self-contained-usage">Self Contained Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#basic-example">Basic Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#retrieving-non-p4-configuration">Retrieving Non-P4 Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#manipulating-non-match-action-tables">Manipulating Non-Match/Action Tables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#building-documentation">Building Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../fields.html">Fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#existing-fields">Existing Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#defining-custom-fields">Defining Custom Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#operations-on-fields">Operations on Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../match.html">Match</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#exact">Exact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#masked-matches-lpm-ternary">Masked Matches (LPM &amp; Ternary)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../match.html#construction">Construction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../match.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#unsupported-matches">Unsupported Matches</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#loading-a-pipeline">Loading a Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/bfrt_info.html">bfrt_helper.bfrt_info</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt_info.html#bfrtinfo">BfRtInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/bfrt.html">bfrt_helper.bfrt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt.html#bfrthelper">BfRtHelper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownaction">UnknownAction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownactionparameter">UnknownActionParameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknowntable">UnknownTable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownkeyfield">UnknownKeyField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#mismatchedmatchtype">MismatchedMatchType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#mismatcheddatasize">MismatchedDataSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#invalidactionparameter">InvalidActionParameter</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/fields.html">bfrt_helper.fields</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#base-fields">Base Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#jsonserialisable">JSONSerialisable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#field">Field</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#predefined-fields">Predefined Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#devport">DevPort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#digesttype">DigestType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#egressspec">EgressSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#ipv4address">IPv4Address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#layer2port">Layer2Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#macaddress">MACAddress</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#multicastgroupid">MulticastGroupId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#multicastnodeid">MulticastNodeId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#portid">PortId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#replicationid">ReplicationId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#stringfield">StringField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#vlanid">VlanID</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/match.html">bfrt_helper.match</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#base-match-type">Base Match Type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#masked">Masked</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#supported-types">Supported Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#exact">Exact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#longestprefixmatch">LongestPrefixMatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#ternary">Ternary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/util.html">bfrt_helper.util</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/util.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#encode-number">encode_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#bit-not">bit_not</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#mask-from-prefix">mask_from_prefix</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/util.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#invalidvalue">InvalidValue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#invalidoperation">InvalidOperation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#valueoutofrange">ValueOutOfRange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#matchhelper">MatchHelper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Barefoot Runtime gRPC Helper</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+<div class="git-ribbon">
+  <a href="http://github.com/APS-Networks" rel="me">Join us on GitHub</a>
+</div>
+
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>bfrt_helper.bfrt_info</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bfrt_helper.bfrt_info</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module contains objects which are created when parsing BfRt Info files</span>
+<span class="sd">and makes it much easier to build requests. This module is not intended to be</span>
+<span class="sd">used by developers. Other than the creation of the BfRtInfo object for</span>
+<span class="sd">consumption by the actual helper class.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">bfrt_helper.fields</span> <span class="kn">import</span> <span class="n">JSONSerialisable</span>
+
+
+<span class="k">def</span> <span class="nf">quoted</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># or isinstance(value, unicode):</span>
+        <span class="k">return</span> <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="k">class</span> <span class="nc">BfRtObject</span><span class="p">(</span><span class="n">JSONSerialisable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">pairs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">quoted</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">BfRtTable</span><span class="p">(</span><span class="n">BfRtObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">id_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table_type</span> <span class="o">=</span> <span class="n">table_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_specs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<span class="k">class</span> <span class="nc">BfRtTableKey</span><span class="p">(</span><span class="n">BfRtObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">id_</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">repeated</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">annotations</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">match_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">type_</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">id_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repeated</span> <span class="o">=</span> <span class="n">repeated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">annotations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mandatory</span> <span class="o">=</span> <span class="n">mandatory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">match_type</span> <span class="o">=</span> <span class="n">match_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">type_</span>
+
+
+<span class="k">class</span> <span class="nc">BfRtTableActionSpec</span><span class="p">(</span><span class="n">BfRtObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">id_</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">action_scope</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">annotations</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">id_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_scope</span> <span class="o">=</span> <span class="n">action_scope</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">annotations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+
+
+<span class="k">class</span> <span class="nc">BfRtTableActionData</span><span class="p">(</span><span class="n">BfRtObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">id_</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">repeated</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">read_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">annotations</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">type_</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">id_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repeated</span> <span class="o">=</span> <span class="n">repeated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mandatory</span> <span class="o">=</span> <span class="n">mandatory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="n">read_only</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">annotations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">type_</span>
+
+
+<span class="k">class</span> <span class="nc">BfRtTableDataFieldSingleton</span><span class="p">(</span><span class="n">BfRtObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">id_</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">repeated</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">annotations</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">type_</span><span class="p">:</span> <span class="nb">dict</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">id_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repeated</span> <span class="o">=</span> <span class="n">repeated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">annotations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">type_</span>
+
+
+<span class="k">class</span> <span class="nc">BfRtTableDataField</span><span class="p">(</span><span class="n">BfRtObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">mandatory</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">read_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">singleton</span><span class="p">:</span> <span class="n">BfRtTableDataFieldSingleton</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mandatory</span> <span class="o">=</span> <span class="n">mandatory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="n">read_only</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">singleton</span> <span class="o">=</span> <span class="n">singleton</span>
+
+
+<span class="k">def</span> <span class="nf">parse_table_key</span><span class="p">(</span><span class="n">key_data</span><span class="p">):</span>
+    <span class="n">id_</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">repeated</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;repeated&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotations&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">mandatory</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mandatory&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">match_type</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;match_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">type_</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">BfRtTableKey</span><span class="p">(</span>
+        <span class="n">id_</span><span class="o">=</span><span class="n">id_</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">repeated</span><span class="o">=</span><span class="n">repeated</span><span class="p">,</span>
+        <span class="n">annotations</span><span class="o">=</span><span class="n">annotations</span><span class="p">,</span>
+        <span class="n">mandatory</span><span class="o">=</span><span class="n">mandatory</span><span class="p">,</span>
+        <span class="n">match_type</span><span class="o">=</span><span class="n">match_type</span><span class="p">,</span>
+        <span class="n">type_</span><span class="o">=</span><span class="n">type_</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">parse_action_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">data_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">id_</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">repeated</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;repeated&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">read_only</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;read_only&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">annotations</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotations&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">mandatory</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mandatory&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">type_</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">data_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">BfRtTableActionData</span><span class="p">(</span>
+                <span class="n">id_</span><span class="o">=</span><span class="n">id_</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">repeated</span><span class="o">=</span><span class="n">repeated</span><span class="p">,</span>
+                <span class="n">read_only</span><span class="o">=</span><span class="n">read_only</span><span class="p">,</span>
+                <span class="n">annotations</span><span class="o">=</span><span class="n">annotations</span><span class="p">,</span>
+                <span class="n">mandatory</span><span class="o">=</span><span class="n">mandatory</span><span class="p">,</span>
+                <span class="n">type_</span><span class="o">=</span><span class="n">type_</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">data_list</span>
+
+
+<span class="k">def</span> <span class="nf">parse_action_spec</span><span class="p">(</span><span class="n">action_data</span><span class="p">):</span>
+    <span class="n">id_</span> <span class="o">=</span> <span class="n">action_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">action_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">action_scope</span> <span class="o">=</span> <span class="n">action_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;action_scope&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">action_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotations&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">action_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">parse_action_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">BfRtTableActionSpec</span><span class="p">(</span>
+        <span class="n">id_</span><span class="o">=</span><span class="n">id_</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">action_scope</span><span class="o">=</span><span class="n">action_scope</span><span class="p">,</span>
+        <span class="n">annotations</span><span class="o">=</span><span class="n">annotations</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">parse_table_data_field_singleton</span><span class="p">(</span><span class="n">singleton</span><span class="p">):</span>
+    <span class="n">id_</span> <span class="o">=</span> <span class="n">singleton</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">singleton</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">repeated</span> <span class="o">=</span> <span class="n">singleton</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;repeated&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">singleton</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotations&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">type_</span> <span class="o">=</span> <span class="n">singleton</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">BfRtTableDataFieldSingleton</span><span class="p">(</span>
+        <span class="n">id_</span><span class="o">=</span><span class="n">id_</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">repeated</span><span class="o">=</span><span class="n">repeated</span><span class="p">,</span> <span class="n">annotations</span><span class="o">=</span><span class="n">annotations</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="n">type_</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">parse_table_data_field</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+    <span class="n">mandatory</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mandatory&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">read_only</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;read_only&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">singleton</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;singleton&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">singleton</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">singleton</span> <span class="o">=</span> <span class="n">parse_table_data_field_singleton</span><span class="p">(</span><span class="n">singleton</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">BfRtTableDataField</span><span class="p">(</span>
+        <span class="n">mandatory</span><span class="o">=</span><span class="n">mandatory</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="n">read_only</span><span class="p">,</span> <span class="n">singleton</span><span class="o">=</span><span class="n">singleton</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">parse_table</span><span class="p">(</span><span class="n">table_data</span><span class="p">):</span>
+    <span class="n">id_</span> <span class="o">=</span> <span class="n">table_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">table_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">table_type</span> <span class="o">=</span> <span class="n">table_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;table_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">table_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">table</span> <span class="o">=</span> <span class="n">BfRtTable</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">table_type</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;key&quot;</span> <span class="ow">in</span> <span class="n">table_data</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">table_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;key&quot;</span><span class="p">):</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parse_table_key</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="s2">&quot;action_specs&quot;</span> <span class="ow">in</span> <span class="n">table_data</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">action_spec</span> <span class="ow">in</span> <span class="n">table_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;action_specs&quot;</span><span class="p">):</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">action_specs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parse_action_spec</span><span class="p">(</span><span class="n">action_spec</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="s2">&quot;data&quot;</span> <span class="ow">in</span> <span class="n">table_data</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">table_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">):</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parse_table_data_field</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">table</span>
+
+
+<span class="k">def</span> <span class="nf">parse_learn_filters</span><span class="p">(</span><span class="n">table_data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="BfRtInfo"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo">[docs]</a><span class="k">class</span> <span class="nc">BfRtInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class representing the contents of a BfRtInfo file</span>
+
+<span class="sd">    This class is a utility class used to more easily access the contents of</span>
+<span class="sd">    a BfRtInfo file, rather than define a bunch of functions for navigating</span>
+<span class="sd">    it&#39;s JSON (or a dictionary containing it&#39;s contents).</span>
+
+<span class="sd">    This would then be passed to the BfRt helper.</span>
+
+<span class="sd">    The data passed in would ordinarily be created as follows::</span>
+
+<span class="sd">        bfrt_data = json.load(open(&quot;all_bfrt.json&quot;))</span>
+<span class="sd">        bfrt_info = BfRtInfo(all_bfrt_data)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (dict): Dictionary containing the contents of the BfRtInfo file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;tables&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tables</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">table_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tables&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parse_table</span><span class="p">(</span><span class="n">table_data</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s2">&quot;learn_filters&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">learn_filters</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">table_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;learn_filters&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">learn_filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">table_data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BfRtInfo.get_action_field"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_action_field">[docs]</a>    <span class="k">def</span> <span class="nf">get_action_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
+        <span class="n">action_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_action_spec</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">action_spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">action_spec</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">field_name</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">field</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BfRtInfo.get_action_field_id"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_action_field_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_action_field_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_action_field</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">field</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BfRtInfo.get_data_field"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_data_field">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">table</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">singleton</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">singleton</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">field_name</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">field</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BfRtInfo.get_data_field_id"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_data_field_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_field_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_field</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">singleton</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">field</span><span class="o">.</span><span class="n">singleton</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BfRtInfo.get_table"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;tables&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">table</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">table_name</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">table</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BfRtInfo.get_key"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">key_name</span><span class="p">):</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">table</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">key</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">key_name</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">key</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BfRtInfo.get_table_id"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_table_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_table_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">table</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">table</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BfRtInfo.get_key_id"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_key_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_key_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">key_name</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">key_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">key</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BfRtInfo.get_action_spec"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_action_spec">[docs]</a>    <span class="k">def</span> <span class="nf">get_action_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_spec_name</span><span class="p">):</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">table</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">action_spec</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">action_specs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">action_spec</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">action_spec_name</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">action_spec</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BfRtInfo.get_action_spec_id"><a class="viewcode-back" href="../../api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_action_spec_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_action_spec_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_spec_name</span><span class="p">):</span>
+        <span class="n">action_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_action_spec</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">action_spec_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">action_spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">action_spec</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">return</span> <span class="kc">None</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021 - present, APS Networks GmbH.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

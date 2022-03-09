@@ -1,0 +1,678 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Index &mdash; Barefoot Runtime gRPC Helper 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/fonts.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/blockquote.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/font.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Barefoot Runtime gRPC Helper
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#installing">Installing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#self-contained-usage">Self Contained Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#basic-example">Basic Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#retrieving-non-p4-configuration">Retrieving Non-P4 Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#manipulating-non-match-action-tables">Manipulating Non-Match/Action Tables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#building-documentation">Building Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fields.html">Fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#existing-fields">Existing Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#defining-custom-fields">Defining Custom Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#operations-on-fields">Operations on Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="match.html">Match</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="match.html#exact">Exact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="match.html#masked-matches-lpm-ternary">Masked Matches (LPM &amp; Ternary)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="match.html#construction">Construction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="match.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="match.html#unsupported-matches">Unsupported Matches</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#loading-a-pipeline">Loading a Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/bfrt_info.html">bfrt_helper.bfrt_info</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/bfrt_info.html#bfrtinfo">BfRtInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/bfrt.html">bfrt_helper.bfrt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/bfrt.html#bfrthelper">BfRtHelper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/bfrt.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknownaction">UnknownAction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknownactionparameter">UnknownActionParameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknowntable">UnknownTable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknownkeyfield">UnknownKeyField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#mismatchedmatchtype">MismatchedMatchType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#mismatcheddatasize">MismatchedDataSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#invalidactionparameter">InvalidActionParameter</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/fields.html">bfrt_helper.fields</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/fields.html#base-fields">Base Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#jsonserialisable">JSONSerialisable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#field">Field</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/fields.html#predefined-fields">Predefined Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#devport">DevPort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#digesttype">DigestType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#egressspec">EgressSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#ipv4address">IPv4Address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#layer2port">Layer2Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#macaddress">MACAddress</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#multicastgroupid">MulticastGroupId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#multicastnodeid">MulticastNodeId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#portid">PortId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#replicationid">ReplicationId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#stringfield">StringField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#vlanid">VlanID</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/fields.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/match.html">bfrt_helper.match</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/match.html#base-match-type">Base Match Type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#masked">Masked</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/match.html#supported-types">Supported Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#exact">Exact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#longestprefixmatch">LongestPrefixMatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#ternary">Ternary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/match.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/util.html">bfrt_helper.util</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/util.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#encode-number">encode_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#bit-not">bit_not</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#mask-from-prefix">mask_from_prefix</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/util.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#invalidvalue">InvalidValue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#invalidoperation">InvalidOperation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#valueoutofrange">ValueOutOfRange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#matchhelper">MatchHelper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Barefoot Runtime gRPC Helper</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+<div class="git-ribbon">
+  <a href="http://github.com/APS-Networks" rel="me">Join us on GitHub</a>
+</div>
+
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Index</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ 
+</div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.__and__">__and__() (Masked method)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.__eq__">__eq__() (Masked method)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.__ge__">__ge__() (Masked method)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.__gt__">__gt__() (Masked method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.__iter__">__iter__() (Masked method)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.__le__">__le__() (Masked method)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.__lt__">__lt__() (Masked method)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.__or__">__or__() (Masked method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.BfRtHelper">BfRtHelper (class in bfrt_helper.bfrt)</a>
+</li>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo">BfRtInfo (class in bfrt_helper.bfrt_info)</a>
+</li>
+      <li><a href="api/util.html#bfrt_helper.util.bit_not">bit_not() (in module bfrt_helper.util)</a>
+</li>
+      <li><a href="api/fields.html#bfrt_helper.fields.DevPort.bitwidth">bitwidth (DevPort attribute)</a>
+
+      <ul>
+        <li><a href="api/fields.html#bfrt_helper.fields.DigestType.bitwidth">(DigestType attribute)</a>
+</li>
+        <li><a href="api/fields.html#bfrt_helper.fields.EgressSpec.bitwidth">(EgressSpec attribute)</a>
+</li>
+        <li><a href="api/fields.html#bfrt_helper.fields.IPv4Address.bitwidth">(IPv4Address attribute)</a>
+</li>
+        <li><a href="api/fields.html#bfrt_helper.fields.Layer2Port.bitwidth">(Layer2Port attribute)</a>
+</li>
+        <li><a href="api/fields.html#bfrt_helper.fields.MACAddress.bitwidth">(MACAddress attribute)</a>
+</li>
+        <li><a href="api/fields.html#bfrt_helper.fields.MulticastGroupId.bitwidth">(MulticastGroupId attribute)</a>
+</li>
+        <li><a href="api/fields.html#bfrt_helper.fields.MulticastNodeId.bitwidth">(MulticastNodeId attribute)</a>
+</li>
+        <li><a href="api/fields.html#bfrt_helper.fields.PortId.bitwidth">(PortId attribute)</a>
+</li>
+        <li><a href="api/fields.html#bfrt_helper.fields.ReplicationId.bitwidth">(ReplicationId attribute)</a>
+</li>
+        <li><a href="api/fields.html#bfrt_helper.fields.VlanID.bitwidth">(VlanID attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_copy_to_cpu">create_copy_to_cpu() (BfRtHelper method)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_get_pipeline_request">create_get_pipeline_request() (BfRtHelper method)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_key_field">create_key_field() (BfRtHelper method)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_set_pipeline_request">create_set_pipeline_request() (BfRtHelper method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_subscribe_request">create_subscribe_request() (BfRtHelper method)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_table_data_write">create_table_data_write() (BfRtHelper method)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_table_read">create_table_read() (BfRtHelper method)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_table_write">create_table_write() (BfRtHelper method)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.BfRtHelper.create_write_request">create_write_request() (BfRtHelper method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.DevPort">DevPort (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.DigestType">DigestType (class in bfrt_helper.fields)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Ternary.dont_care">dont_care() (Ternary class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.EgressSpec">EgressSpec (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/util.html#bfrt_helper.util.encode_number">encode_number() (in module bfrt_helper.util)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Exact">Exact (class in bfrt_helper.match)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.Field">Field (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.Field.from_bytes">from_bytes() (Field class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_action_field">get_action_field() (BfRtInfo method)</a>
+</li>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_action_field_id">get_action_field_id() (BfRtInfo method)</a>
+</li>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_action_spec">get_action_spec() (BfRtInfo method)</a>
+</li>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_action_spec_id">get_action_spec_id() (BfRtInfo method)</a>
+</li>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_data_field">get_data_field() (BfRtInfo method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_data_field_id">get_data_field_id() (BfRtInfo method)</a>
+</li>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_key">get_key() (BfRtInfo method)</a>
+</li>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_key_id">get_key_id() (BfRtInfo method)</a>
+</li>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_table">get_table() (BfRtInfo method)</a>
+</li>
+      <li><a href="api/bfrt_info.html#bfrt_helper.bfrt_info.BfRtInfo.get_table_id">get_table_id() (BfRtInfo method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.intersection">intersection() (Masked method)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.InvalidActionParameter">InvalidActionParameter (class in bfrt_helper.bfrt)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/util.html#bfrt_helper.util.InvalidOperation">InvalidOperation (class in bfrt_helper.util)</a>
+</li>
+      <li><a href="api/util.html#bfrt_helper.util.InvalidValue">InvalidValue (class in bfrt_helper.util)</a>
+</li>
+      <li><a href="api/fields.html#bfrt_helper.fields.IPv4Address">IPv4Address (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.JSONSerialisable.json">json() (JSONSerialisable method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.JSONSerialisable">JSONSerialisable (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.Layer2Port">Layer2Port (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/match.html#bfrt_helper.match.LongestPrefixMatch">LongestPrefixMatch (class in bfrt_helper.match)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.MACAddress">MACAddress (class in bfrt_helper.fields)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Ternary.mask_bytes">mask_bytes() (Ternary method)</a>
+</li>
+      <li><a href="api/util.html#bfrt_helper.util.mask_from_prefix">mask_from_prefix() (in module bfrt_helper.util)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Masked">Masked (class in bfrt_helper.match)</a>
+</li>
+      <li><a href="api/util.html#bfrt_helper.util.MatchHelper">MatchHelper (class in bfrt_helper.util)</a>
+</li>
+      <li><a href="api/fields.html#bfrt_helper.fields.Field.max_value">max_value() (Field class method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.merged">merged() (Masked method)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.MismatchedDataSize">MismatchedDataSize (class in bfrt_helper.bfrt)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.MismatchedKeys">MismatchedKeys (class in bfrt_helper.match)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.MismatchedMatchType">MismatchedMatchType (class in bfrt_helper.bfrt)</a>
+</li>
+      <li><a href="api/fields.html#bfrt_helper.fields.MismatchedTypes">MismatchedTypes (class in bfrt_helper.fields)</a>
+</li>
+      <li><a href="api/fields.html#bfrt_helper.fields.MulticastGroupId">MulticastGroupId (class in bfrt_helper.fields)</a>
+</li>
+      <li><a href="api/fields.html#bfrt_helper.fields.MulticastNodeId">MulticastNodeId (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.overlaps">overlaps() (Masked method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.PortId">PortId (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.proper_subset_of">proper_subset_of() (Masked method)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.proper_superset_of">proper_superset_of() (Masked method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.ReplicationId">ReplicationId (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.JSONSerialisable.serialise">serialise() (JSONSerialisable static method)</a>
+</li>
+      <li><a href="api/fields.html#bfrt_helper.fields.StringField">StringField (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.subset_of">subset_of() (Masked method)</a>
+</li>
+      <li><a href="api/match.html#bfrt_helper.match.Masked.superset_of">superset_of() (Masked method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/match.html#bfrt_helper.match.Ternary">Ternary (class in bfrt_helper.match)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fields.html#bfrt_helper.fields.Field.to_bytes">to_bytes() (Field method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.UnknownAction">UnknownAction (class in bfrt_helper.bfrt)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.UnknownActionParameter">UnknownActionParameter (class in bfrt_helper.bfrt)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.UnknownKeyField">UnknownKeyField (class in bfrt_helper.bfrt)</a>
+</li>
+      <li><a href="api/bfrt.html#bfrt_helper.bfrt.UnknownTable">UnknownTable (class in bfrt_helper.bfrt)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/match.html#bfrt_helper.match.Exact.value_bytes">value_bytes() (Exact method)</a>
+
+      <ul>
+        <li><a href="api/match.html#bfrt_helper.match.LongestPrefixMatch.value_bytes">(LongestPrefixMatch method)</a>
+</li>
+        <li><a href="api/match.html#bfrt_helper.match.Ternary.value_bytes">(Ternary method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/util.html#bfrt_helper.util.ValueOutOfRange">ValueOutOfRange (class in bfrt_helper.util)</a>
+</li>
+      <li><a href="api/fields.html#bfrt_helper.fields.VlanID">VlanID (class in bfrt_helper.fields)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021 - present, APS Networks GmbH.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

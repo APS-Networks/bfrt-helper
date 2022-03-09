@@ -1,0 +1,17 @@
+/*  This prevents the content background going all green when the page 
+    viewport width is less than 1100px. */
+.wy-nav-content {
+    background: rgb(252,252,252);
+}
+
+.wy-side-nav-search a {
+    color: rgb(252,252,252);
+}
+
+/* Make the title more obvious when the page is collapsed */
+@media (max-width: 1100px) {
+    .wy-nav-top a {
+        color: rgb(252,252,252);
+        font-size: 1.2em;
+    }
+}

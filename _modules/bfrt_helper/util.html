@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bfrt_helper.util &mdash; Barefoot Runtime gRPC Helper 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/fonts.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/blockquote.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/font.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Barefoot Runtime gRPC Helper
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#installing">Installing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#self-contained-usage">Self Contained Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#basic-example">Basic Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#retrieving-non-p4-configuration">Retrieving Non-P4 Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../overview.html#manipulating-non-match-action-tables">Manipulating Non-Match/Action Tables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html#building-documentation">Building Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../fields.html">Fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#existing-fields">Existing Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#defining-custom-fields">Defining Custom Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fields.html#operations-on-fields">Operations on Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../match.html">Match</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#exact">Exact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#masked-matches-lpm-ternary">Masked Matches (LPM &amp; Ternary)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../match.html#construction">Construction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../match.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../match.html#unsupported-matches">Unsupported Matches</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#loading-a-pipeline">Loading a Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/bfrt_info.html">bfrt_helper.bfrt_info</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt_info.html#bfrtinfo">BfRtInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/bfrt.html">bfrt_helper.bfrt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt.html#bfrthelper">BfRtHelper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/bfrt.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownaction">UnknownAction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownactionparameter">UnknownActionParameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknowntable">UnknownTable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#unknownkeyfield">UnknownKeyField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#mismatchedmatchtype">MismatchedMatchType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#mismatcheddatasize">MismatchedDataSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/bfrt.html#invalidactionparameter">InvalidActionParameter</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/fields.html">bfrt_helper.fields</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#base-fields">Base Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#jsonserialisable">JSONSerialisable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#field">Field</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#predefined-fields">Predefined Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#devport">DevPort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#digesttype">DigestType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#egressspec">EgressSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#ipv4address">IPv4Address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#layer2port">Layer2Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#macaddress">MACAddress</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#multicastgroupid">MulticastGroupId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#multicastnodeid">MulticastNodeId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#portid">PortId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#replicationid">ReplicationId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#stringfield">StringField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#vlanid">VlanID</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/fields.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/fields.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/match.html">bfrt_helper.match</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#base-match-type">Base Match Type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#masked">Masked</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#supported-types">Supported Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#exact">Exact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#longestprefixmatch">LongestPrefixMatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#ternary">Ternary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/match.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/match.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/util.html">bfrt_helper.util</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/util.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#encode-number">encode_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#bit-not">bit_not</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#mask-from-prefix">mask_from_prefix</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/util.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#invalidvalue">InvalidValue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#invalidoperation">InvalidOperation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#valueoutofrange">ValueOutOfRange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/util.html#matchhelper">MatchHelper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Barefoot Runtime gRPC Helper</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+<div class="git-ribbon">
+  <a href="http://github.com/APS-Networks" rel="me">Join us on GitHub</a>
+</div>
+
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>bfrt_helper.util</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bfrt_helper.util</h1><div class="highlight"><pre>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="InvalidValue"><a class="viewcode-back" href="../../api/util.html#bfrt_helper.util.InvalidValue">[docs]</a><span class="k">class</span> <span class="nc">InvalidValue</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="InvalidOperation"><a class="viewcode-back" href="../../api/util.html#bfrt_helper.util.InvalidOperation">[docs]</a><span class="k">class</span> <span class="nc">InvalidOperation</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ValueOutOfRange"><a class="viewcode-back" href="../../api/util.html#bfrt_helper.util.ValueOutOfRange">[docs]</a><span class="k">class</span> <span class="nc">ValueOutOfRange</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MatchHelper"><a class="viewcode-back" href="../../api/util.html#bfrt_helper.util.MatchHelper">[docs]</a><span class="k">class</span> <span class="nc">MatchHelper</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">types</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">types</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">types</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">):</span>
+            <span class="n">match_type</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="n">t</span>
+            <span class="k">pass</span></div>
+
+
+<span class="n">BYTE_WIDTH</span> <span class="o">=</span> <span class="mi">8</span>
+
+
+<div class="viewcode-block" id="encode_number"><a class="viewcode-back" href="../../api/util.html#bfrt_helper.util.encode_number">[docs]</a><span class="k">def</span> <span class="nf">encode_number</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">bitwidth</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert an integer to it&#39;s representation in bytes.</span>
+
+<span class="sd">    gRPC operations involving values are always sent as ``bytes``. Since</span>
+<span class="sd">    operations internally to the helpers are performed on integers (it is way</span>
+<span class="sd">    easier), values need to be &#39;casted&#39; to bytes.</span>
+
+<span class="sd">    The byte string will always be the smallest number of bytes capable of</span>
+<span class="sd">    holding the value based upon the bitwidth. If a value is provided that is</span>
+<span class="sd">    out of range, an exception will be thrown.</span>
+
+<span class="sd">    The number of bytes is calculated as:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        [ (b + 8 - 1) / b ]</span>
+
+<span class="sd">    Where :math:`b` is the bitwidth.</span>
+
+<span class="sd">    Conversion to bytes is performed via the ``int.to_bytes`` method, using a</span>
+<span class="sd">    big endian conversion.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        number (int): Value to convert</span>
+<span class="sd">        bitwidth (int): Bitwidth of the field</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueOutOfRange: The supplied value exceeds the maximum number the</span>
+<span class="sd">            bitwidth is capable of supporting.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">**</span><span class="n">bitwidth</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ValueOutOfRange</span><span class="p">(</span><span class="s2">&quot;Value </span><span class="si">{}</span><span class="s2"> has more bits than </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">bitwidth</span><span class="p">))</span>
+    <span class="n">n_bytes</span> <span class="o">=</span> <span class="p">(</span><span class="n">bitwidth</span> <span class="o">+</span> <span class="n">BYTE_WIDTH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">BYTE_WIDTH</span>
+    <span class="k">return</span> <span class="n">number</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">n_bytes</span><span class="p">,</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="bit_not"><a class="viewcode-back" href="../../api/util.html#bfrt_helper.util.bit_not">[docs]</a><span class="k">def</span> <span class="nf">bit_not</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">n_bits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculates the bitwise negation (NOT) of an integer.</span>
+
+<span class="sd">    Since integers in python are both signed and have arbitrary lengths,</span>
+<span class="sd">    calculating the bitwsie negation is not straightforward.</span>
+
+<span class="sd">    The is calculated by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">            (2^b-1) - x</span>
+
+<span class="sd">    Where :math:`b` is the number of bits in the value and :math:`x` is the</span>
+<span class="sd">    value to convert.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This will not work on negative numbers.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        value (int): The value to convert.</span>
+<span class="sd">        n_bits (int): The number of bits the value should have.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n_bits</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="mask_from_prefix"><a class="viewcode-back" href="../../api/util.html#bfrt_helper.util.mask_from_prefix">[docs]</a><span class="k">def</span> <span class="nf">mask_from_prefix</span><span class="p">(</span><span class="n">bitwidth</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculates a mask for the given bitwidth and prefix.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        2^{p-1} \\ll (w - p)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">prefix</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">bitwidth</span> <span class="o">-</span> <span class="n">prefix</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021 - present, APS Networks GmbH.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

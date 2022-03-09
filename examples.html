@@ -1,0 +1,537 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Examples &mdash; Barefoot Runtime gRPC Helper 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/fonts.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/blockquote.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/font.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="Match" href="match.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Barefoot Runtime gRPC Helper
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#installing">Installing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#self-contained-usage">Self Contained Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#basic-example">Basic Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#retrieving-non-p4-configuration">Retrieving Non-P4 Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#manipulating-non-match-action-tables">Manipulating Non-Match/Action Tables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#building-documentation">Building Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fields.html">Fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#existing-fields">Existing Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#defining-custom-fields">Defining Custom Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#operations-on-fields">Operations on Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="match.html">Match</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="match.html#exact">Exact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="match.html#masked-matches-lpm-ternary">Masked Matches (LPM &amp; Ternary)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="match.html#construction">Construction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="match.html#operations">Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="match.html#unsupported-matches">Unsupported Matches</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#loading-a-pipeline">Loading a Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/bfrt_info.html">bfrt_helper.bfrt_info</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/bfrt_info.html#bfrtinfo">BfRtInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/bfrt.html">bfrt_helper.bfrt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/bfrt.html#bfrthelper">BfRtHelper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/bfrt.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknownaction">UnknownAction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknownactionparameter">UnknownActionParameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknowntable">UnknownTable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#unknownkeyfield">UnknownKeyField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#mismatchedmatchtype">MismatchedMatchType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#mismatcheddatasize">MismatchedDataSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/bfrt.html#invalidactionparameter">InvalidActionParameter</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/fields.html">bfrt_helper.fields</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/fields.html#base-fields">Base Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#jsonserialisable">JSONSerialisable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#field">Field</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/fields.html#predefined-fields">Predefined Fields</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#devport">DevPort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#digesttype">DigestType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#egressspec">EgressSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#ipv4address">IPv4Address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#layer2port">Layer2Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#macaddress">MACAddress</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#multicastgroupid">MulticastGroupId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#multicastnodeid">MulticastNodeId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#portid">PortId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#replicationid">ReplicationId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#stringfield">StringField</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#vlanid">VlanID</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/fields.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/fields.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/match.html">bfrt_helper.match</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/match.html#base-match-type">Base Match Type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#masked">Masked</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/match.html#supported-types">Supported Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#exact">Exact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#longestprefixmatch">LongestPrefixMatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#ternary">Ternary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/match.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/match.html#mismatchedkeys">MismatchedKeys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/util.html">bfrt_helper.util</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/util.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#encode-number">encode_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#bit-not">bit_not</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#mask-from-prefix">mask_from_prefix</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/util.html#exceptions">Exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#invalidvalue">InvalidValue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#invalidoperation">InvalidOperation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#valueoutofrange">ValueOutOfRange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/util.html#matchhelper">MatchHelper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Barefoot Runtime gRPC Helper</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+<div class="git-ribbon">
+  <a href="http://github.com/APS-Networks" rel="me">Join us on GitHub</a>
+</div>
+
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Examples</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>More examples to follow.</p>
+</div>
+<section id="loading-a-pipeline">
+<h2>Loading a Pipeline<a class="headerlink" href="#loading-a-pipeline" title="Permalink to this headline">¶</a></h2>
+<p class="rubric">Using BfRt Helper</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+
+<span class="kn">import</span> <span class="nn">grpc</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">import</span> <span class="nn">bfruntime_pb2_grpc</span>
+
+<span class="kn">from</span> <span class="nn">bfrt_helper.bfrt</span> <span class="kn">import</span> <span class="n">BfRtHelper</span>
+<span class="kn">from</span> <span class="nn">bfrt_helper.bfrt_info</span> <span class="kn">import</span> <span class="n">BfRtInfo</span>
+
+<span class="n">HOST</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1:50052&quot;</span>
+<span class="n">DEVICE_ID</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">CLIENT_ID</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="n">PROGRAM_NAME</span> <span class="o">=</span> <span class="s2">&quot;port_forward&quot;</span>
+<span class="n">CTX_PATH</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.tofino/pipe/context.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PROGRAM_NAME</span><span class="p">)</span>
+<span class="n">BIN_PATH</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.tofino/pipe/tofino.bin&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PROGRAM_NAME</span><span class="p">)</span>
+<span class="n">BFRT_PATH</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.tofino/bfrt.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PROGRAM_NAME</span><span class="p">)</span>
+
+
+<span class="n">channel</span> <span class="o">=</span> <span class="n">grpc</span><span class="o">.</span><span class="n">insecure_channel</span><span class="p">(</span><span class="n">HOST</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">bfruntime_pb2_grpc</span><span class="o">.</span><span class="n">BfRuntimeStub</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+
+<span class="n">stream_out_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>  <span class="c1"># Stream request channel (self._stream),</span>
+<span class="n">stream_in_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>  <span class="c1"># Receiving messages from device</span>
+
+
+<span class="k">def</span> <span class="nf">stream_req_iterator</span><span class="p">():</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">stream_out_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stream sending: &quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">p</span>
+
+
+<span class="k">def</span> <span class="nf">stream_recv</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stream received: &quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+            <span class="n">stream_in_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+
+<span class="n">stream</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">StreamChannel</span><span class="p">(</span><span class="n">stream_req_iterator</span><span class="p">())</span>
+<span class="n">stream_recv_thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">stream_recv</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">stream</span><span class="p">,))</span>
+<span class="n">stream_recv_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+    <span class="n">stream_out_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">stream_recv_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+
+<span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span> <span class="n">close</span><span class="p">)</span>
+
+
+<span class="n">bfrt_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;bfrt.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">bfrt_info</span> <span class="o">=</span> <span class="n">BfRtInfo</span><span class="p">(</span><span class="n">bfrt_data</span><span class="p">)</span>
+<span class="n">bfrt_helper</span> <span class="o">=</span> <span class="n">BfRtHelper</span><span class="p">(</span><span class="n">DEVICE_ID</span><span class="p">,</span> <span class="n">CLIENT_ID</span><span class="p">,</span> <span class="n">bfrt_info</span><span class="p">)</span>
+
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">bfrt_helper</span><span class="o">.</span><span class="n">create_subscribe_request</span><span class="p">()</span>
+<span class="n">stream_out_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="n">stream_in_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">bfrt_helper</span><span class="o">.</span><span class="n">create_set_pipeline_request</span><span class="p">(</span>
+    <span class="n">program_name</span><span class="o">=</span><span class="n">PROGRAM_NAME</span><span class="p">,</span>
+    <span class="n">bfrt_path</span><span class="o">=</span><span class="n">BFRT_PATH</span><span class="p">,</span>
+    <span class="n">context_path</span><span class="o">=</span><span class="n">CTX_PATH</span><span class="p">,</span>
+    <span class="n">binary_path</span><span class="o">=</span><span class="n">BIN_PATH</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">client</span><span class="o">.</span><span class="n">SetForwardingPipelineConfig</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Using Native gRPC</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+
+<span class="kn">import</span> <span class="nn">grpc</span>
+
+<span class="kn">import</span> <span class="nn">bfruntime_pb2</span>
+<span class="kn">import</span> <span class="nn">bfruntime_pb2_grpc</span>
+
+<span class="n">HOST</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1:50052&quot;</span>
+<span class="n">DEVICE_ID</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="n">PROGRAM_NAME</span> <span class="o">=</span> <span class="s2">&quot;port_forward&quot;</span>
+<span class="n">CTX_PATH</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.tofino/pipe/context.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PROGRAM_NAME</span><span class="p">)</span>
+<span class="n">BIN_PATH</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.tofino/pipe/tofino.bin&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PROGRAM_NAME</span><span class="p">)</span>
+<span class="n">BFRT_PATH</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.tofino/bfrt.json&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PROGRAM_NAME</span><span class="p">)</span>
+
+
+<span class="n">channel</span> <span class="o">=</span> <span class="n">grpc</span><span class="o">.</span><span class="n">insecure_channel</span><span class="p">(</span><span class="n">HOST</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">bfruntime_pb2_grpc</span><span class="o">.</span><span class="n">BfRuntimeStub</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+
+<span class="n">stream_out_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>  <span class="c1"># Stream request channel (self._stream),</span>
+<span class="n">stream_in_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>  <span class="c1"># Receiving messages from device</span>
+
+
+<span class="k">def</span> <span class="nf">stream_req_iterator</span><span class="p">():</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">stream_out_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stream sending: &quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">p</span>
+
+
+<span class="k">def</span> <span class="nf">stream_recv</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stream received: &quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+            <span class="n">stream_in_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+
+<span class="n">stream</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">StreamChannel</span><span class="p">(</span><span class="n">stream_req_iterator</span><span class="p">())</span>
+<span class="n">stream_recv_thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">stream_recv</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">stream</span><span class="p">,))</span>
+<span class="n">stream_recv_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+    <span class="n">stream_out_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">stream_recv_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+
+<span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span> <span class="n">close</span><span class="p">)</span>
+
+
+<span class="n">subscribe</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">Subscribe</span><span class="p">()</span>
+<span class="n">subscribe</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">notifications</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">Subscribe</span><span class="o">.</span><span class="n">Notifications</span><span class="p">()</span>
+<span class="n">notifications</span><span class="o">.</span><span class="n">enable_learn_notifications</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">notifications</span><span class="o">.</span><span class="n">enable_idletimeout_notifications</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">notifications</span><span class="o">.</span><span class="n">enable_port_status_change_notifications</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">subscribe</span><span class="o">.</span><span class="n">notifications</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">notifications</span><span class="p">)</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">StreamMessageRequest</span><span class="p">()</span>
+<span class="n">request</span><span class="o">.</span><span class="n">client_id</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">request</span><span class="o">.</span><span class="n">subscribe</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">subscribe</span><span class="p">)</span>
+
+
+<span class="n">stream_out_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="n">stream_in_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">SetForwardingPipelineConfigRequest</span><span class="p">()</span>
+<span class="n">request</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">SetForwardingPipelineConfigRequest</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">VERIFY_AND_WARM_INIT_BEGIN_AND_END</span>
+<span class="p">)</span>
+<span class="n">request</span><span class="o">.</span><span class="n">dev_init_mode</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">SetForwardingPipelineConfigRequest</span><span class="o">.</span><span class="n">DevInitMode</span><span class="o">.</span><span class="n">FAST_RECONFIG</span>
+<span class="p">)</span>
+
+<span class="n">bfrt_data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">BFRT_PATH</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">binary_data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">BIN_PATH</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">context_data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">CTX_PATH</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">ForwardingPipelineConfig</span><span class="p">()</span>
+<span class="n">config</span><span class="o">.</span><span class="n">p4_name</span> <span class="o">=</span> <span class="n">PROGRAM_NAME</span>
+<span class="n">config</span><span class="o">.</span><span class="n">bfruntime_info</span> <span class="o">=</span> <span class="n">bfrt_data</span>
+
+<span class="n">profile</span> <span class="o">=</span> <span class="n">bfruntime_pb2</span><span class="o">.</span><span class="n">ForwardingPipelineConfig</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span>
+<span class="n">profile</span><span class="o">.</span><span class="n">profile_name</span> <span class="o">=</span> <span class="s2">&quot;pipe0&quot;</span>
+<span class="n">profile</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context_data</span>
+<span class="n">profile</span><span class="o">.</span><span class="n">binary</span> <span class="o">=</span> <span class="n">binary_data</span>
+<span class="n">profile</span><span class="o">.</span><span class="n">pipe_scope</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="n">config</span><span class="o">.</span><span class="n">profiles</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">profile</span><span class="p">])</span>
+<span class="n">request</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">config</span><span class="p">])</span>
+
+<span class="n">client</span><span class="o">.</span><span class="n">SetForwardingPipelineConfig</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="match.html" class="btn btn-neutral float-left" title="Match" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021 - present, APS Networks GmbH.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
