@@ -380,6 +380,10 @@ class BfRtHelper:
         elif isinstance(value, float):
             data_field.float_val = value
         elif isinstance(value, str):
+            if 'choices' in field.type:
+                choices = field.type['choices']
+                if value not in choices:
+                    raise Exception(f'String value {value} not in choices: {choices}')
             data_field.str_val = value
         elif isinstance(value, bool):
             data_field.bool_val = value

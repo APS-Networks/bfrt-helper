@@ -185,12 +185,11 @@ class StringField(Field):
         raise InvalidOperation("StringField.max_value not allowed")
 
     def to_bytes(self):
-        raise NotImplementedError()
+        return self.value.encode('utf-8')
 
     @classmethod
     def from_bytes(cls, data):
-        raise NotImplementedError()
-
+        return cls(data.decode('utf-8'))
 
 class IPv4Address(Field):
     """Utility class for better representing IP addresses in a more pleasing
