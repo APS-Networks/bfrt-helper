@@ -11,7 +11,7 @@ from bfrt_helper.pb2.bfruntime_pb2 import (
 from bfrt_helper.match import Exact
 from bfrt_helper.match import LongestPrefixMatch
 from bfrt_helper.match import Ternary
-from bfrt_helper.fields import Field
+from bfrt_helper.fields import Field, PortId
 
 
 class UnknownAction(Exception):
@@ -575,7 +575,8 @@ class BfRtHelper:
         """
         bfrt_request = self.create_write_request(program_name)
         bfrt_table_entry = self.create_table_entry("$pre.port")
-        bfrt_key_field = self.create_key_field("$pre.port", "$DEV_PORT", Exact(port))
+        bfrt_key_field = self.create_key_field("$pre.port", "$DEV_PORT",
+                Exact(PortId(port)))
         bfrt_table_entry.extend([bfrt_key_field])
 
         info_cpu_port_field = self.bfrt_info.get_data_field(
