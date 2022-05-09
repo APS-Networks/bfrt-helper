@@ -191,6 +191,7 @@ class StringField(Field):
     def from_bytes(cls, data):
         return cls(data.decode('utf-8'))
 
+
 class IPv4Address(Field):
     """Utility class for better representing IP addresses in a more pleasing
     way.
