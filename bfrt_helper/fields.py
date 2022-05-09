@@ -250,14 +250,10 @@ class MACAddress(Field):
             super().__init__(int(address.replace(":", ""), 16))
 
     def __str__(self):
-        return ":".join([f"{b:02x}" for b in self.value.to_bytes(6, 16)])
+        return ":".join([f"{b:02x}" for b in self.value.to_bytes(6, byteorder='big')])
 
-    # def __repr__(self):
-    #     return f'MACAddress(\'{str(self)}\')'
-
-    @classmethod
-    def from_bytes(cls, data):
-        return cls(":".join([f"{b:02x}" for b in data.to_bytes(6, 16)]))
+    def __repr__(self):
+        return f'MACAddress(\'{str(self)}\')'
 
 
 class PortId(Field):
