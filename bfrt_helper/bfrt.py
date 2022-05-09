@@ -11,7 +11,7 @@ from bfrt_helper.pb2.bfruntime_pb2 import (
 from bfrt_helper.match import Exact
 from bfrt_helper.match import LongestPrefixMatch
 from bfrt_helper.match import Ternary
-from bfrt_helper.fields import Field, PortId
+from bfrt_helper.fields import Field, PortId, DevPort
 
 
 class UnknownAction(Exception):
@@ -576,8 +576,8 @@ class BfRtHelper:
         bfrt_request = self.create_write_request(program_name)
         bfrt_table_entry = self.create_table_entry("$pre.port")
         bfrt_key_field = self.create_key_field("$pre.port", "$DEV_PORT",
-                Exact(PortId(port)))
-        bfrt_table_entry.extend([bfrt_key_field])
+                Exact(DevPort(port)))
+        bfrt_table_entry.key.fields.extend([bfrt_key_field])
 
         info_cpu_port_field = self.bfrt_info.get_data_field(
             "$pre.port", "$COPY_TO_CPU_PORT_ENABLE"
@@ -590,6 +590,8 @@ class BfRtHelper:
         bfrt_update = bfrt_request.updates.add()
         bfrt_update.type = bfruntime_pb2.Update.Type.MODIFY
         bfrt_update.entity.table_entry.CopyFrom(bfrt_table_entry)
+
+        return bfrt_request
 
     def create_set_pipeline_request(
         self, program_name, bfrt_path, context_path, binary_path
