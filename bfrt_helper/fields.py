@@ -185,11 +185,11 @@ class StringField(Field):
         raise InvalidOperation("StringField.max_value not allowed")
 
     def to_bytes(self):
-        raise NotImplementedError()
+        return self.value.encode('utf-8')
 
     @classmethod
     def from_bytes(cls, data):
-        raise NotImplementedError()
+        return cls(data.decode('utf-8'))
 
 
 class IPv4Address(Field):
@@ -250,14 +250,10 @@ class MACAddress(Field):
             super().__init__(int(address.replace(":", ""), 16))
 
     def __str__(self):
-        return ":".join([f"{b:02x}" for b in self.value.to_bytes(6, 16)])
+        return ":".join([f"{b:02x}" for b in self.value.to_bytes(6, byteorder='big')])
 
-    # def __repr__(self):
-    #     return f'MACAddress(\'{str(self)}\')'
-
-    @classmethod
-    def from_bytes(cls, data):
-        return cls(":".join([f"{b:02x}" for b in data.to_bytes(6, 16)]))
+    def __repr__(self):
+        return f'MACAddress(\'{str(self)}\')'
 
 
 class PortId(Field):

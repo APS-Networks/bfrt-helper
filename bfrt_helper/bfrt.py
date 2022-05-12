@@ -11,7 +11,7 @@ from bfrt_helper.pb2.bfruntime_pb2 import (
 from bfrt_helper.match import Exact
 from bfrt_helper.match import LongestPrefixMatch
 from bfrt_helper.match import Ternary
-from bfrt_helper.fields import Field
+from bfrt_helper.fields import Field, DevPort
 
 
 class UnknownAction(Exception):
@@ -380,6 +380,11 @@ class BfRtHelper:
         elif isinstance(value, float):
             data_field.float_val = value
         elif isinstance(value, str):
+            if 'choices' in field.type:
+                choices = field.type['choices']
+                if value not in choices:
+                    raise Exception(f'String value {value} not in choices: {choices}')
+
             data_field.str_val = value
         elif isinstance(value, bool):
             data_field.bool_val = value
@@ -571,8 +576,9 @@ class BfRtHelper:
         """
         bfrt_request = self.create_write_request(program_name)
         bfrt_table_entry = self.create_table_entry("$pre.port")
-        bfrt_key_field = self.create_key_field("$pre.port", "$DEV_PORT", Exact(port))
-        bfrt_table_entry.extend([bfrt_key_field])
+        bfrt_key_field = self.create_key_field("$pre.port", "$DEV_PORT",
+                                               Exact(DevPort(port)))
+        bfrt_table_entry.key.fields.extend([bfrt_key_field])
 
         info_cpu_port_field = self.bfrt_info.get_data_field(
             "$pre.port", "$COPY_TO_CPU_PORT_ENABLE"
@@ -585,6 +591,8 @@ class BfRtHelper:
         bfrt_update = bfrt_request.updates.add()
         bfrt_update.type = bfruntime_pb2.Update.Type.MODIFY
         bfrt_update.entity.table_entry.CopyFrom(bfrt_table_entry)
+
+        return bfrt_request
 
     def create_set_pipeline_request(
         self, program_name, bfrt_path, context_path, binary_path
