@@ -14,6 +14,7 @@ from bfrt_helper.match import Ternary
 from bfrt_helper.fields import Field, PortId, DevPort
 
 
+
 class UnknownAction(Exception):
     """Exception raised when an action for a given table could not be found.
 
@@ -384,6 +385,7 @@ class BfRtHelper:
                 choices = field.type['choices']
                 if value not in choices:
                     raise Exception(f'String value {value} not in choices: {choices}')
+
             data_field.str_val = value
         elif isinstance(value, bool):
             data_field.bool_val = value
@@ -578,6 +580,7 @@ class BfRtHelper:
         bfrt_key_field = self.create_key_field("$pre.port", "$DEV_PORT",
                 Exact(DevPort(port)))
         bfrt_table_entry.key.fields.extend([bfrt_key_field])
+
 
         info_cpu_port_field = self.bfrt_info.get_data_field(
             "$pre.port", "$COPY_TO_CPU_PORT_ENABLE"

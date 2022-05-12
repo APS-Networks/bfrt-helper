@@ -192,6 +192,7 @@ class StringField(Field):
         return cls(data.decode('utf-8'))
 
 
+
 class IPv4Address(Field):
     """Utility class for better representing IP addresses in a more pleasing
     way.
@@ -254,6 +255,7 @@ class MACAddress(Field):
 
     def __repr__(self):
         return f'MACAddress(\'{str(self)}\')'
+
 
 
 class PortId(Field):
