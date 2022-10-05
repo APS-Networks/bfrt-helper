@@ -5,6 +5,7 @@ from threading import Thread
 import grpc
 
 import bfrt_helper.pb2.bfruntime_pb2 as bfruntime_pb2
+import bfrt_helper.pb2.bfruntime_pb2_grpc as bfruntime_pb2_grpc
 from bfrt_helper.pb2.bfruntime_pb2 import WriteRequest
 from bfrt_helper.pb2.bfruntime_pb2 import Update
 
