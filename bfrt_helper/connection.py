@@ -2,6 +2,8 @@ from queue import Queue
 from queue import Empty
 from threading import Thread
 
+import grpc
+
 import bfrt_helper.pb2.bfruntime_pb2 as bfruntime_pb2
 from bfrt_helper.pb2.bfruntime_pb2 import WriteRequest
 from bfrt_helper.pb2.bfruntime_pb2 import Update
