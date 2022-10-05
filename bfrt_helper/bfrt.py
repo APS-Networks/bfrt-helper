@@ -640,7 +640,7 @@ def make_bfrt_helper(host, device_id, client_id, bfrt_path):
 
 
 
-def make_empty_bfrt_helper(host, device_id, client_id):
+def make_empty_bfrt_helper(device_id, client_id):
     """ Make an empty BfRtInfo object """
     bfrt_info = BfRtInfo({})
     return BfRtHelper(device_id, client_id, bfrt_info)
