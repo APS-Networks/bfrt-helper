@@ -9,6 +9,7 @@ import bfrt_helper.pb2.bfruntime_pb2_grpc as bfruntime_pb2_grpc
 from bfrt_helper.pb2.bfruntime_pb2 import WriteRequest
 from bfrt_helper.pb2.bfruntime_pb2 import Update
 
+from bfrt_helper.bfrt_info import BfRtInfo
 from bfrt_helper.bfrt import make_empty_bfrt_helper
 from bfrt_helper.bfrt import make_merged_config
 from bfrt_helper.bfrt import make_port_map
