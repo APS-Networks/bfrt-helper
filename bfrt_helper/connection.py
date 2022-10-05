@@ -45,8 +45,8 @@ class BfRtConnection:
     def retrieve_config(self):
         request = self.helper.create_get_pipeline_request()
         response = self.get_forwarding_pipeline(request)
-        if len(response.configs) > 0:
-            self.p4_name = response.configs[0].p4_name
+        if len(response.config) > 0:
+            self.p4_name = response.config[0].p4_name
         configs = make_merged_config(response)
         self.helper.bfrt_info = BfRtInfo(configs[0])
 
