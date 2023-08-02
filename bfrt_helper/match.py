@@ -528,7 +528,7 @@ class Key:
 
             if k1 != k2:
                 raise MismatchedKeys(f"Key {k1} is not equal to {k2}")
-            if type(v1) != type(v2):
+            if type(v1) is not type(v2):
                 raise MismatchedTypes(
                     (
                         f"Type of {v1} ({type(v1)}) is not equal to {v2} ",

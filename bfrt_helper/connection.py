@@ -1,12 +1,9 @@
 from queue import Queue
-from queue import Empty
 from threading import Thread
 
 import grpc
 
-import bfrt_helper.pb2.bfruntime_pb2 as bfruntime_pb2
 import bfrt_helper.pb2.bfruntime_pb2_grpc as bfruntime_pb2_grpc
-from bfrt_helper.pb2.bfruntime_pb2 import WriteRequest
 from bfrt_helper.pb2.bfruntime_pb2 import Update
 
 from bfrt_helper.bfrt_info import BfRtInfo
@@ -23,13 +20,14 @@ class PortMap:
     def __getitem__(self, key):
         return PortId(self.data[key])
 
+
 class BfRtConnection:
     """ Barefoot Runtime gRPC Connection Class
 
     This class represents a an instance of the gRPC interface, which manages
     it's own connection.
     """
-    def __init__(self, host, device_id, client_id):#, helper):
+    def __init__(self, host, device_id, client_id):
         self.host = host
         self.channel = grpc.insecure_channel(self.host)
         self.client = bfruntime_pb2_grpc.BfRuntimeStub(self.channel)
@@ -69,20 +67,21 @@ class BfRtConnection:
         """ """
         try:
             for p in self.stream:
-                if self.on_message != None:
+                if self.on_message is not None:
                     self.on_message(p)
-                else:   
+                else:
                     self.queue_in.put(p)
         except Exception as e:
             print(str(e))
 
-    def write_table(self,
-        table_name,
-        key,
-        program_name=None,
-        action_name=None,
-        action_params=None,
-        update_type=Update.Type.INSERT):
+    def write_table(
+            self,
+            table_name,
+            key,
+            program_name=None,
+            action_name=None,
+            action_params=None,
+            update_type=Update.Type.INSERT):
         """ """
         if program_name is None and self.p4_name is None:
             raise Exception('Cannot write table without a program name')
