@@ -1,3 +1,8 @@
+import json
+
+from bfrt_helper.fields import StringField
+from bfrt_helper.bfrt_info import BfRtInfo
+
 import bfrt_helper.pb2.bfruntime_pb2 as bfruntime_pb2
 from bfrt_helper.pb2.bfruntime_pb2 import WriteRequest
 from bfrt_helper.pb2.bfruntime_pb2 import Update
@@ -602,7 +607,7 @@ class BfRtHelper:
         request = bfruntime_pb2.SetForwardingPipelineConfigRequest()
         request.client_id = self.client_id
         request.device_id = self.device_id
-        request.base_path = f"install/share/tofinopd/{program_name}"
+        request.base_path = 'install/share/tofinopd/'
         request.action = SetPipelineReq.VERIFY_AND_WARM_INIT_BEGIN_AND_END
 
         config = request.config.add()
@@ -622,3 +627,67 @@ class BfRtHelper:
         request.device_id = self.device_id
         request.client_id = self.client_id
         return request
+
+
+def make_bfrt_helper(host, device_id, client_id, bfrt_path):
+    """ Create a BfRtHelper instance with BfRtInfo already loaded. """
+    bfrt_data = json.loads(open(bfrt_path).read())
+    bfrt_info = BfRtInfo(bfrt_data)
+    return BfRtHelper(device_id, client_id, bfrt_info)
+
+
+def make_empty_bfrt_helper(device_id, client_id):
+    """ Make an empty BfRtInfo object """
+    bfrt_info = BfRtInfo({})
+    return BfRtHelper(device_id, client_id, bfrt_info)
+
+
+def make_merged_config(response):
+    """ Create a merged jSON configuration
+
+    This creates a merged jSON configuration from a BfRt response containing
+    both program and internal non-p4 data.
+    """
+    non_p4_data = response.non_p4_config.bfruntime_info.decode('utf-8')
+    non_p4_config = json.loads(non_p4_data)
+
+    configs = []
+
+    for config in response.config:
+        p4_config = json.loads(config.bfruntime_info)
+        p4_config.get('tables').extend(non_p4_config.get('tables'))
+        configs.append(p4_config)
+
+    return configs
+
+
+def make_port_map(program_name, bfrt_helper, client, ports):
+    """ Create a map of port to device port
+
+    For a given set of input ports, this will request over gRPC the device port
+    information.
+    """
+    request = bfrt_helper.create_read_request(program_name)
+    for port in ports:
+        table_entry = bfrt_helper.create_table_entry('$PORT_STR_INFO')
+        key_field = bfrt_helper.create_key_fields(
+            '$PORT_STR_INFO',
+            key_fields={
+                '$PORT_NAME': Exact(StringField(port))
+            })
+        table_entry.key.fields.extend(key_field)
+        update = request.entities.add()
+        update.table_entry.CopyFrom(table_entry)
+
+    response = client.Read(request)
+
+    data = response.next()
+
+    result = {}
+    for entity in data.entities:
+        port_name = entity.table_entry.key.fields[0].exact.value.decode('utf-8')
+        dev_port = entity.table_entry.data.fields[0].stream
+        dev_port = int.from_bytes(dev_port, byteorder='big')
+        result[port_name] = dev_port
+
+    return result
