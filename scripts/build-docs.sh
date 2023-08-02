@@ -19,6 +19,7 @@ pip install  \
     myst-parser \
     renku-sphinx-theme \
     sphinxcontrib-email \
+    sphinx-rtd-theme \
     sphinx-documatt-theme \
     sphinx-material
 
