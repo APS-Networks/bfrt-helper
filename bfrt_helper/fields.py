@@ -49,7 +49,7 @@ class JSONSerialisable:
 
 
 def type_check(a, b):
-    if type(a) != type(b):
+    if type(a) is not type(b):
         raise MismatchedTypes(a, b)
 
 
