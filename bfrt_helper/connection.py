@@ -1,5 +1,7 @@
 from queue import Queue
 from threading import Thread
+from abc import ABC
+from abc import abstractmethod
 
 import grpc
 
@@ -21,7 +23,7 @@ class PortMap:
         return PortId(self.data[key])
 
 
-class BfRtConnection:
+class BfRtConnection(ABC):
     """ Barefoot Runtime gRPC Connection Class
 
     This class represents a an instance of the gRPC interface, which manages
@@ -36,7 +38,7 @@ class BfRtConnection:
         self.stream = self.client.StreamChannel(self.__stream_out())
         self.recv_thread = Thread(target=self.__stream_in)
         self.recv_thread.start()
-        self.on_message = None
+        # self.on_message = None
         self.helper = make_empty_bfrt_helper(device_id, client_id)
         self.p4_name = None
         self.retrieve_config()
@@ -116,3 +118,7 @@ class BfRtConnection:
         """ Close connection to the gRPC interface."""
         self.queue_out.put(None)
         self.recv_thread.join()
+
+    @abstractmethod
+    def on_message(self, msg):
+        pass
