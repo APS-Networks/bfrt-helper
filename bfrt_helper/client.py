@@ -4,8 +4,16 @@ from abc import ABC
 from abc import abstractmethod
 
 import grpc
+import time
 import os
 from enum import Enum
+from threading import Lock
+
+from typing import List
+
+from concurrent.futures import ThreadPoolExecutor
+from threading import Lock, Event, Thread
+
 
 import bfrt_helper.pb2.bfruntime_pb2_grpc as bfruntime_pb2_grpc
 from bfrt_helper.pb2.bfruntime_pb2 import Update
@@ -30,8 +38,66 @@ from port import PortSpeed
 
 
 
+class BfRtStreamMonitorFuture:
+    def __init__(self, timeout=5):
+        self._isset = False
+        self.value = None
+        self.lock = Lock()
+        self.expires = time.time() + timeout
 
-class BfRtConnection(ABC):
+    def result(self) -> any:
+        while time.time() < self.expires:
+            time.sleep(0.1)
+            with self.lock:
+                if self._isset:
+                    return self.value
+        raise Exception('Timeout')
+
+    def set(self, value):
+        with self.lock:
+            self.value = value
+            self._isset = True
+
+    def __bool__(self) -> bool:
+        try:
+            self.result()
+        except Exception as e:
+            return False
+        return True
+
+
+class BfRtStreamMonitorState(Enum):
+    OK = 0
+    EXPIRED = 1
+    COMPLETE = 2
+
+
+class BfRtStreamMonitor:
+    def __init__(self, function, future, timeout):
+        self.function = function
+        self.future = future
+        self.expires = time.time() + timeout
+
+    def execute(self, obj):
+        if time.time() > self.expires:
+            return BfRtStreamMonitorState.EXPIRED
+        res = self.function(obj)
+        if res is not None:
+            self.future.set(res)
+            return BfRtStreamMonitorState.COMPLETE
+        return BfRtStreamMonitorState.OK
+
+
+def received_subscribe(obj):
+    return obj.HasField('subscribe')
+
+
+def received_set_pipeline_response(obj):
+    return obj.HasField('set_forwarding_pipeline_config_response')
+
+
+
+class BfRtClient(ABC):
     """ Barefoot Runtime gRPC Connection Class
 
     This class represents a an instance of the gRPC interface, which manages
@@ -51,8 +117,24 @@ class BfRtConnection(ABC):
         self.p4_name = None
         self.port_map = None
         self.program_name = None
-
         self.retrieve_config()
+
+        self.executor = ThreadPoolExecutor(max_workers=4)
+        self.monitors: List[BfRtClient.Monitor] = []
+        self.monitor_lock = Lock()
+
+
+    def expect(self, predicate, timeout=5) -> BfRtStreamMonitorFuture:
+        ''' For convenience, If predicate is class name because it takes no
+            arguments, instantiate it. '''
+        if isinstance(predicate, type):
+            predicate = predicate()
+        with self.monitor_lock:
+            future = BfRtStreamMonitorFuture(timeout)
+            monitor = BfRtStreamMonitor(predicate, future, timeout)
+            self.monitors.append(monitor)
+            return future
+
 
     def retrieve_config(self):
         request = self.helper.create_get_pipeline_request()
@@ -77,13 +159,20 @@ class BfRtConnection(ABC):
             yield p
 
     def __stream_in(self):
+        needs_monitor_remove = [
+                BfRtStreamMonitorState.COMPLETE,
+                BfRtStreamMonitorState.OK
+            ]
         """ """
         try:
             for p in self.stream:
-                if self.on_message is not None:
-                    self.on_message(p)
-                else:
-                    self.queue_in.put(p)
+                with self.monitor_lock:
+                    for monitor in self.monitors:
+                        sts = monitor.execute(p)
+                        if sts in needs_monitor_remove:
+                            self.monitors.remove(monitor)
+                self.on_message(p)
+                self.queue_in.put(p)
         except Exception as e:
             print(str(e))
 
