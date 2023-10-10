@@ -95,7 +95,8 @@ def received_subscribe(obj):
 def received_set_pipeline_response(obj):
     return obj.HasField('set_forwarding_pipeline_config_response')
 
-
+GRPC_MAX_MSG_LEN_DEFAULT = 4194304
+GRPC_MAX_MSG_LEN = GRPC_MAX_MSG_LEN_DEFAULT * 4
 
 class BfRtClient(ABC):
     """ Barefoot Runtime gRPC Connection Class
@@ -105,7 +106,9 @@ class BfRtClient(ABC):
     """
     def __init__(self, host, device_id, client_id):
         self.host = host
-        self.channel = grpc.insecure_channel(self.host)
+        self.channel = grpc.insecure_channel(self.host,
+                options=[('grpc.max_send_message_length',    GRPC_MAX_MSG_LEN),
+                         ('grpc.max_receive_message_length', GRPC_MAX_MSG_LEN)])
         self.client = bfruntime_pb2_grpc.BfRuntimeStub(self.channel)
         self.queue_out = Queue()
         self.queue_in = Queue()
