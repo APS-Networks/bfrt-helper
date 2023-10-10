@@ -228,6 +228,14 @@ class BfRtClient(ABC):
         pass
 
 
+    def __ensure_program_name(self):
+        if self.program_name is None:
+            raise Exception('Program name not set, you must bind to program')
+
+
+    def __ensure_port_map(self):
+        if self.port_map is None:
+            raise Exception('Port list has not been set')
 
 
     def add_port(self, port: str, 
@@ -236,11 +244,8 @@ class BfRtClient(ABC):
             an: PortAN=PortAN.DEFAULT,
             enable=True):
 
-        if self.program_name is None:
-            raise Exception('Program name not set, you must bind to program')
-    
-        if self.port_map is None:
-            raise Exception('Port list has not been set')
+        self.__ensure_program_name()
+        self.__ensure_port_map()
         
         dev_port = self.port_map[port]
         request = self.helper.create_table_data_write(
@@ -305,3 +310,52 @@ class BfRtClient(ABC):
             action_name=action_name,
             action_params=action_params)
         return self.client.Write(request)
+
+
+    def create_multicast_node(self,
+            id: int,
+            rid: int,
+            members: list,
+            lags: list=[]):
+
+        self.__ensure_program_name()
+        self.__ensure_port_map()
+
+        members_ = []
+        for ii, member in enumerate(members):
+            if isinstance(member, str):
+                try:
+                    members_.append(self.port_map[member])
+                except KeyError as ke:
+                    raise Exception(f'Port "{member}" not found')
+            elif isinstance(member, int):
+                members_.append(member)
+            else:
+                raise Exception(f'Member at index {ii} is neither string or int')
+
+
+        request = self.helper.create_multicast_node_write(
+                self.program_name,
+                node_id=id,
+                rid=rid,
+                members=members_,
+                lags=lags)
+        
+        return self.write(request)
+    
+
+    def create_multicast_group(self,
+            id: int, 
+            node_ids: list=[]):
+
+        self.__ensure_program_name()
+
+        if self._program_name == None:
+            raise Exception('Not bound!')
+        
+        request = self.helper.create_multicast_group_write(
+                self.program_name,
+                id, 
+                node_ids)
+
+        return request, self._stub.Write(request)

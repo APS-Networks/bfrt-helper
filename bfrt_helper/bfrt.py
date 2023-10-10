@@ -17,7 +17,13 @@ from bfrt_helper.pb2.bfruntime_pb2 import (
 from bfrt_helper.match import Exact
 from bfrt_helper.match import LongestPrefixMatch
 from bfrt_helper.match import Ternary
-from bfrt_helper.fields import Field, DevPort
+from bfrt_helper.fields import (
+    Field,
+    DevPort,
+    MulticastGroupId,
+    MulticastNodeId,
+    ReplicationId
+)
 
 
 class UnknownAction(Exception):
@@ -645,6 +651,83 @@ class BfRtHelper:
         request.client_id = self.client_id
         return request
 
+
+    def create_multicast_node_write(self, 
+            program_name: str,
+            node_id: int, 
+            rid: int, 
+            members: list=[],
+            lags: list=[],
+            update_type=bfruntime_pb2.Update.Type.INSERT):
+
+        if isinstance(node_id, int):
+            node_id = MulticastNodeId(node_id)
+        if isinstance(rid, int):
+            rid = ReplicationId(rid)
+
+        rid_field = self.bfrt_info.get_data_field('$pre.node', '$MULTICAST_RID')
+        rid_field = self.create_data_field(rid_field.singleton, rid)
+
+        lag_field = self.bfrt_info.get_data_field('$pre.node', '$MULTICAST_LAG_ID')
+        lag_field = self.create_data_field(lag_field.singleton, lags)
+
+        members_field = self.bfrt_info.get_data_field('$pre.node', '$DEV_PORT')
+        members_field = self.create_data_field(members_field.singleton, members)
+
+
+        request = self.create_write_request(program_name)
+        table_entry = self.create_table_entry('$pre.node')
+        key_field = self.create_key_field('$pre.node', '$MULTICAST_NODE_ID', Exact(node_id))
+        table_entry.key.fields.extend([key_field])
+        table_entry.data.fields.extend([rid_field, lag_field, members_field])
+
+        update = request.updates.add()
+        update.type = update_type
+        update.entity.table_entry.CopyFrom(table_entry)
+
+        return request
+
+
+    def create_multicast_group_write(self,
+            program_name,
+            group_id, 
+            nodes: list=[],
+            update_type=bfruntime_pb2.Update.Type.INSERT):
+
+        if isinstance(group_id, int):
+            group_id = MulticastGroupId(group_id)
+        elif not isinstance(group_id, MulticastGroupId):
+            raise Exception('Group id is neither int or MulticastGroupId!')
+
+        nodes_field = self.bfrt_info.get_data_field('$pre.mgid', '$MULTICAST_NODE_ID')
+        nodes_field = self.create_data_field(nodes_field.singleton, nodes)
+
+        node_xid_valid_field = self.bfrt_info.get_data_field('$pre.mgid', '$MULTICAST_NODE_L1_XID_VALID')
+        node_xid_valid_field_data_field = bfruntime_pb2.DataField()
+        node_xid_valid_field_data_field.field_id = node_xid_valid_field.singleton.id
+        node_xid_valid_field_data_field.bool_arr_val.val.extend([0])
+
+        node_xid_field = self.bfrt_info.get_data_field('$pre.mgid', '$MULTICAST_NODE_L1_XID')
+        node_xid_field_data_field = bfruntime_pb2.DataField()
+        node_xid_field_data_field.field_id = node_xid_field.singleton.id
+        node_xid_field_data_field.int_arr_val.val.extend([0])
+
+        request = self.create_write_request(program_name)
+        table_entry = self.create_table_entry('$pre.mgid')
+        key_field = self.create_key_field('$pre.mgid', '$MGID', Exact(group_id))
+        table_entry.key.fields.extend([key_field])
+
+        table_entry.data.fields.extend([
+                nodes_field,
+                node_xid_valid_field_data_field,
+                node_xid_field_data_field,
+            ])
+
+        update = request.updates.add()
+        update.type = update_type
+        update.entity.table_entry.CopyFrom(table_entry)
+
+        return request
 
 def make_bfrt_helper(host, device_id, client_id, bfrt_path):
     """ Create a BfRtHelper instance with BfRtInfo already loaded. """
