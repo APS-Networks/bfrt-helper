@@ -98,7 +98,7 @@ def received_set_pipeline_response(obj):
 GRPC_MAX_MSG_LEN_DEFAULT = 4194304
 GRPC_MAX_MSG_LEN = GRPC_MAX_MSG_LEN_DEFAULT * 4
 
-class BfRtClient(ABC):
+class BfRtClient:
     """ Barefoot Runtime gRPC Connection Class
 
     This class represents a an instance of the gRPC interface, which manages
@@ -174,7 +174,8 @@ class BfRtClient(ABC):
                         sts = monitor.execute(p)
                         if sts in needs_monitor_remove:
                             self.monitors.remove(monitor)
-                self.on_message(p)
+                if self.on_message is not None:
+                    self.on_message(p)
                 self.queue_in.put(p)
         except Exception as e:
             print(str(e))
