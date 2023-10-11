@@ -692,7 +692,12 @@ class BfRtHelper:
             program_name,
             group_id, 
             nodes: list=[],
+            xids: list=[],
+            xid_valid_list: list=[],
             update_type=bfruntime_pb2.Update.Type.INSERT):
+
+        assert len(nodes) == len(xids) == len(xid_valid_list), 'Node, XID and XID valid lists must be same length'
+
 
         if isinstance(group_id, int):
             group_id = MulticastGroupId(group_id)
@@ -705,12 +710,12 @@ class BfRtHelper:
         node_xid_valid_field = self.bfrt_info.get_data_field('$pre.mgid', '$MULTICAST_NODE_L1_XID_VALID')
         node_xid_valid_field_data_field = bfruntime_pb2.DataField()
         node_xid_valid_field_data_field.field_id = node_xid_valid_field.singleton.id
-        node_xid_valid_field_data_field.bool_arr_val.val.extend([0])
+        node_xid_valid_field_data_field.bool_arr_val.val.extend(xid_valid_list)
 
         node_xid_field = self.bfrt_info.get_data_field('$pre.mgid', '$MULTICAST_NODE_L1_XID')
         node_xid_field_data_field = bfruntime_pb2.DataField()
         node_xid_field_data_field.field_id = node_xid_field.singleton.id
-        node_xid_field_data_field.int_arr_val.val.extend([0])
+        node_xid_field_data_field.int_arr_val.val.extend(xids)
 
         request = self.create_write_request(program_name)
         table_entry = self.create_table_entry('$pre.mgid')

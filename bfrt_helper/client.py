@@ -31,9 +31,9 @@ from bfrt_helper.fields import PortId
 from bfrt_helper.fields import DevPort
 from bfrt_helper.match import Exact
 
-from port import PortAN
-from port import PortFEC
-from port import PortSpeed
+from bfrt_helper.port import PortAN
+from bfrt_helper.port import PortFEC
+from bfrt_helper.port import PortSpeed
 
 
 
@@ -346,16 +346,19 @@ class BfRtClient(ABC):
 
     def create_multicast_group(self,
             id: int, 
-            node_ids: list=[]):
+            node_ids: list=[],
+            xids: list=[],
+            xid_valid: list=[]):
+        assert len(node_ids) == len(xids) == len(xid_valid), 'Node, XID and XID valid lists must be same length'
+
 
         self.__ensure_program_name()
-
-        if self._program_name == None:
-            raise Exception('Not bound!')
         
         request = self.helper.create_multicast_group_write(
                 self.program_name,
                 id, 
-                node_ids)
+                nodes=node_ids,
+                xids=xids,
+                xid_valid_list=xid_valid)
 
-        return request, self._stub.Write(request)
+        return self.write(request)
