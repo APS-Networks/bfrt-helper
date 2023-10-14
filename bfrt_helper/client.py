@@ -174,9 +174,12 @@ class BfRtClient:
                         sts = monitor.execute(p)
                         if sts in needs_monitor_remove:
                             self.monitors.remove(monitor)
+
+                # Put the message in the queue first; if the application wants
+                # to modify the queue in order to consume messages they can.
+                self.queue_in.put(p)
                 if self.on_message is not None:
                     self.on_message(p)
-                self.queue_in.put(p)
         except Exception as e:
             print(str(e))
 
