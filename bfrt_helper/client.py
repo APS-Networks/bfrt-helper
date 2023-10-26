@@ -31,9 +31,9 @@ from bfrt_helper.fields import PortId
 from bfrt_helper.fields import DevPort
 from bfrt_helper.match import Exact
 
-from port import PortAN
-from port import PortFEC
-from port import PortSpeed
+from bfrt_helper.port import PortAN
+from bfrt_helper.port import PortFEC
+from bfrt_helper.port import PortSpeed
 
 
 
