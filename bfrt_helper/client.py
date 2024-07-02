@@ -250,9 +250,9 @@ class BfRtClient(ABC):
                 '$DEV_PORT': Exact(DevPort(dev_port)) 
             },
             data={
-                '$SPEED':            speed.value,
-                '$FEC':              fec.value,
-                '$AUTO_NEGOTIATION': an.value,
+                '$SPEED':            speed,
+                '$FEC':              fec,
+                '$AUTO_NEGOTIATION': an,
                 '$PORT_ENABLE':      enable,
             })
         
