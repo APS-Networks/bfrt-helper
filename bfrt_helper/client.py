@@ -139,13 +139,16 @@ class BfRtClient(ABC):
             return future
 
 
-    def retrieve_config(self):
+    def retrieve_config(self) -> bool:
         request = self.helper.create_get_pipeline_request()
         response = self.get_forwarding_pipeline(request)
         if len(response.config) > 0:
             self.p4_name = response.config[0].p4_name
         configs = make_merged_config(response)
+        if len(configs) == 0:
+            return False
         self.helper.bfrt_info = BfRtInfo(configs[0])
+        return True
 
     def get_port_map(self, ports: list) -> dict:
         if self.p4_name is None:
