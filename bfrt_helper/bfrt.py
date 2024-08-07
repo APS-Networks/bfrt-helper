@@ -1,4 +1,5 @@
 import json
+import os
 
 from bfrt_helper.fields import StringField
 from bfrt_helper.bfrt_info import BfRtInfo
@@ -600,27 +601,43 @@ class BfRtHelper:
         return bfrt_request
 
     def create_set_pipeline_request(
-        self, program_name, bfrt_path, context_path, binary_path
+        self, 
+        program_name, 
+        bfrt_path=None, 
+        ctx_path=None, 
+        bin_path=None,
+        action=SetPipelineReq.VERIFY_AND_WARM_INIT_BEGIN_AND_END
     ):
-
-        # Need to figure out base_path properly later
         request = bfruntime_pb2.SetForwardingPipelineConfigRequest()
         request.client_id = self.client_id
         request.device_id = self.device_id
-        request.base_path = 'install/share/tofinopd/'
-        request.action = SetPipelineReq.VERIFY_AND_WARM_INIT_BEGIN_AND_END
+        request.base_path = 'share/tofinopd/'
+        request.action = action
 
         config = request.config.add()
         config.p4_name = program_name
-        config.bfruntime_info = open(bfrt_path, "rb").read()
 
-        profile = config.profiles.add()
-        profile.profile_name = "pipe"
-        profile.context = open(context_path, "rb").read()
-        profile.binary = open(binary_path, "rb").read()
-        profile.pipe_scope.extend([0, 1, 2, 3])
+        requires_config = [
+            SetPipelineReq.VERIFY,
+            SetPipelineReq.VERIFY_AND_WARM_INIT_BEGIN,
+            SetPipelineReq.VERIFY_AND_WARM_INIT_BEGIN_AND_END,
+        ]
+        
+        if action in requires_config:
+            assert os.path.exists(bfrt_path), f'Path "{bfrt_path}" does not exist'
+            assert os.path.exists(ctx_path),  f'Path "{ctx_path}" does not exist'
+            assert os.path.exists(bin_path),  f'Path "{bin_path}" does not exist'
+            # Need to figure out base_path properly later
+            config.bfruntime_info = open(bfrt_path, "rb").read()
+            profile = config.profiles.add()
+            profile.profile_name = "pipe"
+            profile.context = open(ctx_path, "rb").read()
+            profile.binary = open(bin_path, "rb").read()
+            profile.pipe_scope.extend([0, 1, 2, 3])
 
         return request
+
+       
 
     def create_get_pipeline_request(self):
         request = bfruntime_pb2.GetForwardingPipelineConfigRequest()
