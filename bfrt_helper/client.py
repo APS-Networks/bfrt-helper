@@ -1,7 +1,5 @@
 from queue import Queue
 from threading import Thread
-from abc import ABC
-from abc import abstractmethod
 
 import grpc
 import time
@@ -95,10 +93,11 @@ def received_subscribe(obj):
 def received_set_pipeline_response(obj):
     return obj.HasField('set_forwarding_pipeline_config_response')
 
+
 GRPC_MAX_MSG_LEN_DEFAULT = 4194304
 GRPC_MAX_MSG_LEN = GRPC_MAX_MSG_LEN_DEFAULT * 4
 
-class BfRtClient(ABC):
+class BfRtClient:
     """ Barefoot Runtime gRPC Connection Class
 
     This class represents a an instance of the gRPC interface, which manages
@@ -226,11 +225,8 @@ class BfRtClient(ABC):
         self.queue_out.put(None)
         self.recv_thread.join()
 
-    @abstractmethod
     def on_message(self, msg):
         pass
-
-
 
 
     def add_port(self, port: str, 
