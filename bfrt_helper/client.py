@@ -166,7 +166,7 @@ class BfRtClient:
     def __stream_in(self):
         needs_monitor_remove = [
                 BfRtStreamMonitorState.COMPLETE,
-                BfRtStreamMonitorState.OK
+                BfRtStreamMonitorState.EXPIRED
             ]
         """ """
         try:
