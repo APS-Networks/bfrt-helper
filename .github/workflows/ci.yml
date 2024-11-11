@@ -36,7 +36,7 @@ jobs:
         run:
           python -m pytest -v --cov=bfrt_helper --cov-report html
       - name: "Save Coverage Report"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: "coverage-report"
           path: "htmlcov"
