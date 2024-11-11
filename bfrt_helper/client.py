@@ -12,6 +12,8 @@ from typing import List
 from concurrent.futures import ThreadPoolExecutor
 from threading import Lock, Event, Thread
 
+from uuid import uuid4
+
 
 import bfrt_helper.pb2.bfruntime_pb2_grpc as bfruntime_pb2_grpc
 from bfrt_helper.pb2.bfruntime_pb2 import Update
@@ -75,6 +77,7 @@ class BfRtStreamMonitor:
         self.function = function
         self.future = future
         self.expires = time.time() + timeout
+        self.id = uuid4()
 
     def execute(self, obj):
         if time.time() > self.expires:
@@ -122,7 +125,7 @@ class BfRtClient:
         self.retrieve_config()
 
         self.executor = ThreadPoolExecutor(max_workers=4)
-        self.monitors: List[BfRtClient.Monitor] = []
+        self.monitors: Dict[str, BfRtClient.Monitor] = {}
         self.monitor_lock = Lock()
 
 
@@ -134,7 +137,7 @@ class BfRtClient:
         with self.monitor_lock:
             future = BfRtStreamMonitorFuture(timeout)
             monitor = BfRtStreamMonitor(predicate, future, timeout)
-            self.monitors.append(monitor)
+            self.monitors[monitor.id] = monitor
             return future
 
 
@@ -172,10 +175,11 @@ class BfRtClient:
         try:
             for p in self.stream:
                 with self.monitor_lock:
-                    for monitor in self.monitors:
-                        sts = monitor.execute(p)
+                    for id_ in list(self.monitors):
+                        sts = self.monitors[id_].execute(p)
                         if sts in needs_monitor_remove:
-                            self.monitors.remove(monitor)
+                            assert(id_ == self.monitors[id_].id)
+                            del self.monitors[id_]
                 self.on_message(p)
                 self.queue_in.put(p)
         except Exception as e:
