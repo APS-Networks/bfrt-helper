@@ -17,17 +17,17 @@ from uuid import uuid4
 
 import bfrt_helper.pb2.bfruntime_pb2_grpc as bfruntime_pb2_grpc
 from bfrt_helper.pb2.bfruntime_pb2 import Update
-
+from bfrt_helper.pb2.bfruntime_pb2 import WriteRequest
 from bfrt_helper.pb2.bfruntime_pb2 import (
     SetForwardingPipelineConfigRequest as SetPipelineReq,
 )
+
 
 
 from bfrt_helper.bfrt_info import BfRtInfo
 from bfrt_helper.bfrt import make_empty_bfrt_helper
 from bfrt_helper.bfrt import make_merged_config
 from bfrt_helper.bfrt import make_port_map
-from bfrt_helper.fields import PortId
 from bfrt_helper.fields import DevPort
 from bfrt_helper.match import Exact
 
@@ -128,6 +128,15 @@ class BfRtClient:
         self.monitors: Dict[str, BfRtClient.Monitor] = {}
         self.monitor_lock = Lock()
 
+    def __ensure_program_name(self):
+        if self.program_name is None:
+            raise Exception('Program name not set, you must bind to program')
+
+
+    def __ensure_port_map(self):
+        if self.port_map is None:
+            raise Exception('Port list has not been set')
+
 
     def expect(self, predicate, timeout=5) -> BfRtStreamMonitorFuture:
         ''' For convenience, If predicate is class name because it takes no
@@ -180,8 +189,9 @@ class BfRtClient:
                         if sts in needs_monitor_remove:
                             assert(id_ == self.monitors[id_].id)
                             del self.monitors[id_]
-                self.on_message(p)
                 self.queue_in.put(p)
+                self.on_message(p)
+
         except Exception as e:
             print(str(e))
 
@@ -194,8 +204,8 @@ class BfRtClient:
             action_params=None,
             update_type=Update.Type.INSERT):
         """ """
-        if program_name is None and self.p4_name is None:
-            raise Exception('Cannot write table without a program name')
+
+        self.__ensure_program_name()
 
         request = self.helper.create_table_write(
             program_name=program_name if program_name is not None else self.p4_name,
@@ -227,44 +237,42 @@ class BfRtClient:
     def close(self):
         """ Close connection to the gRPC interface."""
         self.queue_out.put(None)
+        self.stream.cancel()
         self.recv_thread.join()
 
     def on_message(self, msg):
         pass
 
 
-    def add_port(self, port: str, 
-            speed: PortSpeed, 
-            fec: PortFEC=PortFEC.NONE, 
+    def add_port(self, port: str,
+            speed: PortSpeed,
+            fec: PortFEC=PortFEC.NONE,
             an: PortAN=PortAN.DEFAULT,
             enable=True):
 
-        if self.program_name is None:
-            raise Exception('Program name not set, you must bind to program')
-    
-        if self.port_map is None:
-            raise Exception('Port list has not been set')
-        
+        self.__ensure_program_name()
+        self.__ensure_port_map()
+
         dev_port = self.port_map[port]
         request = self.helper.create_table_data_write(
             program_name=self.program_name,
             table_name='$PORT',
             key={
-                '$DEV_PORT': Exact(DevPort(dev_port)) 
+                '$DEV_PORT': Exact(DevPort(dev_port))
             },
             data={
-                '$SPEED':            speed,
-                '$FEC':              fec,
-                '$AUTO_NEGOTIATION': an,
+                '$SPEED':            speed.value,
+                '$FEC':              fec.value,
+                '$AUTO_NEGOTIATION': an.value,
                 '$PORT_ENABLE':      enable,
             })
-        
+
         return self.write(request)
 
 
     def subscribe(self, learn=True, timeout=True, port_change=True):
         req = self.helper.create_subscribe_request(
-            learn=True, 
+            learn=True,
             timeout=True,
             port_change=False)
         self.post(req)
@@ -285,7 +293,7 @@ class BfRtClient:
             ctx_path,
             bin_path,
             bind=True):
-        
+
         request = self.helper.create_set_pipeline_request(
                 program_name,
                 bfrt_path=bfrt_path,
@@ -301,10 +309,63 @@ class BfRtClient:
             key: dict,
             action_name: str=None,
             action_params: dict=None):
-        request = self.helper.create_table_write( 
-            program_name=self.program_name, 
+        request = self.helper.create_table_write(
+            program_name=self.program_name,
             table_name=table_name,
             key=key,
             action_name=action_name,
             action_params=action_params)
         return self.client.Write(request)
+
+
+    def create_multicast_node(self,
+            id: int,
+            rid: int,
+            members: list,
+            lags: list=[]):
+
+        self.__ensure_program_name()
+        self.__ensure_port_map()
+
+        members_ = []
+        for ii, member in enumerate(members):
+            if isinstance(member, str):
+                try:
+                    members_.append(self.port_map[member])
+                except KeyError as ke:
+                    raise Exception(f'Port "{member}" not found')
+            elif isinstance(member, int):
+                members_.append(member)
+            else:
+                raise Exception(f'Member at index {ii} is neither string or int')
+
+
+        request = self.helper.create_multicast_node_write(
+                self.program_name,
+                node_id=id,
+                rid=rid,
+                members=members_,
+                lags=lags)
+
+        return self.write(request)
+
+
+    def create_multicast_group(self,
+            id: int,
+            node_ids: list=[],
+            xids: list=[],
+            xid_valid: list=[]):
+        assert len(node_ids) == len(xids) == len(xid_valid), 'Node, XID and XID valid lists must be same length'
+
+
+        self.__ensure_program_name()
+
+        request = self.helper.create_multicast_group_write(
+                self.program_name,
+                id,
+                nodes=node_ids,
+                xids=xids,
+                xid_valid_list=xid_valid)
+
+        return self.write(request)
+
