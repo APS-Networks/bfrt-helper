@@ -1,27 +1,22 @@
 from queue import Queue
-from threading import Thread
 
 import grpc
 import time
-import os
 from enum import Enum
-from threading import Lock
 
-from typing import List
 
 from concurrent.futures import ThreadPoolExecutor
-from threading import Lock, Event, Thread
+from threading import Lock, Thread
 
 from uuid import uuid4
+from typing import Dict
 
 
 import bfrt_helper.pb2.bfruntime_pb2_grpc as bfruntime_pb2_grpc
 from bfrt_helper.pb2.bfruntime_pb2 import Update
-from bfrt_helper.pb2.bfruntime_pb2 import WriteRequest
 from bfrt_helper.pb2.bfruntime_pb2 import (
     SetForwardingPipelineConfigRequest as SetPipelineReq,
 )
-
 
 
 from bfrt_helper.bfrt_info import BfRtInfo
@@ -34,8 +29,6 @@ from bfrt_helper.match import Exact
 from bfrt_helper.port import PortAN
 from bfrt_helper.port import PortFEC
 from bfrt_helper.port import PortSpeed
-
-
 
 
 class BfRtStreamMonitorFuture:
@@ -61,7 +54,7 @@ class BfRtStreamMonitorFuture:
     def __bool__(self) -> bool:
         try:
             self.result()
-        except Exception as e:
+        except Exception:
             return False
         return True
 
@@ -100,6 +93,7 @@ def received_set_pipeline_response(obj):
 GRPC_MAX_MSG_LEN_DEFAULT = 4194304
 GRPC_MAX_MSG_LEN = GRPC_MAX_MSG_LEN_DEFAULT * 4
 
+
 class BfRtClient:
     """ Barefoot Runtime gRPC Connection Class
 
@@ -109,7 +103,7 @@ class BfRtClient:
     def __init__(self, host, device_id, client_id):
         self.host = host
         self.channel = grpc.insecure_channel(self.host,
-                options=[('grpc.max_send_message_length',    GRPC_MAX_MSG_LEN),
+                options=[('grpc.max_send_message_length', GRPC_MAX_MSG_LEN),
                          ('grpc.max_receive_message_length', GRPC_MAX_MSG_LEN)])
         self.client = bfruntime_pb2_grpc.BfRuntimeStub(self.channel)
         self.queue_out = Queue()
@@ -132,11 +126,9 @@ class BfRtClient:
         if self.program_name is None:
             raise Exception('Program name not set, you must bind to program')
 
-
     def __ensure_port_map(self):
         if self.port_map is None:
             raise Exception('Port list has not been set')
-
 
     def expect(self, predicate, timeout=5) -> BfRtStreamMonitorFuture:
         ''' For convenience, If predicate is class name because it takes no
@@ -148,7 +140,6 @@ class BfRtClient:
             monitor = BfRtStreamMonitor(predicate, future, timeout)
             self.monitors[monitor.id] = monitor
             return future
-
 
     def retrieve_config(self) -> bool:
         request = self.helper.create_get_pipeline_request()
@@ -187,7 +178,7 @@ class BfRtClient:
                     for id_ in list(self.monitors):
                         sts = self.monitors[id_].execute(p)
                         if sts in needs_monitor_remove:
-                            assert(id_ == self.monitors[id_].id)
+                            assert id_ == self.monitors[id_].id
                             del self.monitors[id_]
                 self.queue_in.put(p)
                 self.on_message(p)
@@ -217,7 +208,6 @@ class BfRtClient:
         )
         return self.client.Write(request)
 
-
     def post(self, message):
         """ Post a message to BfRt """
         self.queue_out.put(message)
@@ -243,11 +233,10 @@ class BfRtClient:
     def on_message(self, msg):
         pass
 
-
     def add_port(self, port: str,
             speed: PortSpeed,
-            fec: PortFEC=PortFEC.NONE,
-            an: PortAN=PortAN.DEFAULT,
+            fec: PortFEC = PortFEC.NONE,
+            an: PortAN = PortAN.DEFAULT,
             enable=True):
 
         self.__ensure_program_name()
@@ -269,14 +258,12 @@ class BfRtClient:
 
         return self.write(request)
 
-
     def subscribe(self, learn=True, timeout=True, port_change=True):
         req = self.helper.create_subscribe_request(
             learn=True,
             timeout=True,
             port_change=False)
         self.post(req)
-
 
     def bind(self, program_name):
         request = self.helper.create_set_pipeline_request(
@@ -286,7 +273,6 @@ class BfRtClient:
         self.set_forwarding_pipeline(request)
         self.program_name = program_name
         self.retrieve_config()
-
 
     def load_pipeline(self, program_name,
             bfrt_path,
@@ -302,13 +288,13 @@ class BfRtClient:
 
         self.set_forwarding_pipeline(request)
 
-        if bind: self.bind(program_name)
-
+        if bind:
+            self.bind(program_name)
 
     def table_insert(self, table_name: str,
             key: dict,
-            action_name: str=None,
-            action_params: dict=None):
+            action_name: str = None,
+            action_params: dict = None):
         request = self.helper.create_table_write(
             program_name=self.program_name,
             table_name=table_name,
@@ -317,12 +303,11 @@ class BfRtClient:
             action_params=action_params)
         return self.client.Write(request)
 
-
     def create_multicast_node(self,
             id: int,
             rid: int,
             members: list,
-            lags: list=[]):
+            lags: list = []):
 
         self.__ensure_program_name()
         self.__ensure_port_map()
@@ -332,13 +317,12 @@ class BfRtClient:
             if isinstance(member, str):
                 try:
                     members_.append(self.port_map[member])
-                except KeyError as ke:
+                except KeyError:
                     raise Exception(f'Port "{member}" not found')
             elif isinstance(member, int):
                 members_.append(member)
             else:
                 raise Exception(f'Member at index {ii} is neither string or int')
-
 
         request = self.helper.create_multicast_node_write(
                 self.program_name,
@@ -349,14 +333,13 @@ class BfRtClient:
 
         return self.write(request)
 
-
     def create_multicast_group(self,
             id: int,
-            node_ids: list=[],
-            xids: list=[],
-            xid_valid: list=[]):
-        assert len(node_ids) == len(xids) == len(xid_valid), 'Node, XID and XID valid lists must be same length'
-
+            node_ids: list = [],
+            xids: list = [],
+            xid_valid: list = []):
+        assert len(node_ids) == len(xids) == len(xid_valid), (
+                'Node, XID and XID valid lists must be same length')
 
         self.__ensure_program_name()
 
@@ -368,4 +351,3 @@ class BfRtClient:
                 xid_valid_list=xid_valid)
 
         return self.write(request)
-

@@ -14,12 +14,14 @@ class PortSpeed(Enum):
     SPEED_200G              = "BF_SPEED_200G"
     SPEED_400G              = "BF_SPEED_400G"
 
+
 class PortFEC(Enum):
     NONE         = "BF_FEC_TYP_NONE"
     FIRECODE     = "BF_FEC_TYP_FIRECODE"
     REED_SOLOMON = "BF_FEC_TYP_REED_SOLOMON"
     FC           = "BF_FEC_TYP_FC"
     RS           = "BF_FEC_TYP_RS"
+
 
 class PortAN(Enum):
     DEFAULT = "PM_AN_DEFAULT"

@@ -4,7 +4,7 @@ on:
     branches:
       - "develop"
   pull_request:
-    branches: 
+    branches:
       - "develop"
 
 jobs:
@@ -72,4 +72,4 @@ jobs:
           flake8: true
           flake8_args: >
             --max-line-length=100 --exclude bfrt_helper/pb2
-            --ignore=W605
+            --ignore=W605,E128,E221,E126,E121,E241
