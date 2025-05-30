@@ -7,6 +7,7 @@ from bfrt_helper.bfrt_info import BfRtInfo
 import bfrt_helper.pb2.bfruntime_pb2 as bfruntime_pb2
 from bfrt_helper.pb2.bfruntime_pb2 import WriteRequest
 from bfrt_helper.pb2.bfruntime_pb2 import Update
+from bfrt_helper.pb2.bfruntime_pb2 import DataField
 
 # Atomicity = WriteRequest.Atomicity
 
@@ -17,7 +18,13 @@ from bfrt_helper.pb2.bfruntime_pb2 import (
 from bfrt_helper.match import Exact
 from bfrt_helper.match import LongestPrefixMatch
 from bfrt_helper.match import Ternary
-from bfrt_helper.fields import Field, DevPort
+from bfrt_helper.fields import (
+    Field,
+    DevPort,
+    MulticastNodeId,
+    MulticastGroupId,
+    ReplicationId
+)
 
 
 class UnknownAction(Exception):
@@ -601,10 +608,10 @@ class BfRtHelper:
         return bfrt_request
 
     def create_set_pipeline_request(
-        self, 
-        program_name, 
-        bfrt_path=None, 
-        ctx_path=None, 
+        self,
+        program_name,
+        bfrt_path=None,
+        ctx_path=None,
         bin_path=None,
         action=SetPipelineReq.VERIFY_AND_WARM_INIT_BEGIN_AND_END
     ):
@@ -622,11 +629,11 @@ class BfRtHelper:
             SetPipelineReq.VERIFY_AND_WARM_INIT_BEGIN,
             SetPipelineReq.VERIFY_AND_WARM_INIT_BEGIN_AND_END,
         ]
-        
+
         if action in requires_config:
             assert os.path.exists(bfrt_path), f'Path "{bfrt_path}" does not exist'
-            assert os.path.exists(ctx_path),  f'Path "{ctx_path}" does not exist'
-            assert os.path.exists(bin_path),  f'Path "{bin_path}" does not exist'
+            assert os.path.exists(ctx_path), f'Path "{ctx_path}" does not exist'
+            assert os.path.exists(bin_path), f'Path "{bin_path}" does not exist'
             # Need to figure out base_path properly later
             config.bfruntime_info = open(bfrt_path, "rb").read()
             profile = config.profiles.add()
@@ -637,12 +644,94 @@ class BfRtHelper:
 
         return request
 
-       
-
     def create_get_pipeline_request(self):
         request = bfruntime_pb2.GetForwardingPipelineConfigRequest()
         request.device_id = self.device_id
         request.client_id = self.client_id
+        return request
+
+    def create_multicast_node_write(self,
+            program_name: str,
+            node_id: int,
+            rid: int,
+            members: list = [],
+            lags: list = [],
+            update_type=Update.Type.INSERT):
+
+        if isinstance(node_id, int):
+            node_id = MulticastNodeId(node_id)
+        if isinstance(rid, int):
+            rid = ReplicationId(rid)
+
+        rid_field = self.bfrt_info.get_data_field('$pre.node', '$MULTICAST_RID')
+        rid_field = self.create_data_field(rid_field.singleton, rid)
+
+        lag_field = self.bfrt_info.get_data_field('$pre.node', '$MULTICAST_LAG_ID')
+        lag_field = self.create_data_field(lag_field.singleton, lags)
+
+        members_field = self.bfrt_info.get_data_field('$pre.node', '$DEV_PORT')
+        members_field = self.create_data_field(members_field.singleton, members)
+
+        request = self.create_write_request(program_name)
+        table_entry = self.create_table_entry('$pre.node')
+        key_field = self.create_key_field('$pre.node', '$MULTICAST_NODE_ID', Exact(node_id))
+        table_entry.key.fields.extend([key_field])
+        table_entry.data.fields.extend([rid_field, lag_field, members_field])
+
+        update = request.updates.add()
+        update.type = update_type
+        update.entity.table_entry.CopyFrom(table_entry)
+
+        return request
+
+    def create_multicast_group_write(self,
+            program_name,
+            group_id,
+            nodes: list = [],
+            xids: list = [],
+            xid_valid_list: list = [],
+            update_type=Update.Type.INSERT):
+
+        assert len(nodes) == len(xids) == len(xid_valid_list), (
+                'Node, XID and XID valid lists must be same length')
+
+        if isinstance(group_id, int):
+            group_id = MulticastGroupId(group_id)
+        elif not isinstance(group_id, MulticastGroupId):
+            raise Exception('Group id is neither int or MulticastGroupId!')
+
+        nodes_field = self.bfrt_info.get_data_field('$pre.mgid', '$MULTICAST_NODE_ID')
+        nodes_field = self.create_data_field(nodes_field.singleton, nodes)
+
+        node_xid_valid_field = self.bfrt_info.get_data_field(
+                '$pre.mgid',
+                '$MULTICAST_NODE_L1_XID_VALID')
+        node_xid_valid_field_data_field = DataField()
+        node_xid_valid_field_data_field.field_id = node_xid_valid_field.singleton.id
+        node_xid_valid_field_data_field.bool_arr_val.val.extend(xid_valid_list)
+
+        node_xid_field = self.bfrt_info.get_data_field(
+                '$pre.mgid',
+                '$MULTICAST_NODE_L1_XID')
+        node_xid_field_data_field = DataField()
+        node_xid_field_data_field.field_id = node_xid_field.singleton.id
+        node_xid_field_data_field.int_arr_val.val.extend(xids)
+
+        request = self.create_write_request(program_name)
+        table_entry = self.create_table_entry('$pre.mgid')
+        key_field = self.create_key_field('$pre.mgid', '$MGID', Exact(group_id))
+        table_entry.key.fields.extend([key_field])
+
+        table_entry.data.fields.extend([
+                nodes_field,
+                node_xid_valid_field_data_field,
+                node_xid_field_data_field,
+            ])
+
+        update = request.updates.add()
+        update.type = update_type
+        update.entity.table_entry.CopyFrom(table_entry)
+
         return request
 
 

@@ -187,7 +187,7 @@ def autodoc_process_signature(
     A minor gripe is that the signatures include the full package and module path
     when referring to another object type, which is annoying since, in most cases,
     Sphinx is more than capable of creating a reference to such classes in it's
-    absence. The solution here is to simply strip `/bfrt_helper\..*?\,/` from
+    absence. The solution here is to simply strip `/bfrt_helper\\..*?\\,/` from
     the string.
 
     Secondly, and more annoyingly, there are issues with displaying the proper
